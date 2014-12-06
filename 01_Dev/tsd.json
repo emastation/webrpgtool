@@ -1,0 +1,24 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "meteor/meteor.d.ts": {
+      "commit": "f87a6264784613ee49f316c8addb94e355e140e4"
+    },
+    "underscore/underscore.d.ts": {
+      "commit": "f87a6264784613ee49f316c8addb94e355e140e4"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "f87a6264784613ee49f316c8addb94e355e140e4"
+    },
+    "bootstrap.datepicker/bootstrap.datepicker.d.ts": {
+      "commit": "f87a6264784613ee49f316c8addb94e355e140e4"
+    },
+    "bootstrap/bootstrap.d.ts": {
+      "commit": "f87a6264784613ee49f316c8addb94e355e140e4"
+    }
+  }
+}

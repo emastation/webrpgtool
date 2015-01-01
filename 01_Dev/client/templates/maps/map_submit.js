@@ -3,7 +3,9 @@ Template.mapSubmit.events({
     e.preventDefault();
 
     var map = {
-      title: $(e.target).find('[name=title]').val()
+      title: $(e.target).find('[name=title]').val(),
+      width: parseInt($(e.target).find('[name=width]').val(), 10),
+      height: parseInt($(e.target).find('[name=height]').val(), 10)
     };
 
     Meteor.call('mapInsert', map, function(error, result) { // display the error to the user and abort

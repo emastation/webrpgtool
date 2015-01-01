@@ -7,7 +7,9 @@ Template.mapEdit.events({
     var mapProperties = {
       title: $(e.target).find('[name=title]').val(),
       width: parseInt($(e.target).find('[name=width]').val(), 10),
-      height: parseInt($(e.target).find('[name=height]').val(), 10)
+      height: parseInt($(e.target).find('[name=height]').val(), 10),
+      type_array: $(e.target).find('[name=type_array]').val(),
+      height_array: $(e.target).find('[name=height_array]').val()
     }
 
     Maps.update(currentMapId, {$set: mapProperties}, function(error) {

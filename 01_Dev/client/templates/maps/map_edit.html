@@ -7,11 +7,23 @@
       </div>
       <label class="control-label" for="title">横幅</label>
       <div class="controls">
-        <input name="width" id="title" type="text" value="{{width}}" placeholder="マップの横幅を入力してください" class="form-control"/>
+        <input name="width" id="width" type="text" value="{{width}}" placeholder="マップの横幅を入力してください" class="form-control"/>
       </div>
       <label class="control-label" for="title">高さ</label>
       <div class="controls">
-        <input name="height" id="title" type="text" value="{{height}}" placeholder="マップの高さを入力してください" class="form-control"/>
+        <input name="height" id="height" type="text" value="{{height}}" placeholder="マップの高さを入力してください" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="title">タイルタイプ文字列</label>
+      <div class="controls">
+        <textarea name="type_array" id="type_array" placeholder="Tile type text" class="form-control">{{type_array}}</textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="title">タイル高さ文字列</label>
+      <div class="controls">
+        <textarea name="height_array" id="height_array" placeholder="Tile height text" class="form-control">{{height_array}}</textarea>
       </div>
     </div>
     <input type="submit" value="Submit" class="btn btn-primary submit"/>

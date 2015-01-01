@@ -4,8 +4,18 @@ Template.mapSubmit.events({
 
     var map = {
       title: $(e.target).find('[name=title]').val(),
-      width: parseInt($(e.target).find('[name=width]').val(), 10),
-      height: parseInt($(e.target).find('[name=height]').val(), 10)
+      width: 5,
+      height: 5,
+      type_array:"1 N,1 W,1 N,1 W,1 W\n" +
+      "1 N,1 W,1 N,1 W,1 W\n" +
+      "1 N,1 N,1 N,1 N,1 N\n" +
+      "1 W,1 W,1 N,1 W,1 W\n" +
+      "1 W,1 W,1 N,1 W,1 W\n",
+      height_array:"0 1,0 1,0 1,0 1,0 1\n" +
+      "0 1,0 1,0 1,0 1,0 1\n" +
+      "0 1,0 1,0 1,0 1,0 1\n" +
+      "0 1,0 1,0 1,0 1,0 1\n" +
+      "0 1,0 1,0 1,0 1,0 1\n"
     };
 
     Meteor.call('mapInsert', map, function(error, result) { // display the error to the user and abort

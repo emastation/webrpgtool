@@ -8,7 +8,7 @@ Maps.allow({
 Maps.deny({
   update: function(userId, post, fieldNames) {
     // may only edit the following two fields:
-    return (_.without(fieldNames, 'title', 'width', 'height').length > 0);
+    return (_.without(fieldNames, 'title', 'width', 'height', 'type_array', 'height_array').length > 0);
   }
 });
 
@@ -18,7 +18,9 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
     check(mapAttributes, {
       title: String,
       width: Number,
-      height: Number
+      height: Number,
+      type_array: String,
+      height_array: String
     });
 
     var postWithSameTitle = Maps.findOne({title: mapAttributes.title});

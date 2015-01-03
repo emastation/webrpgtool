@@ -1,3 +1,18 @@
+WRT = {};
+WRT.map = {};
+
+Template.mapEdit.rendered = function() {
+  WRT.map.app = tm.app.CanvasApp("#world");
+  // リサイズ
+  WRT.map.app.resize(6400, 6400);
+  // 画面フィット
+  //WRT.map.app.fitWindow();
+  // 背景色をセット
+  WRT.map.app.background = "rgba(150, 150, 150, 1.0)";
+  // 実行
+  WRT.map.app.run();
+};
+
 Template.mapEdit.events({
   'submit form': function(e) {
     e.preventDefault();

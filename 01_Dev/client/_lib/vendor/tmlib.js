@@ -14,7 +14,9 @@
 var tm = tm || {};
 //var window = window || {};
 tm.global = window || global || this;
-tm.global.tm = tm;
+if (tm.global.Meteor != null) {
+  tm.global.tm = tm;
+}
 
 // node.js
 if (typeof module !== 'undefined' && module.exports) {
@@ -18909,7 +18911,7 @@ tm.social = tm.social || {};
      *          screen_name : "phi_jp",             // スクリーンネーム
      *          hashtags    : "javascript,tmlibjs", // ハッシュタグ
      *          url         : "http://tmlife.net",  // url
-     *          via         : "phi_jp",             // ～から
+     *          via         : "phi_jp",             // 〜から
      *          related     : "tmlib.js tmlife",    // 関連ワード
      *      });
      */

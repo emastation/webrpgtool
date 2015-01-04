@@ -23,11 +23,11 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
       height_array: String
     });
 
-    var postWithSameTitle = Maps.findOne({title: mapAttributes.title});
-    if (postWithSameTitle) {
+    var mapWithSameTitle = Maps.findOne({title: mapAttributes.title});
+    if (mapWithSameTitle) {
       return {
-        postExists: true,
-        _id: postWithSameTitle._id
+        mapExists: true,
+        _id: mapWithSameTitle._id
       }
     }
 
@@ -45,4 +45,3 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
     };
   }
 });
-

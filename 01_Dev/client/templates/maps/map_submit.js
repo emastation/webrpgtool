@@ -23,12 +23,10 @@ Template.mapSubmit.events({
         return alert(error.reason);
 
       // show this result but route anyway
-      if (result.postExists)
+      if (result.mapExists)
         alert('This title has already been posted');
 
       Router.go('mapEdit', {_id: result._id});
     });
   }
 });
-
-

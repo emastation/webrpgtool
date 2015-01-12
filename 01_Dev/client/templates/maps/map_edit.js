@@ -2,15 +2,62 @@ WRT = {};
 WRT.map = {};
 
 Template.mapEdit.rendered = function() {
-  WRT.map.app = tm.app.CanvasApp("#world");
-  // リサイズ
-  WRT.map.app.resize(6400, 6400);
-  // 画面フィット
-  //WRT.map.app.fitWindow();
-  // 背景色をセット
-  WRT.map.app.background = "rgba(150, 150, 150, 1.0)";
-  // 実行
-  WRT.map.app.run();
+  var that = this;
+
+  var ASSETS = {};
+  WRT.map.mapManager = new window.MapManager();
+  var mapData = WRT.map.mapManager.getMapData(that.data);
+  for(var key in mapData) {        
+    tm.asset.Manager.set(key, mapData[key]);
+    for(var idx in mapData[key].tilesets) {
+      ASSETS[mapData[key].tilesets[idx].image] = mapData[key].tilesets[idx].image;
+    }
+  }
+  // 読み込みシーンを初期セット
+  var loadingScene = tm.ui.LoadingScene({
+    assets: ASSETS,
+    nextScene: MapScene
+  });
+
+  tm.main( function() {
+
+    if(!_.isUndefined(WRT.map.app)) {
+      WRT.map.app.stop();
+    }
+
+    WRT.map.app = tm.app.CanvasApp("#world");
+    // リサイズ
+    WRT.map.app.resize(6400, 6400);
+    // 画面フィット
+    //WRT.map.app.fitWindow();
+    // 背景色をセット
+    WRT.map.app.background = "rgba(150, 150, 150, 1.0)";
+
+//    WRT.map.app.replaceScene(WRT.map.app.mapScene);
+
+  
+//    WRT.map.app.mapScene = MapScene();
+
+    WRT.map.app.replaceScene(loadingScene);      
+    // 実行
+    WRT.map.app.run();
+      
+  });
+
+  if (document.readyState == "complete") {
+    // loadイベントをエミュレート
+//    setTimeout( function() {
+      if (!document.createEvent) {
+        window.fireEvent('onload');
+      } else {
+        event = document.createEvent('HTMLEvents');
+        event.initEvent ("load", false, true)
+        window.dispatchEvent(event);
+      }
+//    }
+//    , 100);
+  }
+
 };
 
 Template.mapEdit.events({

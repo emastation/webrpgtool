@@ -178,7 +178,7 @@ constructor(private map:any) {
     this.reloadMap();
   }
 
-  private reloadMap() {
+  public reloadMap() {
     var mapData = this.getMapFullData();
     for(var key in mapData) {
       tm.asset.Manager.set(key, tm.asset.MapSheet(mapData[key]));
@@ -190,8 +190,11 @@ constructor(private map:any) {
   public getMap():any {
     return this.map; 
   }
+  public setMap(map:any) {
+    this.map = map; 
+  }
 
-  public getMapFullData():any {
+  private getMapFullData():any {
     var mapName = 'map.001'
 
     var mapdata = this.getMapBaseData();

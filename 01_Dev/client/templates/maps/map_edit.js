@@ -6,6 +6,9 @@ Template.mapEdit.rendered = function() {
 
   var ASSETS = {};
   WRT.map.mapManager = new window.MapManager(that.data);
+  
+  WRT.map.previousMap = _.clone(that.data);
+  
   var mapData = WRT.map.mapManager.getMapFullData();
   for(var key in mapData) {    
     tm.asset.Manager.set(key, tm.asset.MapSheet(mapData[key]));
@@ -109,6 +112,16 @@ Template.mapEdit.events({
       Maps.remove(currentMapId);
       Router.go('mapsList');
     }
+  },
+  
+  'click .rollback': function(e) {
+    e.preventDefault();
+
+    var currentMapId = this._id;
+    updateMap(currentMapId, WRT.map.previousMap);
+    
+    WRT.map.mapManager.setMap(WRT.map.previousMap);
+    WRT.map.mapManager.reloadMap();
   },
     
   'change #width': function(e) {

@@ -6,10 +6,11 @@
 meteor-platform
 mizzao:bootstrap-3
 underscore
-meteortypescript:compiler
 fourseven:scss
 iron:router
 sacha:spin
 ian:accounts-ui-bootstrap-3
 accounts-password
 audit-argument-checks
+meteortypescript:typescript-libs@=1.0.12
+meteortypescript:compiler@=1.0.2

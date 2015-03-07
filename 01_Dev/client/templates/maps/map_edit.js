@@ -60,6 +60,23 @@ Template.mapEdit.rendered = function() {
 
 };
 
+var updateMap = function(currentMapId, map) {
+  var mapProperties = {
+    title: map.title,
+    width: map.width,
+    height: map.height,
+    type_array: map.type_array,
+    height_array: map.height_array
+  };
+
+  Maps.update(currentMapId, {$set: mapProperties}, function(error) { 
+    if (error) {
+      // display the error to the user
+      alert(error.reason);
+    }
+  });
+}
+
 Template.mapEdit.events({
   'submit form': function(e) {
     e.preventDefault();
@@ -97,7 +114,29 @@ Template.mapEdit.events({
   'change #width': function(e) {
     e.preventDefault();
     
+    console.log(this.data);
+    
     var newWidth = parseInt($(e.target).val(), 10);
     WRT.map.mapManager.setMapWidth(newWidth);
+    
+    var map = WRT.map.mapManager.getMap();
+    
+    var currentMapId = this._id;
+    updateMap(currentMapId, map);
+  },
+  
+  'change #height': function(e) {
+    e.preventDefault();
+    
+    var newHeight = parseInt($(e.target).val(), 10);
+    WRT.map.mapManager.setMapHeight(newHeight);
+    
+    var map = WRT.map.mapManager.getMap();
+    
+    var currentMapId = this._id;
+    updateMap(currentMapId, map);
+
   }
+
+  
 });

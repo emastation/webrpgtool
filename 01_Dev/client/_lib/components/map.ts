@@ -49,7 +49,7 @@ constructor(private map:any) {
     if (delta > 0) { // 横幅が増えた場合
       var map_data_str = this.map.type_array;
       var addStr = "";
-      for (var i=0; i<=delta; i++) {
+      for (var i=0; i<delta; i++) {
         addStr += ","; // カンマを付加する。
         addStr += this.initialTypes; // 初期値を文字列として加える
       }
@@ -60,7 +60,7 @@ constructor(private map:any) {
     {
       delta *= -1 // 正の数にする
       map_data_str = this.map.type_array
-      for (var i=0; i<=delta; i++) {
+      for (var i=0; i<delta; i++) {
         var re = new RegExp(",[^,]+\n", 'g'); // 一つ分の ,0 dz(改行) などにマッチして、
         map_data_str = map_data_str.replace(re, '\n'); // それを改行で置き換える
       }
@@ -68,13 +68,13 @@ constructor(private map:any) {
     // タイプアレイにデータ保存
     this.map.type_array = map_data_str;
         
-      
+    delta = newWidth - curWidth;
     // 高さタイルの増減
     if (delta > 0) // 横幅が増えた場合
     {  
       map_data_str = this.map.height_array;
       addStr = ""
-      for (var i=0; i<=delta; i++) {
+      for (var i=0; i<delta; i++) {
         addStr += ","; //カンマを付加する。
         addStr += this.initialHeights; // 初期値を文字列として加える
       }
@@ -85,7 +85,7 @@ constructor(private map:any) {
     {
       delta *= -1 // 正の数にする
       map_data_str = this.map.height_array
-      for (var i=0; i<=delta; i++) {
+      for (var i=0; i<delta; i++) {
         var re = new RegExp(",[^,]+\n", 'g') // 一つ分の ,0 dz(改行) などにマッチして、
         map_data_str = map_data_str.replace(re, '\n') // それを改行で置き換える
       }
@@ -94,13 +94,97 @@ constructor(private map:any) {
     this.map.height_array = map_data_str;
         
     this.map.width = newWidth;
+        
+    this.reloadMap();
+
+  }
+
+  public getMapHeight():any {
+    return this.map.height;
+  }
+
+  public setMapHeight(value:number) {
+    var curHeight = this.getMapHeight();
+    var width = this.getMapWidth();
+    var newHeight = value;
+    var delta = newHeight - curHeight;
     
+    if (delta === 0) { // 高さに変更がなかったら、何もしない
+      return
+    }
+
+    // テクスチャとタイルタイプの増減
+    if (delta > 0) // 縦幅が増えた場合
+    {
+      var map_data_str = this.map.type_array;
+      var row = ""
+      for (var i=0; i<delta; i++) {
+        for (var j=0; j<width; j++) {
+          if (j != 0) { // 1列目以外の列で
+            row += ","; // 値の前にカンマを加える
+          }
+          row += this.initialTypes;
+        }
+        row += '\n'
+      }
+      map_data_str += row;
+    }
+    else //縦幅が減った場合
+    {
+      var map_data_str = this.map.type_array;
+      var splitted_with_n = map_data_str.split("\n") // マップ文字列を行ごとに区切る
+      var index = 0
+      for (var i=0; i<newHeight; i++) {
+        index += splitted_with_n[i].length + 1; // height-1行までの各行の文字数と改行をindexに加算する
+      }
+      map_data_str = map_data_str.substr(0, index);
+    }
+    
+    // タイプアレイにデータ保存
+    this.map.type_array = map_data_str;
+    
+    delta = newHeight - curHeight;
+    // 高さタイルの増減
+    if (delta > 0) // 縦幅が増えた場合
+    {
+      map_data_str = this.map.height_array;
+      row = "";
+      for (var i=0; i<delta; i++) {
+        for (var j=0; j<width; j++) {
+          if (j != 0) {// 1列目以外の列で
+            row += ","; // 値の前にカンマを加える
+          }
+          row += this.initialHeights;
+        }
+        row += '\n';
+      }
+      map_data_str += row;
+    }
+    else // 縦幅が減った場合
+    {
+      map_data_str = this.map.height_array;
+      splitted_with_n = map_data_str.split("\n") // マップ文字列を行ごとに区切る
+      index = 0
+      for (var i=0; i<newHeight; i++) {
+        index += splitted_with_n[i].length + 1; // height-1行までの各行の文字数と改行をindexに加算する
+      }
+      map_data_str = map_data_str.substr(0, index);
+    }
+    // 高さアレイにデータ保存
+    this.map.height_array = map_data_str;
+    
+    this.map.height = newHeight;
+    
+    this.reloadMap();
+  }
+
+  private reloadMap() {
     var mapData = this.getMapFullData();
     for(var key in mapData) {
       tm.asset.Manager.set(key, tm.asset.MapSheet(mapData[key]));
     }
     
-    WRT.map.app.currentScene.load('001');
+    WRT.map.app.currentScene.load('001');    
   }
 
   public getMap():any {

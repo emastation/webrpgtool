@@ -10,8 +10,12 @@ class MapManager {
   private maxMapWidth = 100;
   private minMapHeight = 1;
   private maxMapHeight = 100;
+  private textureTileUrl = 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/toolTile/output_tile.jpg';
+  private typeTileUrl = 'http://www.emastation.net/uploadspace/WebRPGTool/material/typeTypeImage/output_tile.png';
+  private heightTileUrl = 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileHeightImage/tileHeightImage.png';
+  private chipSize = 64;
 
-constructor(private map:any) {
+  constructor(private map:any) {
     this.init();
   }
 
@@ -30,7 +34,7 @@ constructor(private map:any) {
         if (!_.isNull(that.mapSprite)) {
             that.mapSprite.remove();
         }
-        that.mapSprite = tm.display.MapSprite("map." + name, 64, 64).addChildTo(this);
+        that.mapSprite = tm.display.MapSprite("map." + name, that.chipSize, that.chipSize).addChildTo(this);
           
 
       }
@@ -287,17 +291,17 @@ constructor(private map:any) {
           {
             // 32x32 のタイル（マップチップ）を並べた画像（幅と段数は自由）
             name: 'textureTile',
-            image: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/toolTile/output_tile.jpg'
+            image: this.textureTileUrl
           },
           {
             // 32x32 のタイル（マップチップ）を並べた画像（幅と段数は自由）
             name: 'typeTile',
-            image: 'http://www.emastation.net/uploadspace/WebRPGTool/material/typeTypeImage/output_tile.png'
+            image: this.typeTileUrl
           },
           {
             // 32x32 のタイル（マップチップ）を並べた画像（幅と段数は自由）
             name: 'heightTile',
-            image: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileHeightImage/tileHeightImage.png'
+            image: this.heightTileUrl
           }
         ],
 

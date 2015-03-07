@@ -6,6 +6,10 @@ class MapManager {
   private mapSprite:any = null;
   private initialTypes:string = '1 N'; // マップのサイズを増やす時に増えたタイプタイルに設定するタイプタイル文字列
   private initialHeights:string = '0 1'; // マップのサイズを増やす時に増えたタイルに設定するタイル文字列
+  private minMapWidth = 1;
+  private maxMapWidth = 100;
+  private minMapHeight = 1;
+  private maxMapHeight = 100;
 
 constructor(private map:any) {
     this.init();
@@ -37,8 +41,16 @@ constructor(private map:any) {
   }
 
   public setMapWidth(value:number) {
+    var newWidth = 0;
+    if (value < this.minMapWidth) {
+      newWidth = this.minMapWidth;
+    } else if (value > this.maxMapWidth) {
+      newWidth = this.maxMapWidth;
+    } else {
+      newWidth = value;
+    }
+
     var curWidth = this.getMapWidth();
-    var newWidth = value;
     var delta = newWidth - curWidth;
     
     if (delta === 0) {
@@ -104,9 +116,16 @@ constructor(private map:any) {
   }
 
   public setMapHeight(value:number) {
+    var newHeight = 0;
+    if (value < this.minMapHeight) {
+      newHeight = this.minMapHeight;
+    } else if (value > this.maxMapHeight) {
+      newHeight = this.maxMapHeight;
+    } else {
+      newHeight = value;      
+    }
     var curHeight = this.getMapHeight();
     var width = this.getMapWidth();
-    var newHeight = value;
     var delta = newHeight - curHeight;
     
     if (delta === 0) { // 高さに変更がなかったら、何もしない

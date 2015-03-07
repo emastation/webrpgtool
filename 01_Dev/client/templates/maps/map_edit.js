@@ -127,8 +127,6 @@ Template.mapEdit.events({
   'change #width': function(e) {
     e.preventDefault();
     
-    console.log(this.data);
-    
     var newWidth = parseInt($(e.target).val(), 10);
     WRT.map.mapManager.setMapWidth(newWidth);
     

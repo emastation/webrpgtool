@@ -1,9 +1,13 @@
+declare var WRT:any;
 declare var tm:any;
 declare var _:any;
 
 class MapManager {
   private mapSprite:any = null;
-  constructor() {
+  private initialTypes:string = '1 N'; // マップのサイズを増やす時に増えたタイプタイルに設定するタイプタイル文字列
+  private initialHeights:string = '0 1'; // マップのサイズを増やす時に増えたタイルに設定するタイル文字列
+
+constructor(private map:any) {
     this.init();
   }
 
@@ -14,6 +18,7 @@ class MapManager {
 
       init: function () {
         this.superInit();
+        var canvasDom = tm.dom.Element("#world");
         this.load('001');
       },
 
@@ -21,27 +26,95 @@ class MapManager {
         if (!_.isNull(that.mapSprite)) {
             that.mapSprite.remove();
         }
-        that.mapSprite = tm.display.MapSprite("map." + name,64,64).addChildTo(this);
+        that.mapSprite = tm.display.MapSprite("map." + name, 64, 64).addChildTo(this);
           
-        /*
-        # マップCanvasの幅と高さを更新
-        mapdata = that.get('MAP_DATA')
-        width = mapdata[that.mapName].width
-        height = mapdata[that.mapName].height
-        Tool.app.resize(64*width, 64*height)
-        */
+
       }
     });
   }
+  public getMapWidth():number {
+    return this.map.width;
+  }
 
-  public getMapData(model:any):any {
+  public setMapWidth(value:number) {
+    var curWidth = this.getMapWidth();
+    var newWidth = value;
+    var delta = newWidth - curWidth;
+    
+    if (delta === 0) {
+      return
+    }
+
+    // テクスチャとタイルタイプの増減
+    if (delta > 0) { // 横幅が増えた場合
+      var map_data_str = this.map.type_array;
+      var addStr = "";
+      for (var i=0; i<=delta; i++) {
+        addStr += ","; // カンマを付加する。
+        addStr += this.initialTypes; // 初期値を文字列として加える
+      }
+      addStr += '\n';
+      map_data_str = map_data_str.replace(/\n/g, addStr); // 現状のマップ文字列の各改行（つまり、各行の一番後ろ）をaddStr文字列に置き換える
+    }
+    else // 横幅が減った場合
+    {
+      delta *= -1 // 正の数にする
+      map_data_str = this.map.type_array
+      for (var i=0; i<=delta; i++) {
+        var re = new RegExp(",[^,]+\n", 'g'); // 一つ分の ,0 dz(改行) などにマッチして、
+        map_data_str = map_data_str.replace(re, '\n'); // それを改行で置き換える
+      }
+    }
+    // タイプアレイにデータ保存
+    this.map.type_array = map_data_str;
+        
+      
+    // 高さタイルの増減
+    if (delta > 0) // 横幅が増えた場合
+    {  
+      map_data_str = this.map.height_array;
+      addStr = ""
+      for (var i=0; i<=delta; i++) {
+        addStr += ","; //カンマを付加する。
+        addStr += this.initialHeights; // 初期値を文字列として加える
+      }
+      addStr += '\n';
+      map_data_str = map_data_str.replace(/\n/g, addStr) // 現状のマップ文字列の各改行（つまり、各行の一番後ろ）をaddStr文字列に置き換える
+    }
+    else // 横幅が減った場合
+    {
+      delta *= -1 // 正の数にする
+      map_data_str = this.map.height_array
+      for (var i=0; i<=delta; i++) {
+        var re = new RegExp(",[^,]+\n", 'g') // 一つ分の ,0 dz(改行) などにマッチして、
+        map_data_str = map_data_str.replace(re, '\n') // それを改行で置き換える
+      }
+    }
+    // 高さアレイにデータ保存
+    this.map.height_array = map_data_str;
+        
+    this.map.width = newWidth;
+    
+    var mapData = this.getMapFullData();
+    for(var key in mapData) {
+      tm.asset.Manager.set(key, tm.asset.MapSheet(mapData[key]));
+    }
+    
+    WRT.map.app.currentScene.load('001');
+  }
+
+  public getMap():any {
+    return this.map; 
+  }
+
+  public getMapFullData():any {
     var mapName = 'map.001'
 
     var mapdata = this.getMapBaseData();
 
-    mapdata[mapName].width = model.width;
-    mapdata[mapName].height = model.height;
-    var type_map = model.type_array;
+    mapdata[mapName].width = this.map.width;
+    mapdata[mapName].height = this.map.height;
+    var type_map = this.map.type_array;
 
     var splitted_with_n = type_map.split("\n"); //マップ文字列を行ごとに区切る
     //console.log(splitted_with_n);
@@ -69,7 +142,7 @@ class MapManager {
 
       }
     }
-    var height_map = model.height_array;
+    var height_map = this.map.height_array;
     var splitted_with_n2 = height_map.split("\n"); // マップ文字列を行ごとに区切る
     for (var i_ = 0; i_ < splitted_with_n2.length-1; i_++) { // 行ごとの処理。データの最後で改行しているため、データの行数より１個改行が多いので、lengthに-1している。
       var splitted_with_comma2 = splitted_with_n2[i_].split(","); //カンマで区切り、各列の値を配列に
@@ -88,6 +161,7 @@ class MapManager {
     }
     return mapdata;
   }
+
 
   private getMapBaseData():any {
     return {

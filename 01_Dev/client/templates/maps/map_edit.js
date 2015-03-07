@@ -5,10 +5,10 @@ Template.mapEdit.rendered = function() {
   var that = this;
 
   var ASSETS = {};
-  WRT.map.mapManager = new window.MapManager();
-  var mapData = WRT.map.mapManager.getMapData(that.data);
-  for(var key in mapData) {        
-    tm.asset.Manager.set(key, mapData[key]);
+  WRT.map.mapManager = new window.MapManager(that.data);
+  var mapData = WRT.map.mapManager.getMapFullData();
+  for(var key in mapData) {    
+    tm.asset.Manager.set(key, tm.asset.MapSheet(mapData[key]));
     for(var idx in mapData[key].tilesets) {
       ASSETS[mapData[key].tilesets[idx].image] = mapData[key].tilesets[idx].image;
     }
@@ -92,5 +92,12 @@ Template.mapEdit.events({
       Maps.remove(currentMapId);
       Router.go('mapsList');
     }
+  },
+    
+  'change #width': function(e) {
+    e.preventDefault();
+    
+    var newWidth = parseInt($(e.target).val(), 10);
+    WRT.map.mapManager.setMapWidth(newWidth);
   }
 });

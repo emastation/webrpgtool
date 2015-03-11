@@ -5,9 +5,9 @@ Template.mapEdit.rendered = function() {
   var that = this;
 
   var ASSETS = {};
-  WRT.map.mapManager = new window.MapManager(that.data);
+  WRT.map.mapManager = new window.MapManager(that.data.map);
   
-  WRT.map.previousMap = _.clone(that.data);
+  WRT.map.previousMap = _.clone(that.data.map);
   
   var mapData = WRT.map.mapManager.getMapFullData();
   for(var key in mapData) {    

@@ -26,7 +26,16 @@ Router.route('/maps/:_id', {
 
 Router.route('/maps/:_id/edit', {
   name: 'mapEdit',
-  data: function() { return Maps.findOne(this.params._id); }
+  waitOn: function() {
+    return [Meteor.subscribe('map_textures'), Meteor.subscribe('map_tile_types')];
+  },
+  data: function() {
+    return {
+      map: Maps.findOne(this.params._id),
+      mapTextures: MapTextures.find(),
+      mapTileTypes: MapTileTypes.find()
+    }
+  }
 });
 
 var requireLogin = function() {

@@ -5,3 +5,9 @@ div#map-container {
   overflow:auto;
   background-color: red;
 }
+
+div.controll-tile {
+  width: 64px;
+  height: 64px;
+  float: left;
+}

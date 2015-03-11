@@ -1,0 +1,38 @@
+template(name="mapEdit")
+  form(class="main form")
+    div(class="form-group row")
+      div(class="col-xs-4")
+        label(class="control-label" for="title") Title
+        div(class="controls")
+          input(name="title" id="title" type="text" value="#{map.title}" placeholder="Name your map" class="form-control")
+      div(class="col-xs-4")
+        label(class="control-label" for="width") 横幅
+        div(class="controls")
+          input(name="width" id="width" type="number" min="1" max="100" value="#{map.width}" placeholder="マップの横幅を入力してください" class="form-control")
+      div(class="col-xs-4")
+        label(class="control-label" for="height") 高さ
+        div(class="controls")
+          input(name="height" id="height" type="number" min="1" max="100" value="#{map.height}" placeholder="マップの高さを入力してください" class="form-control")
+    div(class="form-group")
+      label(class="control-label" for="type_array") タイルタイプ文字列
+      div(class="controls")
+        textarea(name="type_array" id="type_array" placeholder="Tile type text" class="form-control") #{map.type_array}
+    div(class="form-group")
+      label(class="control-label" for="height_array") タイル高さ文字列
+      div(class="controls")
+        textarea(name="height_array" id="height_array" placeholder="Tile height text" class="form-control") #{map.height_array}
+    input(type="submit" value="Submit" class="btn btn-primary submit")
+    hr
+    a(class="btn btn-info rollback" href="#") Rollback map
+    a(class="btn btn-danger delete" href="#") Delete map
+    div
+      label テクスチャ
+      div(class="clearfix")
+        +each mapTextures
+          div(class="controll-tile" style="background-image:url(#{tooltex_url});")
+    div
+      +each mapTileTypes
+        span #{name}
+  //form end
+  div(id="map-container")
+    canvas(id="world")

@@ -29,10 +29,16 @@ template(name="mapEdit")
       label テクスチャ
       div(class="clearfix")
         +each mapTextures
-          div(class="controll-tile" style="background-image:url(#{tooltex_url});")
+          a(id="texture_#{name}" href="#")
+            div(class="controll-tile" style="background-image:url(#{tooltex_url});")
     div
-      +each mapTileTypes
-        span #{name}
+      label タイルタイプ
+        div(class="clearfix")
+        +each mapTileTypes
+          a(id="tiletype_#{name}" href="#")
+            div(class="controll-tile" style="background-image:url(#{image_url});")
+    div
+      label 床の高さ
   //form end
   div(id="map-container")
     canvas(id="world")

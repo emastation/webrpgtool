@@ -2,6 +2,12 @@ declare var WRT:any;
 declare var tm:any;
 declare var _:any;
 
+enum MapLayer {
+  TILE_TYPE = 0,
+  FLOOR_HEIGHT = 1,
+  CEILING_HEIGHT = 2
+}
+
 class MapManager {
   private mapSprite:any = null;
   private initialTypes:string = '1 N'; // マップのサイズを増やす時に増えたタイプタイルに設定するタイプタイル文字列
@@ -14,6 +20,8 @@ class MapManager {
   private typeTileUrl = 'http://www.emastation.net/uploadspace/WebRPGTool/material/typeTypeImage/output_tile.png';
   private heightTileUrl = 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileHeightImage/tileHeightImage.png';
   private chipSize = 64;
+  private mapName = 'map.001';
+
 
   constructor(private map:any) {
     this.init();
@@ -218,7 +226,7 @@ class MapManager {
   }
 
   private getMapFullData():any {
-    var mapName = 'map.001'
+    var mapName = this.mapName;
 
     var mapdata = this.getMapBaseData();
 
@@ -246,9 +254,8 @@ class MapManager {
         else if (/^P/.test(firstTypeStr)) { typeId = 3; }
         else { typeId = 0; }
         
-        var offset = 5;
         mapdata[mapName].layers[0].data[x+mapdata[mapName].width*y] = texId - 1; // テクスチャ設定
-        mapdata[mapName].layers[1].data[x+mapdata[mapName].width*y] = offset + typeId; // タイルタイプチップ設定
+        mapdata[mapName].layers[1].data[x+mapdata[mapName].width*y] = typeId; // タイルタイプチップ設定
 
       }
     }
@@ -263,15 +270,44 @@ class MapManager {
         var floorHeight = parseInt(splitted_with_space2[0], 10); // 床の高さを取得する "1 10"だったら、1を数値として保存
         var ceilingHeight = parseInt(splitted_with_space2[1], 10); // 天井の高さを取得する。 "1 10"だったら、10を数値として保存
 
-        var offset2 = 5 + 4;
-        mapdata[mapName].layers[2].data[xx+mapdata[mapName].width*yy] = offset2 + floorHeight + 10; // 床の高さ設定
-        //offset2 = 5 + 4 + 21
-        mapdata[mapName].layers[3].data[xx+mapdata[mapName].width*yy] = offset2 + ceilingHeight + 10; // 天井の高さ設定
+        mapdata[mapName].layers[2].data[xx+mapdata[mapName].width*yy] = floorHeight + 10; // 床の高さ設定
+        mapdata[mapName].layers[3].data[xx+mapdata[mapName].width*yy] = ceilingHeight + 10; // 天井の高さ設定
       }
     }
     return mapdata;
   }
 
+  public switchMapLayer(mode:MapLayer) {
+    var mapData = this.getMapFullData();
+    var mapName = this.mapName;
+
+    switch (mode) {
+      case MapLayer.TILE_TYPE:
+        delete mapData[mapName].layers[1].visible;
+        mapData[mapName].layers[2].visible = false;
+        mapData[mapName].layers[3].visible = false;
+        break;
+
+      case MapLayer.FLOOR_HEIGHT:
+        mapData[mapName].layers[1].visible = false;
+        delete mapData[mapName].layers[2].visible;
+        mapData[mapName].layers[3].visible = false;
+        break;
+
+      case MapLayer.CEILING_HEIGHT:
+        mapData[mapName].layers[1].visible = false;
+        mapData[mapName].layers[2].visible = false;
+        delete mapData[mapName].layers[3].visible;
+        break;
+    }
+
+    for(var key in mapData) {
+      tm.asset.Manager.set(key, tm.asset.MapSheet(mapData[key]));
+    }
+
+    WRT.map.app.currentScene.load('001');
+
+  }
 
   private getMapBaseData():any {
     return {

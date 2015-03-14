@@ -147,6 +147,12 @@ Template.mapEdit.events({
     var currentMapId = this._id;
     updateMap(currentMapId, map);
 
+  },
+
+  "click a[id^='tiletype_']": function(e) {
+    e.preventDefault();
+    console.log($(e.target).children().get(0));
+    WRT.map.mapManager.switchMapLayer(0);
   }
 
   

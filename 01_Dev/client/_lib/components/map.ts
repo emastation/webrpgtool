@@ -369,7 +369,6 @@ class MapManager {
             type: 'layer',
             name: 'layer2',
             tilesets: 'typeTile',
-            visible: false,
             // 実際のデータ（数値配列）
             // 数値は、タイルセットのインデックス（何番目のマップチップを表示するか）
             // マップサイズの幅と高さを掛けた分を用意する
@@ -389,7 +388,7 @@ class MapManager {
             type: 'layer',
             name: 'layer4',
             tilesets: 'heightTile',
-            //visible: false,
+            visible: false,
             // 実際のデータ（数値配列）
             // 数値は、タイルセットのインデックス（何番目のマップチップを表示するか）
             // マップサイズの幅と高さを掛けた分を用意する

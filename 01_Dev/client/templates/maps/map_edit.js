@@ -157,7 +157,17 @@ Template.mapEdit.events({
     e.preventDefault();
     console.log($(e.target).children().get(0));
     WRT.map.mapManager.switchMapLayer(0);
-  }
+  },
 
-  
+  "click a[id^='floorheight_']": function(e) {
+    e.preventDefault();
+    console.log($(e.target).children().get(0));
+    WRT.map.mapManager.switchMapLayer(1);
+  },
+
+  "click a[id^='ceilingheight_']": function(e) {
+    e.preventDefault();
+    console.log($(e.target).children().get(0));
+    WRT.map.mapManager.switchMapLayer(2);
+  }
 });

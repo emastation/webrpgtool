@@ -30,15 +30,26 @@ template(name="mapEdit")
       div(class="clearfix")
         +each mapTextures
           a(id="texture_#{name}" href="#")
-            div(class="controll-tile" style="background-image:url(#{tooltex_url});")
+            div(class="control-tile" style="background-image:url(#{tooltex_url});")
     div
       label タイルタイプ
-        div(class="clearfix")
+      div(class="clearfix")
         +each mapTileTypes
           a(id="tiletype_#{name}" href="#")
-            div(class="controll-tile" style="background-image:url(#{image_url});")
+            div(class="control-tile" style="background-image:url(#{image_url});")
     div
       label 床の高さ
+      div(class="clearfix")
+        +each heightTileDivStyleStrArray
+          a(id="floorheight_#{name}" href="#")
+            div(class="control-tile-half" style="#{offset}")
+    div
+      label 天井の高さ
+      div(class="clearfix")
+        +each heightTileDivStyleStrArray
+          a(id="ceilingheight_#{name}" href="#")
+            div(class="control-tile-half" style="#{offset}")
+
   //form end
   div(id="map-container")
     canvas(id="world")

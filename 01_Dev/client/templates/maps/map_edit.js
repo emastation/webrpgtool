@@ -1,6 +1,10 @@
 WRT = {};
 WRT.map = {};
 
+Template.mapEdit.helpers({
+  heightTileDivStyleStrArray: window.MapManager.getHeightCssOffsetStrArray()
+});
+
 Template.mapEdit.rendered = function() {
   var that = this;
 

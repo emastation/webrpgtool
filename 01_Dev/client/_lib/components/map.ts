@@ -18,10 +18,10 @@ class MapManager {
   private maxMapHeight = 100;
   private textureTileUrl = 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/toolTile/output_tile.jpg';
   private typeTileUrl = 'http://www.emastation.net/uploadspace/WebRPGTool/material/typeTypeImage/output_tile.png';
-  private heightTileUrl = 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileHeightImage/tileHeightImage.png';
+  static heightTileUrl = 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileHeightImage/tileHeightImage.png';
   private chipSize = 64;
   private mapName = 'map.001';
-
+  static heightLevels = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
 
   constructor(private map:any) {
     this.init();
@@ -309,6 +309,19 @@ class MapManager {
 
   }
 
+  static getHeightCssOffsetStrArray():any {
+    var heightOffsetArray = _.map(MapManager.heightLevels, function(num) {
+      return 32*((num + 10) + 0);
+    });
+
+    var that = this;
+    return _.map(heightOffsetArray, function(offset) {
+      return {
+        offset: 'background-image: url(' + that.heightTileUrl + ' ); background-position: -' + offset + 'px 0px;'
+      };
+    });
+  }
+
   private getMapBaseData():any {
     return {
       'map.001': {
@@ -337,7 +350,7 @@ class MapManager {
           {
             // 32x32 のタイル（マップチップ）を並べた画像（幅と段数は自由）
             name: 'heightTile',
-            image: this.heightTileUrl
+            image: MapManager.heightTileUrl
           }
         ],
 

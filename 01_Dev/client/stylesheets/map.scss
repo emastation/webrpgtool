@@ -6,8 +6,19 @@ div#map-container {
   background-color: red;
 }
 
-div.controll-tile {
+@mixin control-tile-mixin {
+  float: left;
   width: 64px;
   height: 64px;
-  float: left;
+}
+
+div.control-tile {
+  @include control-tile-mixin;
+}
+
+div.control-tile-half {
+  @include control-tile-mixin;
+  width: 32px;
+  height: 32px;
+  background-size: 672px 32px;
 }

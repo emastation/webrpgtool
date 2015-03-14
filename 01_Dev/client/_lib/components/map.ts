@@ -284,22 +284,29 @@ class MapManager {
     var mapName = this.mapName;
 
     switch (mode) {
+      case MapLayer.TEXTURE:
+        this.currentMode = MapLayer.TEXTURE;
+        break;
+
       case MapLayer.TILE_TYPE:
         delete mapData[mapName].layers[1].visible;
         mapData[mapName].layers[2].visible = false;
         mapData[mapName].layers[3].visible = false;
+        this.currentMode = MapLayer.TILE_TYPE;
         break;
 
       case MapLayer.FLOOR_HEIGHT:
         mapData[mapName].layers[1].visible = false;
         delete mapData[mapName].layers[2].visible;
         mapData[mapName].layers[3].visible = false;
+        this.currentMode = MapLayer.FLOOR_HEIGHT;
         break;
 
       case MapLayer.CEILING_HEIGHT:
         mapData[mapName].layers[1].visible = false;
         mapData[mapName].layers[2].visible = false;
         delete mapData[mapName].layers[3].visible;
+        this.currentMode = MapLayer.CEILING_HEIGHT;
         break;
     }
 

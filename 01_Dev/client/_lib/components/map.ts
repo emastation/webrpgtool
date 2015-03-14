@@ -340,14 +340,15 @@ class MapManager {
   }
 
   static getHeightCssOffsetStrArray():any {
-    var heightOffsetArray = _.map(MapManager.heightLevels, function(num) {
-      return 32*((num + 10) + 0);
+    var heightIndexArray = _.map(MapManager.heightLevels, function(num) {
+      return num + 10;
     });
 
     var that = this;
-    return _.map(heightOffsetArray, function(offset) {
+    return _.map(heightIndexArray, function(index) {
       return {
-        offset: 'background-image: url(' + that.heightTileUrl + ' ); background-position: -' + offset + 'px 0px;'
+        hid: index,
+        offset: 'background-image: url(' + that.heightTileUrl + ' ); background-position: -' + index*32 + 'px 0px;'
       };
     });
   }

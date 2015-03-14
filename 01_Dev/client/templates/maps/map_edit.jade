@@ -30,13 +30,13 @@ template(name="mapEdit")
       div(class="clearfix")
         +each mapTextures
           a(id="texture_#{name}" href="#")
-            div(class="control-tile" style="background-image:url(#{tooltex_url});")
+            div(data-mtid="#{mtId}" class="control-tile" style="background-image:url(#{tooltex_url});")
     div
       label タイルタイプ
       div(class="clearfix")
         +each mapTileTypes
           a(id="tiletype_#{name}" href="#")
-            div(class="control-tile" style="background-image:url(#{image_url});")
+            div(data-mttid="#{mttId}" class="control-tile" style="background-image:url(#{image_url});")
     div
       label 床の高さ
       div(class="clearfix")

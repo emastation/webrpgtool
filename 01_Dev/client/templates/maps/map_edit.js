@@ -153,6 +153,11 @@ Template.mapEdit.events({
 
   },
 
+  "click a[id^='texture_']": function(e) {
+    e.preventDefault();
+    WRT.map.mapManager.switchMapLayer(0);
+  },
+
   "click a[id^='tiletype_']": function(e) {
     e.preventDefault();
     console.log($(e.target).children().get(0));

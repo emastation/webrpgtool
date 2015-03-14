@@ -66,8 +66,6 @@ class MapManager {
             that.mapSprite.remove();
         }
         that.mapSprite = tm.display.MapSprite("map." + name, that.chipSize, that.chipSize).addChildTo(this);
-          
-
       }
     });
   }

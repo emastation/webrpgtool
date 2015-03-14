@@ -41,14 +41,14 @@ template(name="mapEdit")
       label 床の高さ
       div(class="clearfix")
         +each heightTileDivStyleStrArray
-          a(id="floorheight_#{name}" href="#")
-            div(class="control-tile-half" style="#{offset}")
+          a(id="floorheight_#{hid}" href="#")
+            div(data-hid="#{hid}" class="control-tile-half" style="#{offset}")
     div
       label 天井の高さ
       div(class="clearfix")
         +each heightTileDivStyleStrArray
-          a(id="ceilingheight_#{name}" href="#")
-            div(class="control-tile-half" style="#{offset}")
+          a(id="ceilingheight_#{hid}" href="#")
+            div(data-hid="#{hid}" class="control-tile-half" style="#{offset}")
 
   //form end
   div(id="map-container")

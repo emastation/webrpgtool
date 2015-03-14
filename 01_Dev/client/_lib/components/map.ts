@@ -3,9 +3,10 @@ declare var tm:any;
 declare var _:any;
 
 enum MapLayer {
-  TILE_TYPE = 0,
-  FLOOR_HEIGHT = 1,
-  CEILING_HEIGHT = 2
+  TEXTURE = 0,
+  TILE_TYPE = 1,
+  FLOOR_HEIGHT = 2,
+  CEILING_HEIGHT = 3
 }
 
 class MapManager {
@@ -22,6 +23,7 @@ class MapManager {
   private chipSize = 64;
   private mapName = 'map.001';
   static heightLevels = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
+  private currentMode = MapLayer.TEXTURE;
 
   constructor(private map:any) {
     this.init();

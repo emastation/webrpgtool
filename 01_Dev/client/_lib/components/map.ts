@@ -37,6 +37,27 @@ class MapManager {
       init: function () {
         this.superInit();
         var canvasDom = tm.dom.Element("#world");
+        canvasDom.event.pointstart( (e:any) => {
+          var cellX = Math.floor(e.pointX/that.chipSize);
+          var cellY = Math.floor(e.pointY/that.chipSize);
+
+          var mapData = that.getMapFullData();
+
+          switch (that.currentMode) {
+            case MapLayer.TEXTURE:
+              break;
+
+            case MapLayer.TILE_TYPE:
+              break;
+
+            case MapLayer.FLOOR_HEIGHT:
+              break;
+
+            case MapLayer.CEILING_HEIGHT:
+              break;
+          }
+        });
+
         this.load('001');
       },
 

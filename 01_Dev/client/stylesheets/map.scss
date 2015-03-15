@@ -10,6 +10,10 @@ div#map-container {
   float: left;
   width: 64px;
   height: 64px;
+
+  &.selected {
+    border: solid 2px red;
+  }
 }
 
 div.control-tile {

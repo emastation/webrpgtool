@@ -247,11 +247,7 @@ class MapManager {
 
   public reloadMap() {
     var mapData = this.getMapFullData();
-    for(var key in mapData) {
-      tm.asset.Manager.set(key, tm.asset.MapSheet(mapData[key]));
-    }
-    
-    WRT.map.app.currentScene.load('001');    
+    WRT.map.app.currentScene.load('001', mapData);
   }
 
   public getMap():any {

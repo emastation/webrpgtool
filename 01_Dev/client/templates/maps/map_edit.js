@@ -86,6 +86,15 @@ var updateMap = function(currentMapId, map) {
   });
 }
 
+var updateSelectedClass = function(target) {
+  $("a[id^='texture_']>div").removeClass('selected');
+  $("a[id^='tiletype_']>div").removeClass('selected');
+  $("a[id^='floorheight_']>div").removeClass('selected');
+  $("a[id^='ceilingheight_']>div").removeClass('selected');
+
+  $(target).addClass('selected');
+}
+
 Template.mapEdit.events({
   'submit form': function(e) {
     e.preventDefault();
@@ -157,28 +166,37 @@ Template.mapEdit.events({
 
   "click a[id^='texture_']": function(e) {
     e.preventDefault();
+
     WRT.map.mapManager.switchMapLayer(0);
     WRT.map.mapManager.setCurrentTileIndex($(e.target).data('mtid'))
+
+    updateSelectedClass(e.target);
   },
 
   "click a[id^='tiletype_']": function(e) {
     e.preventDefault();
-    console.log($(e.target).children().get(0));
+
     WRT.map.mapManager.switchMapLayer(1);
     WRT.map.mapManager.setCurrentTileIndex($(e.target).data('mttid'))
+
+    updateSelectedClass(e.target);
   },
 
   "click a[id^='floorheight_']": function(e) {
     e.preventDefault();
-    console.log($(e.target).children().get(0));
+
     WRT.map.mapManager.switchMapLayer(2);
     WRT.map.mapManager.setCurrentTileIndex($(e.target).data('hid'))
+
+    updateSelectedClass(e.target);
   },
 
   "click a[id^='ceilingheight_']": function(e) {
     e.preventDefault();
-    console.log($(e.target).children().get(0));
+
     WRT.map.mapManager.switchMapLayer(3);
     WRT.map.mapManager.setCurrentTileIndex($(e.target).data('hid'))
+
+    updateSelectedClass(e.target);
   }
 });

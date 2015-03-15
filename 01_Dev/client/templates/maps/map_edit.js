@@ -123,7 +123,7 @@ Template.mapEdit.events({
     e.preventDefault();
 
     if (confirm("Delete this map?")) {
-      var currentMapId = this._id;
+      var currentMapId = this.map._id;
       Maps.remove(currentMapId);
       Router.go('mapsList');
     }
@@ -132,7 +132,7 @@ Template.mapEdit.events({
   'click .rollback': function(e) {
     e.preventDefault();
 
-    var currentMapId = this._id;
+    var currentMapId = this.map._id;
     updateMap(currentMapId, WRT.map.previousMap);
     
     WRT.map.mapManager.setMap(WRT.map.previousMap);
@@ -147,7 +147,7 @@ Template.mapEdit.events({
     
     var map = WRT.map.mapManager.getMap();
     
-    var currentMapId = this._id;
+    var currentMapId = this.map._id;
     updateMap(currentMapId, map);
   },
   
@@ -159,7 +159,7 @@ Template.mapEdit.events({
     
     var map = WRT.map.mapManager.getMap();
     
-    var currentMapId = this._id;
+    var currentMapId = this.map._id;
     updateMap(currentMapId, map);
 
   },

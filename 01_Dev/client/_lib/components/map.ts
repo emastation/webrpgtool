@@ -37,6 +37,7 @@ class MapManager {
 
       init: function () {
         this.superInit();
+        var tm_this = this;
         var canvasDom = tm.dom.Element("#world");
         canvasDom.event.pointstart( (e:any) => {
           var cellX = Math.floor(e.pointX/that.chipSize);
@@ -44,28 +45,41 @@ class MapManager {
 
           var mapData = that.getMapFullData();
 
+          var layerId:MapLayer = null;
           switch (that.currentMode) {
             case MapLayer.TEXTURE:
+              layerId = MapLayer.TEXTURE;
               break;
 
             case MapLayer.TILE_TYPE:
+              layerId = MapLayer.TILE_TYPE;
               break;
 
             case MapLayer.FLOOR_HEIGHT:
+              layerId = MapLayer.FLOOR_HEIGHT;
               break;
 
             case MapLayer.CEILING_HEIGHT:
+              layerId = MapLayer.CEILING_HEIGHT;
               break;
           }
+          mapData[that.mapName].layers[layerId].data[cellX+mapData[that.mapName].width*cellY] = that.currentTileIndex;
+          that.switchMapLayer(layerId, mapData);
         });
 
-        this.load('001');
+        var mapData = that.getMapFullData();
+        this.load('001', mapData);
       },
 
-      load: function (name) {
+      load: function (name, mapData) {
         if (!_.isNull(that.mapSprite)) {
             that.mapSprite.remove();
         }
+
+        for(var key in mapData) {
+          tm.asset.Manager.set(key, tm.asset.MapSheet(mapData[key]));
+        }
+
         that.mapSprite = tm.display.MapSprite("map." + name, that.chipSize, that.chipSize).addChildTo(this);
       }
     });
@@ -299,8 +313,11 @@ class MapManager {
     return mapdata;
   }
 
-  public switchMapLayer(mode:MapLayer) {
-    var mapData = this.getMapFullData();
+  public switchMapLayer(mode:MapLayer, mapData:any = null) {
+
+    if (mapData == null) {
+      mapData = this.getMapFullData();
+    }
     var mapName = this.mapName;
 
     switch (mode) {
@@ -330,11 +347,8 @@ class MapManager {
         break;
     }
 
-    for(var key in mapData) {
-      tm.asset.Manager.set(key, tm.asset.MapSheet(mapData[key]));
-    }
 
-    WRT.map.app.currentScene.load('001');
+    WRT.map.app.currentScene.load('001', mapData);
 
   }
 

@@ -53,14 +53,14 @@ class MapManager {
             case MapLayer.TEXTURE:
               layerId = MapLayer.TEXTURE;
               mapData[that.mapName].layers[layerId].data[cellX+mapWidth*cellY] = that.currentTileIndex;
-              cellStr = that.makeCellStrOfTypeArray(cellX, cellY, mapData);
+              cellStr = that.makeCellStrOfTypeArray(cellX, cellY, mapData, false);
               that.modifyMap(cellX, cellY, cellStr, 'type');
               break;
 
             case MapLayer.TILE_TYPE:
               layerId = MapLayer.TILE_TYPE;
               mapData[that.mapName].layers[layerId].data[cellX+mapWidth*cellY] = that.currentTileIndex;
-              cellStr = that.makeCellStrOfTypeArray(cellX, cellY, mapData);
+              cellStr = that.makeCellStrOfTypeArray(cellX, cellY, mapData, true);
               that.modifyMap(cellX, cellY, cellStr, 'type');
               break;
 
@@ -384,7 +384,7 @@ class MapManager {
   }
 
   // tmlib の マップ配列データから、当該チップ用の文字列を生成する。
-  private makeCellStrOfTypeArray(cellX, cellY, mapData, isType = true) {
+  private makeCellStrOfTypeArray(cellX, cellY, mapData, isType) {
 
     var mapWidth = mapData[this.mapName].width;
     var resultStr = '';
@@ -407,22 +407,46 @@ class MapManager {
         break;
     }
 
-    if (isType === true) {// isType引数がtrueの時のみ、実行
+    var typeChipStr = this.getMapTypeChipStr(cellX, cellY);
+    var option:any = typeChipStr.match(/\[(.+)\]/); // オプション文字列を取得
+
+    if (isType === true) {
       if (typeStr === 'P') {
+        if (!option) {
+          option = [];
+          option[1] = "A|0~1";
+        }
         var answer = window.prompt("プラットフォームの動作モードをA（自動）またはM（手動）で指定し、|で区切った上で、\n" +
-        "次にプラットフォームの床の最低の高さと最高の高さを\nチルダで区切って入力してください。\n指定できる数値の範囲は -10 ~ 10 です。\n\n例：\nA|0~5\nM|-2~0", "A|0~1");
+        "次にプラットフォームの床の最低の高さと最高の高さを\nチルダで区切って入力してください。\n指定できる数値の範囲は -10 ~ 10 です。\n\n例：\nA|0~5\nM|-2~0", option[1]);
         if (answer === null) {
-          this.currentPlatformParameter = '[A|0~1]';
+          this.currentPlatformParameter = '[' + option[1] + ']';
         } else {
           this.currentPlatformParameter = '[' + answer + ']';
         }
       } else {
         this.currentPlatformParameter = '';
       }
+    } else {
+      if (!option) { // オプション文字列がついていなかったら
+        this.currentPlatformParameter = '';
+      } else { // オプション文字列がついていたら
+        this.currentPlatformParameter = '[' + option[1] + ']';
+      }
     }
+
     resultStr += typeStr + this.currentPlatformParameter;
+    this.currentPlatformParameter = '';
 
     return resultStr;
+  }
+
+  private getMapTypeChipStr(cellX, cellY):string {
+    var type_map = this.map.type_array;
+    var splitted_with_n = type_map.split("\n"); //マップ文字列を行ごとに区切る
+
+    var splitted_with_comma = splitted_with_n[cellY].split(","); // カンマで区切り、各列の値を配列に
+    var chipStr = splitted_with_comma[cellX];
+    return chipStr;
   }
 
   private makeCellStrOfHeightArray(cellX, cellY, mapData) {

@@ -24,6 +24,7 @@ class MapManager {
   private mapName = 'map.001';
   static heightLevels = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
   private currentMode = MapLayer.TEXTURE;
+  private currentTileIndex = 0; // tmlib Mapのインデックス（０起算）
 
   constructor(private map:any) {
     this.init();
@@ -335,6 +336,10 @@ class MapManager {
 
     WRT.map.app.currentScene.load('001');
 
+  }
+
+  public setCurrentTileIndex(index:number) {
+    this.currentTileIndex = index;
   }
 
   static getHeightCssOffsetStrArray():any {

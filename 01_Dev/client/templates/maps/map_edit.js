@@ -99,7 +99,7 @@ Template.mapEdit.events({
   'submit form': function(e) {
     e.preventDefault();
 
-    var currentMapId = this._id;
+    var currentMapId = this.map._id;
 
     var mapProperties = {
       title: $(e.target).find('[name=title]').val(),

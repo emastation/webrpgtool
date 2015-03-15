@@ -65,6 +65,8 @@ Template.mapEdit.rendered = function() {
 //    , 100);
   }
 
+  $($("a[id^='texture_']>div").get(0)).addClass('selected'); //テクスチャの０番目を選択する
+
 };
 
 var updateMap = function(currentMapId, map) {

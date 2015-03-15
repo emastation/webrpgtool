@@ -198,5 +198,12 @@ Template.mapEdit.events({
     WRT.map.mapManager.setCurrentTileIndex($(e.target).data('hid'))
 
     updateSelectedClass(e.target);
+  },
+
+  "click input#reloadData": function(e) {
+    var map = WRT.map.mapManager.getMap();
+
+    var currentMapId = this.map._id;
+    updateMap(currentMapId, map);
   }
 });

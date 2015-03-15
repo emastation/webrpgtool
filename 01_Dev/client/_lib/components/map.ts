@@ -25,6 +25,7 @@ class MapManager {
   static heightLevels = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
   private currentMode = MapLayer.TEXTURE;
   private currentTileIndex = 0; // tmlib Mapのインデックス（０起算）
+  private currentPlatformParameter = ""; // タイルタイプにプラットフォームを選択した場合に使われる文字列
 
   constructor(private map:any) {
     this.init();
@@ -46,25 +47,41 @@ class MapManager {
           var mapData = that.getMapFullData();
 
           var layerId:MapLayer = null;
+          var cellStr:string = null;
+          var mapWidth = mapData[that.mapName].width;
           switch (that.currentMode) {
             case MapLayer.TEXTURE:
               layerId = MapLayer.TEXTURE;
+              mapData[that.mapName].layers[layerId].data[cellX+mapWidth*cellY] = that.currentTileIndex;
+              cellStr = that.makeCellStrOfTypeArray(cellX, cellY, mapData);
+              that.modifyMap(cellX, cellY, cellStr, 'type');
               break;
 
             case MapLayer.TILE_TYPE:
               layerId = MapLayer.TILE_TYPE;
+              mapData[that.mapName].layers[layerId].data[cellX+mapWidth*cellY] = that.currentTileIndex;
+              cellStr = that.makeCellStrOfTypeArray(cellX, cellY, mapData);
+              that.modifyMap(cellX, cellY, cellStr, 'type');
               break;
 
             case MapLayer.FLOOR_HEIGHT:
               layerId = MapLayer.FLOOR_HEIGHT;
+              mapData[that.mapName].layers[layerId].data[cellX+mapWidth*cellY] = that.currentTileIndex;
+              cellStr = that.makeCellStrOfHeightArray(cellX, cellY, mapData);
+              that.modifyMap(cellX, cellY, cellStr, 'height');
               break;
 
             case MapLayer.CEILING_HEIGHT:
               layerId = MapLayer.CEILING_HEIGHT;
+              mapData[that.mapName].layers[layerId].data[cellX+mapWidth*cellY] = that.currentTileIndex;
+              cellStr = that.makeCellStrOfHeightArray(cellX, cellY, mapData);
+              that.modifyMap(cellX, cellY, cellStr, 'height');
               break;
           }
-          mapData[that.mapName].layers[layerId].data[cellX+mapData[that.mapName].width*cellY] = that.currentTileIndex;
-          that.switchMapLayer(layerId, mapData);
+
+          that.switchMapLayer(layerId, mapData); // マップをリロード
+
+          $("input#reloadData").click();
         });
 
         var mapData = that.getMapFullData();
@@ -364,6 +381,103 @@ class MapManager {
         offset: 'background-image: url(' + that.heightTileUrl + ' ); background-position: -' + index*32 + 'px 0px;'
       };
     });
+  }
+
+  // tmlib の マップ配列データから、当該チップ用の文字列を生成する。
+  private makeCellStrOfTypeArray(cellX, cellY, mapData, isType = true) {
+
+    var mapWidth = mapData[this.mapName].width;
+    var resultStr = '';
+    resultStr += mapData[this.mapName].layers[0].data[cellX+mapWidth*cellY] + 1; // MAD_DATAからクリックされたセルのテクスチャのインデックス値を読み取る
+    resultStr += ' ';
+
+    var typeStr:string = null;
+    switch (mapData[this.mapName].layers[1].data[cellX+mapWidth*cellY]) {// MAD_DATAからクリックされたセルのタイルタイプのインデックス値を読み取る
+      case 0:
+        typeStr = 'N';
+        break;
+      case 1:
+        typeStr = 'W';
+        break;
+      case 2:
+        typeStr = 'Dk';
+        break;
+      case 3:
+        typeStr = 'P';
+        break;
+    }
+
+    if (isType === true) {// isType引数がtrueの時のみ、実行
+      if (typeStr === 'P') {
+        var answer = window.prompt("プラットフォームの動作モードをA（自動）またはM（手動）で指定し、|で区切った上で、\n" +
+        "次にプラットフォームの床の最低の高さと最高の高さを\nチルダで区切って入力してください。\n指定できる数値の範囲は -10 ~ 10 です。\n\n例：\nA|0~5\nM|-2~0", "A|0~1");
+        if (answer === null) {
+          this.currentPlatformParameter = '[A|0~1]';
+        } else {
+          this.currentPlatformParameter = '[' + answer + ']';
+        }
+      } else {
+        this.currentPlatformParameter = '';
+      }
+    }
+    resultStr += typeStr + this.currentPlatformParameter;
+
+    return resultStr;
+  }
+
+  private makeCellStrOfHeightArray(cellX, cellY, mapData) {
+
+    var resultStr = '';
+    var mapWidth = mapData[this.mapName].width;
+    var floorHeightIndexStartedZero = mapData[this.mapName].layers[2].data[cellX+mapWidth*cellY];
+    resultStr += (floorHeightIndexStartedZero - 10); // MAD_DATAからクリックされたセルのインデックス値を読み取る
+    resultStr += ' ';
+
+    var ceilHeightIndexStartedZero = mapData[this.mapName].layers[3].data[cellX+mapWidth*cellY]; // MAD_DATAからクリックされたセルのインデックス値を読み取る
+    resultStr += (ceilHeightIndexStartedZero - 10); // MAD_DATAからクリックされたセルのインデックス値を読み取る
+
+    return resultStr;
+  }
+
+  private replaceChar(text, index, lastIndex, value) {
+    return text.substr(0, index) + value + text.substr(lastIndex); // indexとlastIndexの前後でマップ文字列を分けて、その間に値を挿入する。
+  }
+
+  private modifyMap(x, y, valueChar, type_or_height) {
+
+    var map_data_str:string = null;
+    switch (type_or_height) {
+      case 'type':
+        map_data_str = this.map.type_array;
+        break;
+      case 'height':
+        map_data_str = this.map.height_array;
+        break;
+    }
+    var splitted_with_n = map_data_str.split("\n"); // マップ文字列を行ごとに区切る
+    var index = 0;
+    for (var i=0; i<y; i++) {// y-1行目までの行の全ての文字数を足す。
+      index += splitted_with_n[i].length + 1; // 1足しているのは、改行を含めるため
+    }
+    var splitted_with_comma = splitted_with_n[y].split(",");
+    for (var i=0; i<x; i++) { // y行の先頭から、x-1列目までの文字数を足す
+      index += splitted_with_comma[i].length + 1; // 1足しているのは、カンマを含めるため
+    }
+
+    // この時点で、indexは、指定位置(x,y)のマップ文字列中の開始位置を示す。
+
+    var lastIndex = index + splitted_with_comma[x].length; // 指定位置(x,y)のマップ文字列中の終了位置（値の後ろのカンマは含めない）を示す。
+
+    map_data_str = this.replaceChar(map_data_str, index, lastIndex, valueChar);
+
+    switch (type_or_height) {
+      case 'type':
+        this.map.type_array = map_data_str;
+        break;
+      case 'height':
+        this.map.height_array = map_data_str;
+        break;
+    }
   }
 
   private getMapBaseData():any {

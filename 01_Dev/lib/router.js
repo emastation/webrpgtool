@@ -38,6 +38,12 @@ Router.route('/maps/:_id/edit', {
   }
 });
 
+Router.route('/game/:_id', {
+  name: 'gamePage',
+  data: function() { return Maps.findOne(this.params._id); }
+});
+
+
 var requireLogin = function() {
   if (! Meteor.user()) {
     if (Meteor.loggingIn()) { // p116に説明あり

@@ -1,6 +1,7 @@
 declare var WRT:any;
 declare var tm:any;
 declare var _:any;
+declare var $:any;
 
 enum MapLayer {
   TEXTURE = 0,

@@ -34,13 +34,19 @@ Router.route('/maps/:_id/edit', {
       map: Maps.findOne(this.params._id),
       mapTextures: MapTextures.find(),
       mapTileTypes: MapTileTypes.find()
-    }
+    };
   }
 });
 
 Router.route('/game/:_id', {
   name: 'gamePage',
-  data: function() { return Maps.findOne(this.params._id); }
+  data: function() {
+    return {
+      map: Maps.findOne(this.params._id),
+      mapTextures: MapTextures.find(),
+      mapTileTypes: MapTileTypes.find()
+    };
+  }
 });
 
 

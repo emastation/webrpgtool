@@ -2,7 +2,7 @@ WRT = {};
 WRT.map = {};
 
 Template.mapEdit.helpers({
-  heightTileDivStyleStrArray: window.MapManager.getHeightCssOffsetStrArray()
+  heightTileDivStyleStrArray: _.isUndefined(window.MapManager) ? null : window.MapManager.getHeightCssOffsetStrArray()
 });
 
 Template.mapEdit.rendered = function() {

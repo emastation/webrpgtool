@@ -5,6 +5,10 @@ declare var _:any;
 declare var $:any;
 
 Template.gamePage.rendered = function() {
+
+  var map = new WrtGame.Map();
+  map.setMap(this.data.map);
+
   var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("renderCanvas");
   var engine = new BABYLON.Engine(canvas, true);
 
@@ -41,5 +45,4 @@ Template.gamePage.rendered = function() {
     engine.resize();
   });
 
-  var map = new WrtGame.Map();
 };

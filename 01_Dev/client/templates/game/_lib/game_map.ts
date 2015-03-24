@@ -1,11 +1,17 @@
 
 module WrtGame {
-    export class Map {
-        constructor()
-        {
-            console.log("Hello TypeScript!");
-        }
+  export class Map {
+    private map:any;
+    constructor()
+    {
+      console.log("Hello TypeScript!");
     }
+
+    public setMap(map:any)
+    {
+      this.map = map;
+    }
+  }
 }
 
 interface Window {

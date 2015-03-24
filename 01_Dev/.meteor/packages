@@ -12,6 +12,6 @@ sacha:spin
 ian:accounts-ui-bootstrap-3
 accounts-password
 audit-argument-checks
-meteortypescript:typescript-libs@=1.0.12
-meteortypescript:compiler@=1.0.2
+meteortypescript:typescript-libs@1.0.15
+meteortypescript:compiler@2.0.8
 mquandalle:jade

@@ -1,6 +1,11 @@
+/// <reference path="_lib/game_map.ts"/>
+
+declare var Template:any;
+declare var _:any;
+declare var $:any;
 
 Template.gamePage.rendered = function() {
-  var canvas = document.getElementById("renderCanvas");
+  var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("renderCanvas");
   var engine = new BABYLON.Engine(canvas, true);
 
   var createScene = function() {
@@ -35,4 +40,6 @@ Template.gamePage.rendered = function() {
   window.addEventListener("resize", function() {
     engine.resize();
   });
+
+  var map = new WrtGame.Map();
 };

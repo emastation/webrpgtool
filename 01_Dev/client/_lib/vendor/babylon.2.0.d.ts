@@ -1,4 +1,9 @@
 declare module BABYLON {
+    interface AudioNode {}
+    interface AudioContext {}
+    interface GainNode {}
+    interface AudioBuffer {}
+
     class _DepthCullingState {
         private _isDepthTestDirty;
         private _isDepthMaskDirty;

@@ -1,4 +1,4 @@
-/// <reference path="_lib/game_map.ts"/>
+/// <reference path="_lib/game_flat_map.ts"/>
 
 declare var Template:any;
 declare var _:any;
@@ -6,7 +6,7 @@ declare var $:any;
 
 Template.gamePage.rendered = function() {
 
-  var map = new WrtGame.Map();
+  var map = new WrtGame.FlatMap();
   map.setMap(this.data.map);
 
   var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("renderCanvas");

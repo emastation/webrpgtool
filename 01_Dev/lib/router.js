@@ -38,6 +38,18 @@ Router.route('/maps/:_id/edit', {
   }
 });
 
+Router.route('/codes', {
+  name: 'codesList',
+  waitOn: function() {
+    return Meteor.subscribe('codes');
+  },
+  data: function() {
+    return {
+      codes: Codes.find()
+    };
+  }
+});
+
 Router.route('/game/:_id', {
   name: 'gamePage',
   data: function() {

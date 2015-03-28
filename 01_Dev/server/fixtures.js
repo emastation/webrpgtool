@@ -78,3 +78,16 @@ if (MapTileTypes.find().count() === 0) {
   });
 }
 
+if (Codes.find().count() === 0) {
+  Codes.insert({
+    codeId: 0,
+    name: 'コード１',
+    code: 'Hello World!'
+  });
+  Codes.insert({
+    codeId: 1,
+    name: 'コード２',
+    code: 'Hello Meteor!'
+  });
+}
+

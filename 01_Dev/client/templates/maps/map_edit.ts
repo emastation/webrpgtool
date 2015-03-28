@@ -1,5 +1,14 @@
+interface Window {
+  fireEvent: any;
+}
+
+
 WRT = {};
 WRT.map = {};
+
+declare var MapScene:any;
+declare var Maps:any;
+declare var Router:any;
 
 Template.mapEdit.helpers({
   heightTileDivStyleStrArray: _.isUndefined(window.MapManager) ? null : window.MapManager.getHeightCssOffsetStrArray()
@@ -57,7 +66,7 @@ Template.mapEdit.rendered = function() {
       if (!document.createEvent) {
         window.fireEvent('onload');
       } else {
-        event = document.createEvent('HTMLEvents');
+        var event = document.createEvent('HTMLEvents');
         event.initEvent ("load", false, true)
         window.dispatchEvent(event);
       }

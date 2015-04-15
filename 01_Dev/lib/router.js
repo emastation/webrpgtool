@@ -72,6 +72,6 @@ var requireLogin = function() {
   } else {
     this.next();
   }
-}
+};
 
 Router.onBeforeAction(requireLogin, {only: 'mapSubmit'});

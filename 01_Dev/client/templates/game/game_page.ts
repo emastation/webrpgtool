@@ -6,8 +6,8 @@ declare var $:any;
 
 Template.gamePage.rendered = function() {
 
-  var map = new WrtGame.FlatMap();
-  map.setMap(this.data.map);
+  var flatMap = new WrtGame.FlatMap();
+  flatMap.map = this.data.map;
 
   var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("renderCanvas");
   var engine = new BABYLON.Engine(canvas, true);

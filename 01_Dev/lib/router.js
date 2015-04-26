@@ -52,6 +52,9 @@ Router.route('/codes', {
 
 Router.route('/game/:_id', {
   name: 'gamePage',
+  waitOn: function() {
+    return [Meteor.subscribe('map_textures'), Meteor.subscribe('map_tile_types')];
+  },
   data: function() {
     return {
       map: Maps.findOne(this.params._id),

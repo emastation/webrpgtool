@@ -38,9 +38,9 @@ module WrtGame {
 
   export class Map {
     protected _map:any;
-    private _typeMapData: any;
-    private _texMapData: any;
-    private _heightMapData: any;
+    protected _typeMapData: any;
+    protected _texMapData: any;
+    protected _heightMapData: any;
     constructor(isCalledFromChild:boolean) {
       if(!isCalledFromChild) {
         throw new Error("This class is a abstract class.");
@@ -211,11 +211,11 @@ module WrtGame {
       console.log(mapDataValueStr);
 
     }
-    set map(map:any) {
+    protected set map(map:any) {
+      this._map = map;
       this.makeTexMapData(map.type_array);
       this.makeTypeMapData(map.type_array);
       this.makeHeightMapData(map.height_array);
-      this._map = map;
     }
     get title():string {
       return this._map.title;

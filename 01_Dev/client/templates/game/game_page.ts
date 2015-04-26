@@ -6,12 +6,11 @@ declare var $:any;
 
 Template.gamePage.rendered = function() {
 
-  var flatMap = new WrtGame.FlatMap();
-  flatMap.map = this.data.map;
 
   var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("renderCanvas");
   var engine = new BABYLON.Engine(canvas, true);
 
+  var material = null;
   var createScene = function() {
     var scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color3(0,0,0.2);
@@ -20,14 +19,14 @@ Template.gamePage.rendered = function() {
 
     camera.attachControl(canvas, false);
 
-    var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0,1,0), scene);
+    var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(1,1,1), scene);
 
-    light.groundColor = new BABYLON.Color3(0.5, 0, 0.5);
+    light.groundColor = new BABYLON.Color3(1.0, 1.0, 1.0);
 
     var box = BABYLON.Mesh.CreateBox("mesh", 3, scene);
     box.showBoundingBox = true;
 
-    var material = new BABYLON.StandardMaterial("std", scene);
+    material = new BABYLON.StandardMaterial("std", scene);
     material.diffuseColor = new BABYLON.Color3(0.5, 0, 0.5);
 
     box.material = material;
@@ -36,6 +35,8 @@ Template.gamePage.rendered = function() {
   };
 
   var scene = createScene();
+  var flatMap = new WrtGame.FlatMap(scene, this.data.map, this.data.mapTextures.fetch());
+//  flatMap.setMesh();
 
   engine.runRenderLoop(function() {
     scene.render();

@@ -15,3 +15,4 @@ audit-argument-checks
 meteortypescript:typescript-libs@1.0.15
 meteortypescript:compiler@2.0.8
 mquandalle:jade
+firfi:meteor-baconjs

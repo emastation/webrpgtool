@@ -26,6 +26,8 @@ module WrtGame {
   export var L_MOVE_LEFT = "L_MOVE_LEFT";
   export var L_MOVE_RIGHT = "L_MOVE_RIGHT";
   export var L_MOVE_BACKWARD = "L_MOVE_BACKWARD";
+  export var L_MOVE_UPPER = "L_MOVE_UPPER";
+  export var L_MOVE_LOWER = "L_MOVE_LOWER";
 
   export var L_NORTH = "L_NORTH";
   export var L_WEST = "L_WEST";

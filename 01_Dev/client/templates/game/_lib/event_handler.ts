@@ -1,3 +1,6 @@
+/**
+ * 物理的なイベントを処理する関数群
+ */
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
 
@@ -34,11 +37,10 @@ module WrtGame {
         .skipDuplicates(_.isEqual).toProperty();
   }
 
-  $(function () {
+  export function initEventHandler(): any {
     var gameState = GameState.getInstance();
     var allowedStateKeys:Array<Number> = gameState.allowedStateKeyCodes;
-    keyStateProperty(allowedStateKeys).flatMap(gameState.getFunctionLogicalMovementCommand()).onValue(function (value) {
-      gameState.registerLogicalMovementState(value);
-    });
-  });
+
+    return keyStateProperty(allowedStateKeys);
+  }
 }

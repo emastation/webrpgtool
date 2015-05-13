@@ -27,6 +27,11 @@ module WrtGame {
   export var L_MOVE_RIGHT = "L_MOVE_RIGHT";
   export var L_MOVE_BACKWARD = "L_MOVE_BACKWARD";
 
+  export var L_NORTH = "L_NORTH";
+  export var L_WEST = "L_WEST";
+  export var L_EAST = "L_EAST";
+  export var L_SOUTH = "L_SOUTH";
+
   /**
    *  ゲームの状態を保持するクラス
    */
@@ -49,6 +54,23 @@ module WrtGame {
       return GameState._instance;
     }
 
+    /**
+     * 物理イベントのBaconJSプロパティから移動命令を生成するBaconJSプロパティに変換する
+     * @param property
+     */
+    public mapPhysicalEventPropertyToLogicalMovementCommandProperty(phisicalEventProperty:any) :any {
+      var logicalMovementCommandProperty:any = phisicalEventProperty.flatMap(this.getFunctionLogicalMovementCommand());
+      logicalMovementCommandProperty.onValue((value)=> {
+        this.registerLogicalMovementState(value);
+      });
+
+      return logicalMovementCommandProperty;
+    }
+
+    /**
+     * KEY_INFO_* の配列から KEY_CODE_* の配列を作る
+     * @returns {Array}
+     */
     private createAllowedStateKeyCodes():Array<Number> {
       var allowedStateKeyCodes = [];
       this._allowedStateKeyInfo.forEach(function(element, index, array){
@@ -66,6 +88,10 @@ module WrtGame {
       return this._allowedStateKeyCode;
     }
 
+    /**
+     * Bacon.jsのキーイベントプロパティのflatMapに渡す関数を返す
+     * @returns {any}
+     */
     public getFunctionLogicalMovementCommand() {
       return function(value) {
         var index = this.getIndexOfKeyState(value);
@@ -77,6 +103,11 @@ module WrtGame {
       }.bind(this);
     }
 
+    /**
+     * キーコード配列のインデックスを返す
+     * @param value
+     * @returns {number}
+     */
     public getIndexOfKeyState(value:any) {
       var allowedStateKeyCodes = this._allowedStateKeyCode;
       var index = this.allowedStateKeyCodes.indexOf(value[0]);
@@ -88,7 +119,11 @@ module WrtGame {
       return index;
     }
 
-    public registerLogicalMovementState(value) {
+    /**
+     * 論理移動命令ステートを記憶する
+     * @param value
+     */
+    private registerLogicalMovementState(value) {
       this._logicalMovementState = value;
       console.debug("LogicalMovementState: " + value);
     }

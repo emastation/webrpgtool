@@ -211,6 +211,29 @@ module WrtGame {
       console.log(mapDataValueStr);
 
     }
+
+    public isCouldPassAt(x:number, y:number, h:number): boolean {
+      var floorHeight = this.heightMapData[x][y][0];
+      var ceilingHeight = this.heightMapData[x][y][1];
+
+      if (flyMode_f) {
+        // 自分より下の高さのタイルに移動できる判定処理（空中浮遊モード時に使用）
+        if (h >= floorHeight) {
+          if (h+1 <= ceilingHeight) {
+            return true;
+          }
+        }
+      } else {
+        // 自分と同じ高さの床にしか移動できない判定処理
+        if (h == floorHeight) {
+          if (h+1 <= ceilingHeight) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
     protected set map(map:any) {
       this._map = map;
       this.makeTexMapData(map.type_array);

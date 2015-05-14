@@ -34,6 +34,8 @@ module WrtGame {
   export var L_EAST = "L_EAST";
   export var L_SOUTH = "L_SOUTH";
 
+  export var flyMode_f = true;
+
   /**
    *  ゲームの状態を保持するクラス
    */
@@ -129,5 +131,6 @@ module WrtGame {
       this._logicalMovementState = value;
       console.debug("LogicalMovementState: " + value);
     }
+
   }
 }

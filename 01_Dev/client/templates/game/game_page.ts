@@ -42,8 +42,14 @@ Template.gamePage.rendered = function() {
   var physicalEventProperty:any = WrtGame.initEventHandler();
   var gameState = WrtGame.GameState.getInstance();
   var logicalMovementCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalEventProperty);
+  var mapMovement = WrtGame.MapMovement.getInstance();
+  mapMovement.logicalMovementCommandProperty = logicalMovementCommandProperty;
+  mapMovement.init();
 
   engine.runRenderLoop(function() {
+    var moveDelta = 1.0/60*3;
+    mapMovement.move(flatMap, moveDelta);
+
     scene.render();
   });
 

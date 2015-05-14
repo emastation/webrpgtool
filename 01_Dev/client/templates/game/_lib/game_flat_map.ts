@@ -370,17 +370,13 @@ module WrtGame {
       buffer.positions.push( x-1, ceilingHeight, y-1 );
       buffer.normals.push(0, -1, 0);
       buffer.texcoords.push(0.5, 0);
-
-
+      
       // 表三角形の１個目
       buffer.indices.push(verticesStride+0, verticesStride+1, verticesStride+2);
-
       // 表三角形の２個目
-      buffer.indices.push(verticesStride+0, verticesStride+1, verticesStride+3);
-
+      buffer.indices.push(verticesStride+0, verticesStride+2, verticesStride+3);
       // 裏三角形の１個目
       buffer.indices.push(verticesStride+2, verticesStride+1, verticesStride+0);
-
       // 裏三角形の２個目
       buffer.indices.push(verticesStride+3, verticesStride+2, verticesStride+0);
 

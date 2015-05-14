@@ -229,5 +229,14 @@ module WrtGame {
       }
     }
 
+    public get playerX():number {
+      return this._player_x;
     }
+    public get playerY():number {
+      return this._player_y;
+    }
+    public get playerH():number {
+      return this._player_h;
+    }
+  }
 }

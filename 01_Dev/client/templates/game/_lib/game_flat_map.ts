@@ -24,6 +24,7 @@ module WrtGame {
       var heightMapData = this._heightMapData;
 
       for (var i = 0; i < this.textureImageUrls.length; i++) { //マテリアルごとに処理
+        var ii = i+1; // texMapData配列の中のテキスチャIDは1起算なので、それに合わせる
         var sprite:any = {};
         sprite.textureName = this.textureImageUrls[i].gametex_url;
         sprite.buffer = {positions:[], normals:[], texcoords:[], indices:[]};
@@ -36,7 +37,7 @@ module WrtGame {
         // 床の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
@@ -48,7 +49,7 @@ module WrtGame {
         // 床の北向きの壁の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { // && mapData[y-1][x] === 0) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y-1][x] === 0) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorNorthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
@@ -60,7 +61,7 @@ module WrtGame {
         // 床の東向きの壁の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { // && mapData[y][x+1] === 0) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y][x+1] === 0) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorEastWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
@@ -72,7 +73,7 @@ module WrtGame {
         // 床の南向きの壁の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { // && mapData[y+1][x] == 0) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y+1][x] == 0) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorSouthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
@@ -84,7 +85,7 @@ module WrtGame {
         // 床の西向きの壁の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { // && mapData[y][x-1] == 0) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y][x-1] == 0) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorWestWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
@@ -97,7 +98,7 @@ module WrtGame {
         // 天井の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
@@ -109,7 +110,7 @@ module WrtGame {
         // 天井の北向きの壁の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { // && mapData[y-1][x] === 0) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y-1][x] === 0) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingNorthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
@@ -121,7 +122,7 @@ module WrtGame {
         // 天井の東向きの壁の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { // && mapData[y][x+1] === 0) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y][x+1] === 0) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingEastWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
@@ -133,7 +134,7 @@ module WrtGame {
         // 天井の南向きの壁の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { // && mapData[y+1][x] == 0) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y+1][x] == 0) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingSouthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
@@ -145,7 +146,7 @@ module WrtGame {
         // 天井の西向きの壁の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === i) { // && mapData[y][x-1] == 0) { //
+            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y][x-1] == 0) { //
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingWestWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);

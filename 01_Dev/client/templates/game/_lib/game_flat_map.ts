@@ -155,6 +155,14 @@ module WrtGame {
           }
         }
 
+        // Babylon.jsは左手系なので、z軸を反転する
+        for (var j=0; j<sprite.buffer.positions.length; j++) {
+          if (j%3 === 2) {
+            sprite.buffer.positions[j] *= -1;
+            sprite.buffer.normals[j] *= -1;
+          }
+        }
+
         if (this.chipMeshExArray[i].FaceN > 0) {
           sprite.mesh = new BABYLON.Mesh(this._map.title + "_" + i, this._scene);
           var updatable = true;
@@ -370,7 +378,7 @@ module WrtGame {
       buffer.positions.push( x-1, ceilingHeight, y-1 );
       buffer.normals.push(0, -1, 0);
       buffer.texcoords.push(0.5, 0);
-      
+
       // 表三角形の１個目
       buffer.indices.push(verticesStride+0, verticesStride+1, verticesStride+2);
       // 表三角形の２個目

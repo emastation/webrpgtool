@@ -71,12 +71,16 @@ module WrtGame {
 
     }
 
+    private convertBabylonPlayerPosition(x:number, h:number, y:number) {
+      return new BABYLON.Vector3(x - 0.5, h + 0.5, -1 * y + 0.5);
+    }
+
     private runRenderLoop(mapMovement:MapMovement, flatMap:FlatMap, scene:BABYLON.Scene, camera:BABYLON.FreeCamera) {
       var moveDelta = 1.0/60*3;
       mapMovement.move(flatMap, moveDelta);
-//      camera. = new BABYLON.Vector3(mapMovement.playerX + 0.5, mapMovement.playerH + 0.5, mapMovement.playerY + 0.5);
-      camera.position = new BABYLON.Vector3(mapMovement.playerX - 0.5, mapMovement.playerH + 0.5, mapMovement.playerY - 0.5);
-//      camera.updateCache();
+
+      camera.position = this.convertBabylonPlayerPosition(mapMovement.playerX, mapMovement.playerH, mapMovement.playerY);
+      camera.rotation = new BABYLON.Vector3(0, Math.PI, 0);
       console.debug(""+camera.position.x, camera.position.y, camera.position.z);
       scene.render();
     }

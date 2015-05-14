@@ -12,16 +12,19 @@ module WrtGame {
     }
 
     public init(data:any) {
+      // canvasの取得と、それを引数にしたBabylonエンジン作成
       var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("renderCanvas");
       var engine = new BABYLON.Engine(canvas, true);
 
       var material = null;
+      var camera:BABYLON.Camera;
+      // Babylonのシーン作成関数
       var createScene = function() {
         var scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color3(0,0,0.2);
 
 //    var camera = new BABYLON.ArcRotateCamera("Camera", 1.0, 1.0, 12, BABYLON.Vector3.Zero(), scene);
-        var camera = new BABYLON.Camera("Camera", new BABYLON.Vector3(0.5, 0.5, 0.5), scene);
+        camera = new BABYLON.Camera("Camera", new BABYLON.Vector3(0.5, 0.5, 0.5), scene);
 
         camera.attachControl(canvas);
 
@@ -40,29 +43,39 @@ module WrtGame {
         return scene;
       };
 
+      // Babylonのシーンの作成と、そのシーンを引数に、flatMapクラスの生成
       var scene = createScene();
       var flatMap = new WrtGame.FlatMap(scene, data.map, data.mapTextures.fetch());
-//  flatMap.setMesh();
 
-      // イベントハンドラ初期化
+      // 物理イベントのプロパティ初期化
       var physicalEventProperty:any = WrtGame.initEventHandler();
+
+      // 論理移動コマンドプロパティ初期化
       var gameState = WrtGame.GameState.getInstance();
       var logicalMovementCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalEventProperty);
+
+      // マップ移動クラスの初期化
       var mapMovement = WrtGame.MapMovement.getInstance();
       mapMovement.logicalMovementCommandProperty = logicalMovementCommandProperty;
       mapMovement.init();
 
-      engine.runRenderLoop(function() {
-        var moveDelta = 1.0/60*3;
-        mapMovement.move(flatMap, moveDelta);
-
-        scene.render();
-      });
-
+      // Windowのリサイズ対応
       window.addEventListener("resize", function() {
         engine.resize();
       });
 
+      // 描画ループ定義
+      engine.runRenderLoop(()=> {
+        this.runRenderLoop(mapMovement, flatMap, scene, camera);
+      });
+
+    }
+
+    private runRenderLoop(mapMovement:MapMovement, flatMap:FlatMap, scene:BABYLON.Scene, camera:BABYLON.Camera) {
+      var moveDelta = 1.0/60*3;
+      mapMovement.move(flatMap, moveDelta);
+
+      scene.render();
     }
   }
 

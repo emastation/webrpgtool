@@ -56,8 +56,7 @@ module WrtGame {
 
       // マップ移動クラスの初期化
       var mapMovement = WrtGame.MapMovement.getInstance();
-      mapMovement.logicalMovementCommandProperty = logicalMovementCommandProperty;
-      mapMovement.init();
+      mapMovement.init(logicalMovementCommandProperty);
 
       // Windowのリサイズ対応
       window.addEventListener("resize", function() {

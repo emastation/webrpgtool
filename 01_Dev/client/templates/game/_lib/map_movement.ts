@@ -36,15 +36,15 @@ module WrtGame {
      * 移動すべき方向を示すBaconJSプロパティを返す
      * @returns {any}
      */
-    private getMoveDirectionProperty():any {
+    private mapLogicalMovementCommandToMoveDirectionProperty(logicalMovementCommandProperty:any):any {
 
       /**
        * 押した移動キーと現在プレイヤーが向いている方角に基づき、移動すべき方角を返す
        * @param moveCommand プレーヤーが押した移動キーのキーコード
        * @returns {string} 移動すべき方角
        */
+      var currentResult:string = null;
       var func = (moveCommand:string) => {
-        var currentResult:string = null;
         if (moveCommand === L_MOVE_FORWARD) {
           currentResult = this._player_direction;
         } else if (moveCommand === L_MOVE_LEFT) {
@@ -77,20 +77,15 @@ module WrtGame {
         return currentResult;
       };
 
-      return this._logicalMovementCommandProperty.flatMap(func);
+      return logicalMovementCommandProperty.flatMap(func);
     }
 
-    public init() {
-      var property = this.getMoveDirectionProperty();
+    public init(logicalMovementCommandProperty:any) {
+      var property = this.mapLogicalMovementCommandToMoveDirectionProperty(logicalMovementCommandProperty);
       property.onValue((value)=> {
         this._directionToMove = value;
         console.debug("LogicalMovementDirection: " + value);
       });
-    }
-
-
-    public set logicalMovementCommandProperty(property:any) {
-      this._logicalMovementCommandProperty = property;
     }
 
     /**
@@ -99,8 +94,10 @@ module WrtGame {
      * @param moveDelta 移動する際の、この関数の１回実行分の座標移動値（非常に小さい浮動小数）
      */
     public move(map:any, moveDelta:number) {
+      var gameState = WrtGame.GameState.getInstance();
+
       // 移動キー（回転キーは覗く）を押していた場合
-      if(this._directionToMove !== null) {
+      if(this._directionToMove !== null && gameState.logicalMovementState !== L_NO_MOVE) {
         switch ( this._directionToMove ){ // 向いている方角によって、目的の座標を適切に求める
           case L_NORTH:
             this._player_y -= moveDelta; // 座標を変位させる

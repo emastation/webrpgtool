@@ -127,9 +127,13 @@ module WrtGame {
      * 論理移動命令ステートを記憶する
      * @param value
      */
-    private registerLogicalMovementState(value) {
+    private registerLogicalMovementState(value:string) {
       this._logicalMovementState = value;
       console.debug("LogicalMovementState: " + value);
+    }
+
+    public get logicalMovementState():string {
+      return this._logicalMovementState;
     }
 
   }

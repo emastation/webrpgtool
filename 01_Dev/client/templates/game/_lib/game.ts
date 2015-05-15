@@ -16,7 +16,6 @@ module WrtGame {
       var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("renderCanvas");
       var engine = new BABYLON.Engine(canvas, true);
 
-      var material = null;
       var camera:BABYLON.FreeCamera;
       // Babylonのシーン作成関数
       var createScene = function() {
@@ -31,14 +30,6 @@ module WrtGame {
         var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(1,1,1), scene);
 
         light.groundColor = new BABYLON.Color3(1.0, 1.0, 1.0);
-
-        var box = BABYLON.Mesh.CreateBox("mesh", 3, scene);
-        box.showBoundingBox = true;
-
-        material = new BABYLON.StandardMaterial("std", scene);
-        material.diffuseColor = new BABYLON.Color3(0.5, 0, 0.5);
-
-        box.material = material;
 
         return scene;
       };
@@ -70,17 +61,45 @@ module WrtGame {
 
     }
 
-    private convertBabylonPlayerPosition(x:number, h:number, y:number) {
-      return new BABYLON.Vector3(x - 0.5, h + 0.5, -1 * y + 0.5);
+    /**
+     * MapMovementクラスが返すプレーヤー座標を、BabylonJSでの表示仕様を満たす座標に変換する
+     * @param x
+     * @param h
+     * @param y
+     * @returns {BABYLON.Vector3}
+     */
+    private convertBabylonPlayerPosition(x:number, h:number, y:number, angle:number):BABYLON.Vector3 {
+
+      // プレーヤーが0.5後ろに下がって、背中が後ろのマスの壁にひっつくようにするためのオフセット座標
+      var rotateMtx = BABYLON.Matrix.RotationY(angle);
+      var viewPosOffset = new BABYLON.Vector3(0, 0, -0.5);
+
+      // そのオフセット座標を、プレーヤーの向きに合わせて回転する
+      viewPosOffset = BABYLON.Vector3.TransformCoordinates(viewPosOffset, rotateMtx);
+
+      // プレーヤーのBabylonJSにおける位置座標
+      var viewPos = new BABYLON.Vector3(x - 0.5, h + 0.5, -1 * y + 0.5);
+
+      // オフセットを考慮するために足す
+      return viewPos.add(viewPosOffset);
     }
 
     private runRenderLoop(mapMovement:MapMovement, flatMap:FlatMap, scene:BABYLON.Scene, camera:BABYLON.FreeCamera) {
+
+      // 平行移動する
       var moveDelta = 1.0/60*3;
       mapMovement.move(flatMap, moveDelta);
 
-      camera.position = this.convertBabylonPlayerPosition(mapMovement.playerX, mapMovement.playerH, mapMovement.playerY);
-      camera.rotation = new BABYLON.Vector3(0, Math.PI, 0);
+      // 向きを変える
+      mapMovement.rotate(60*0.8);
+
+      // カメラの位置・回転をセット
+      camera.position = this.convertBabylonPlayerPosition(mapMovement.playerX, mapMovement.playerH, mapMovement.playerY, mapMovement.playerAngle);
+      camera.rotation = new BABYLON.Vector3(0, mapMovement.playerAngle, 0);
+
       console.debug(""+camera.position.x, camera.position.y, camera.position.z);
+
+      // シーンをレンダリングする
       scene.render();
     }
   }

@@ -6,7 +6,7 @@ module WrtGame {
   export class MapMovement {
     private static _instance:MapMovement;
     private _logicalMovementCommandProperty:any; // 論理移動命令のBaconJSプロパティ
-    private _player_direction:string = L_EAST; // プレイヤーが向いている方角
+    private _player_direction:string = L_SOUTH; // プレイヤーが向いている方角
 
     private _player_x_int = 1; // プレイヤーの位置座標（整数）。セルの移動を開始するとすぐに値がインクリメント・デクリメントされる。
     private _player_y_int = 1; // プレイヤーの位置座標（整数）。セルの移動を開始するとすぐに値がインクリメント・デクリメントされる。
@@ -17,6 +17,10 @@ module WrtGame {
     private _player_x_center_int = 1; // プレイヤーの位置座標（整数）。セルの移動を開始して、隣のセルの中央にまで来ると値がインクリメント・デクリメントされる。
     private _player_y_center_int = 1; // プレイヤーの位置座標（整数）。セルの移動を開始して、隣のセルの中央にまで来ると値がインクリメント・デクリメントされる。
     private _player_h_center_int = 0; // プレイヤーの高さ座標（整数）。セルの移動を開始して、隣のセルの中央にまで来ると値がインクリメント・デクリメントされる。
+
+    private _player_angle = Math.PI; // プレーヤーの現在の向きの角度（ラジアン）
+    private _player_angle_to_change = 0; // プレーヤーの回転処理で、何度回転すればよいかの角度
+    private _player_remained_changing_angle = 0; // プレーヤーの回転処理中、あと何度回転すればよいかの角度残量
 
     private _directionToMove:string = null; // プレーヤーが動くべき方向（プレーヤーの向きではないことに注意）
     private _player_moving_f = false; // falseならプレーヤーの位置移動中でない。trueなら位置移動中。
@@ -30,6 +34,45 @@ module WrtGame {
         MapMovement._instance = new MapMovement();
       }
       return MapMovement._instance;
+    }
+
+    /**
+     * プレーヤーが向いている方向を示すBaconJSプロパティを返す
+     * @param logicalMovementCommandProperty
+     */
+    private mapLogicalMovementCommandToPlayerDirectionProperty(logicalMovementCommandProperty:any):any {
+
+      var filterFunc = (moveCommand:string) => {
+        return _.contains([L_TURN_LEFT, L_TURN_BACK, L_TURN_RIGHT], moveCommand);
+      };
+
+      var converterJson = {
+        L_TURN_LEFT: {
+          L_NORTH: [L_WEST, -Math.PI/2],
+          L_EAST: [L_NORTH, -Math.PI/2],
+          L_SOUTH: [L_EAST, -Math.PI/2],
+          L_WEST: [L_SOUTH,  -Math.PI/2]
+        },
+        L_TURN_BACK: {
+          L_NORTH: [L_SOUTH, -Math.PI],
+          L_EAST: [L_WEST, -Math.PI],
+          L_SOUTH: [L_NORTH, -Math.PI],
+          L_WEST: [L_EAST, -Math.PI]
+        },
+        L_TURN_RIGHT: {
+          L_NORTH: [L_EAST, Math.PI/2],
+          L_EAST: [L_SOUTH, Math.PI/2],
+          L_SOUTH: [L_WEST, Math.PI/2],
+          L_WEST: [L_NORTH, Math.PI/2]
+        }
+      };
+
+      var func = (moveCommand:string) => {
+        return converterJson[moveCommand][this._player_direction];
+      };
+
+      return logicalMovementCommandProperty.filter(filterFunc).flatMap(func);
+
     }
 
     /**
@@ -81,11 +124,40 @@ module WrtGame {
     }
 
     public init(logicalMovementCommandProperty:any) {
-      var property = this.mapLogicalMovementCommandToMoveDirectionProperty(logicalMovementCommandProperty);
-      property.onValue((value)=> {
+      var moveDirectionProperty = this.mapLogicalMovementCommandToMoveDirectionProperty(logicalMovementCommandProperty);
+      moveDirectionProperty.onValue((value)=> {
         this._directionToMove = value;
         console.debug("LogicalMovementDirection: " + value);
       });
+
+      var playerDirectionProperty = this.mapLogicalMovementCommandToPlayerDirectionProperty(logicalMovementCommandProperty);
+      playerDirectionProperty.onValue((value)=> {
+        if (!this._player_moving_f && Math.abs(this._player_remained_changing_angle) === 0) {
+          this._player_remained_changing_angle = value[1];
+          this._player_angle_to_change = value[1];
+          this._player_direction = value[0];
+        }
+        console.debug("Player's Direction was changed to : " + value[0] + " rotatoion:" + value[1]);
+      });
+    }
+
+    /**
+     * プレーヤーの向きを回転して変更する。毎フレーム呼ばれ、各フレームで少しずつ回転する。
+     * @param moveDelta
+     */
+    public rotate(rotationUnit:number) {
+      if (this._player_remained_changing_angle === 0) {
+        return;
+      }
+
+      var unitAngleDelta = this._player_angle_to_change / rotationUnit;
+      this._player_angle += unitAngleDelta;
+      this._player_remained_changing_angle -= unitAngleDelta;
+      if (Math.abs(this._player_remained_changing_angle) < Math.abs(unitAngleDelta)+0.00001) {
+        this._player_angle += this._player_remained_changing_angle;
+        this._player_remained_changing_angle = 0;
+      }
+      console.log(this._player_angle);
     }
 
     /**
@@ -234,6 +306,9 @@ module WrtGame {
     }
     public get playerH():number {
       return this._player_h;
+    }
+    public get playerAngle():number {
+      return this._player_angle;
     }
   }
 }

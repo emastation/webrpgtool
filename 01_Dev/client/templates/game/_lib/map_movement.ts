@@ -25,6 +25,27 @@ module WrtGame {
     private _directionToMove:string = null; // プレーヤーが動くべき方向（プレーヤーの向きではないことに注意）
     private _player_moving_f = false; // falseならプレーヤーの位置移動中でない。trueなら位置移動中。
 
+    private converterJson = {
+      L_TURN_LEFT: {
+        L_NORTH: [L_WEST, -Math.PI/2],
+        L_EAST: [L_NORTH, -Math.PI/2],
+        L_SOUTH: [L_EAST, -Math.PI/2],
+        L_WEST: [L_SOUTH,  -Math.PI/2]
+      },
+      L_TURN_BACK: {
+        L_NORTH: [L_SOUTH, -Math.PI],
+        L_EAST: [L_WEST, -Math.PI],
+        L_SOUTH: [L_NORTH, -Math.PI],
+        L_WEST: [L_EAST, -Math.PI]
+      },
+      L_TURN_RIGHT: {
+        L_NORTH: [L_EAST, Math.PI/2],
+        L_EAST: [L_SOUTH, Math.PI/2],
+        L_SOUTH: [L_WEST, Math.PI/2],
+        L_WEST: [L_NORTH, Math.PI/2]
+      }
+    };
+
     constructor() {
     }
 
@@ -46,29 +67,10 @@ module WrtGame {
         return _.contains([L_TURN_LEFT, L_TURN_BACK, L_TURN_RIGHT], moveCommand);
       };
 
-      var converterJson = {
-        L_TURN_LEFT: {
-          L_NORTH: [L_WEST, -Math.PI/2],
-          L_EAST: [L_NORTH, -Math.PI/2],
-          L_SOUTH: [L_EAST, -Math.PI/2],
-          L_WEST: [L_SOUTH,  -Math.PI/2]
-        },
-        L_TURN_BACK: {
-          L_NORTH: [L_SOUTH, -Math.PI],
-          L_EAST: [L_WEST, -Math.PI],
-          L_SOUTH: [L_NORTH, -Math.PI],
-          L_WEST: [L_EAST, -Math.PI]
-        },
-        L_TURN_RIGHT: {
-          L_NORTH: [L_EAST, Math.PI/2],
-          L_EAST: [L_SOUTH, Math.PI/2],
-          L_SOUTH: [L_WEST, Math.PI/2],
-          L_WEST: [L_NORTH, Math.PI/2]
-        }
-      };
+
 
       var func = (moveCommand:string) => {
-        return converterJson[moveCommand][this._player_direction];
+        return this.converterJson[moveCommand][this._player_direction];
       };
 
       return logicalMovementCommandProperty.filter(filterFunc).flatMap(func);
@@ -146,6 +148,8 @@ module WrtGame {
      * @param moveDelta
      */
     public rotate(rotationUnit:number) {
+      var gameState = WrtGame.GameState.getInstance();
+
       if (this._player_remained_changing_angle === 0) {
         return;
       }
@@ -153,9 +157,18 @@ module WrtGame {
       var unitAngleDelta = this._player_angle_to_change / rotationUnit;
       this._player_angle += unitAngleDelta;
       this._player_remained_changing_angle -= unitAngleDelta;
-      if (Math.abs(this._player_remained_changing_angle) < Math.abs(unitAngleDelta)+0.00001) {
+
+      if (Math.abs(this._player_remained_changing_angle) < Math.abs(unitAngleDelta)) {
         this._player_angle += this._player_remained_changing_angle;
         this._player_remained_changing_angle = 0;
+
+        // 回転が終わってもまだ、回転キーが押されている場合は、ひきつづき回転させる
+        if (_.contains([L_TURN_LEFT, L_TURN_BACK, L_TURN_RIGHT], gameState.logicalMovementState)) {
+          var value:any = this.converterJson[gameState.logicalMovementState][this._player_direction];
+          this._player_remained_changing_angle = value[1];
+          this._player_angle_to_change = value[1];
+          this._player_direction = value[0];
+        }
       }
       console.log(this._player_angle);
     }
@@ -166,6 +179,10 @@ module WrtGame {
      * @param moveDelta 移動する際の、この関数の１回実行分の座標移動値（非常に小さい浮動小数）
      */
     public move(map:any, moveDelta:number) {
+      if (this._player_remained_changing_angle !== 0) {
+        return;
+      }
+
       var gameState = WrtGame.GameState.getInstance();
 
       // 移動キー（回転キーは覗く）を押していた場合

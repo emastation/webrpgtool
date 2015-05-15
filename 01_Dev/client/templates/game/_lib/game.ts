@@ -90,12 +90,15 @@ module WrtGame {
       var moveDelta = 1.0/60*3;
       mapMovement.move(flatMap, moveDelta);
 
-      // 向きを変える
+      // 水平方向の向きを変える
       mapMovement.rotate(60*0.8);
+
+      // 垂直方向の向きを変える
+      mapMovement.faceUpOrLow(1/60*0.5);
 
       // カメラの位置・回転をセット
       camera.position = this.convertBabylonPlayerPosition(mapMovement.playerX, mapMovement.playerH, mapMovement.playerY, mapMovement.playerAngle);
-      camera.rotation = new BABYLON.Vector3(0, mapMovement.playerAngle, 0);
+      camera.rotation = new BABYLON.Vector3(-1*mapMovement.playerElevationAngle, mapMovement.playerAngle, 0);
       
       // シーンをレンダリングする
       scene.render();

@@ -6,24 +6,28 @@ module WrtGame {
   export class MapMovement {
     private static _instance:MapMovement;
     private _logicalMovementCommandProperty:any; // 論理移動命令のBaconJSプロパティ
-    private _player_direction:string = L_SOUTH; // プレイヤーが向いている方角
+    private _player_direction:string = L_SOUTH; // プレーヤーが向いている方角
 
-    private _player_x_int = 1; // プレイヤーの位置座標（整数）。セルの移動を開始するとすぐに値がインクリメント・デクリメントされる。
-    private _player_y_int = 1; // プレイヤーの位置座標（整数）。セルの移動を開始するとすぐに値がインクリメント・デクリメントされる。
-    private _player_h_int = 0; // プレイヤーの高さ座標（整数）。セルの移動を開始するとすぐに値がインクリメント・デクリメントされる。
+    private _player_x_int = 1; // プレーヤーの位置座標（整数）。セルの移動を開始するとすぐに値がインクリメント・デクリメントされる。
+    private _player_y_int = 1; // プレーヤーの位置座標（整数）。セルの移動を開始するとすぐに値がインクリメント・デクリメントされる。
+    private _player_h_int = 0; // プレーヤーの高さ座標（整数）。セルの移動を開始するとすぐに値がインクリメント・デクリメントされる。
     private _player_x = 1; // プレーヤーの位置座標x（浮動小数点値）
     private _player_y = 1; // プレーヤーの位置座標y（浮動小数点値）
     private _player_h = 0; // プレーヤーの高さ座標（浮動小数点値）
-    private _player_x_center_int = 1; // プレイヤーの位置座標（整数）。セルの移動を開始して、隣のセルの中央にまで来ると値がインクリメント・デクリメントされる。
-    private _player_y_center_int = 1; // プレイヤーの位置座標（整数）。セルの移動を開始して、隣のセルの中央にまで来ると値がインクリメント・デクリメントされる。
-    private _player_h_center_int = 0; // プレイヤーの高さ座標（整数）。セルの移動を開始して、隣のセルの中央にまで来ると値がインクリメント・デクリメントされる。
+    private _player_x_center_int = 1; // プレーヤーの位置座標（整数）。セルの移動を開始して、隣のセルの中央にまで来ると値がインクリメント・デクリメントされる。
+    private _player_y_center_int = 1; // プレーヤーの位置座標（整数）。セルの移動を開始して、隣のセルの中央にまで来ると値がインクリメント・デクリメントされる。
+    private _player_h_center_int = 0; // プレーヤーの高さ座標（整数）。セルの移動を開始して、隣のセルの中央にまで来ると値がインクリメント・デクリメントされる。
 
     private _player_angle = Math.PI; // プレーヤーの現在の向きの角度（ラジアン）
     private _player_angle_to_change = 0; // プレーヤーの回転処理で、何度回転すればよいかの角度
     private _player_remained_changing_angle = 0; // プレーヤーの回転処理中、あと何度回転すればよいかの角度残量
 
+    private _elevationAngle = 0; // プレーヤーの迎角（見上げる、または見下ろす角度）
+
     private _directionToMove:string = null; // プレーヤーが動くべき方向（プレーヤーの向きではないことに注意）
     private _player_moving_f = false; // falseならプレーヤーの位置移動中でない。trueなら位置移動中。
+
+    private _maxElevationAngle = Math.PI/4.1;
 
     private converterJson = {
       L_TURN_LEFT: {
@@ -182,8 +186,8 @@ module WrtGame {
 
       var gameState = WrtGame.GameState.getInstance();
 
-      // 移動キー（回転キーは覗く）を押していた場合
-      if(this._directionToMove !== null && gameState.logicalMovementState !== L_NO_MOVE) {
+      // 移動キー（回転キーは除く）を押していた場合
+      if(this._directionToMove !== null && !_.contains([L_NO_MOVE, L_FACE_UP, L_FACE_LOW], gameState.logicalMovementState)) {
         switch ( this._directionToMove ){ // 向いている方角によって、目的の座標を適切に求める
           case L_NORTH:
             this._player_y -= moveDelta; // 座標を変位させる
@@ -312,6 +316,25 @@ module WrtGame {
       }
     }
 
+    /**
+     * 見上げるか見下ろす
+     * @param angleDelta
+     */
+    public faceUpOrLow(angleDelta:number) {
+      var gameState = WrtGame.GameState.getInstance();
+      if (gameState.logicalMovementState === L_FACE_UP) {
+        this._elevationAngle += angleDelta;
+        if (this._elevationAngle > this._maxElevationAngle) {
+          this._elevationAngle = this._maxElevationAngle;
+        }
+      } else if (gameState.logicalMovementState === L_FACE_LOW) {
+        this._elevationAngle -= angleDelta;
+        if (this._elevationAngle < -1 * this._maxElevationAngle) {
+          this._elevationAngle = -1 * this._maxElevationAngle;
+        }
+      }
+    }
+
     public get playerX():number {
       return this._player_x;
     }
@@ -323,6 +346,9 @@ module WrtGame {
     }
     public get playerAngle():number {
       return this._player_angle;
+    }
+    public get playerElevationAngle():number {
+      return this._elevationAngle;
     }
   }
 }

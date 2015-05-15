@@ -96,9 +96,7 @@ module WrtGame {
       // カメラの位置・回転をセット
       camera.position = this.convertBabylonPlayerPosition(mapMovement.playerX, mapMovement.playerH, mapMovement.playerY, mapMovement.playerAngle);
       camera.rotation = new BABYLON.Vector3(0, mapMovement.playerAngle, 0);
-
-      console.debug(""+camera.position.x, camera.position.y, camera.position.z);
-
+      
       // シーンをレンダリングする
       scene.render();
     }

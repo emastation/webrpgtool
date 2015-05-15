@@ -67,8 +67,6 @@ module WrtGame {
         return _.contains([L_TURN_LEFT, L_TURN_BACK, L_TURN_RIGHT], moveCommand);
       };
 
-
-
       var func = (moveCommand:string) => {
         return this.converterJson[moveCommand][this._player_direction];
       };
@@ -170,11 +168,10 @@ module WrtGame {
           this._player_direction = value[0];
         }
       }
-      console.log(this._player_angle);
     }
 
     /**
-     * セルを移動する。毎フレーム呼ばれ、各フレームで少しずつ移動する。
+     * マップのセルを移動する。毎フレーム呼ばれ、各フレームで少しずつ移動する。
      * @param map マップデータ
      * @param moveDelta 移動する際の、この関数の１回実行分の座標移動値（非常に小さい浮動小数）
      */

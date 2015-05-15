@@ -33,124 +33,73 @@ module WrtGame {
         this.chipMeshExArray.push(sprite);
 //        this.setTextureToSprite3D(sprite, sprite.textureName);
 
-        /// 床
-        // 床の頂点データ作成
         for (var y = 0; y < mapHeight + 2; y++) {
           for (var x = 0; x < mapWidth + 2; x++) {
             if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { //
+
+              /// 床
+              // 床の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-            }
-          }
-        }
 
-        // 床の北向きの壁の頂点データ作成
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y-1][x] === 0) { //
+              // 床の北向きの壁の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorNorthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-            }
-          }
-        }
 
-        // 床の東向きの壁の頂点データ作成
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y][x+1] === 0) { //
+              // 床の東向きの壁の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorEastWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-            }
-          }
-        }
 
-        // 床の南向きの壁の頂点データ作成
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y+1][x] == 0) { //
+              // 床の南向きの壁の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorSouthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-            }
-          }
-        }
 
-        // 床の西向きの壁の頂点データ作成
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y][x-1] == 0) { //
+              // 床の西向きの壁の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupFloorWestWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-            }
-          }
-        }
 
-        /// 天井
-        // 天井の頂点データ作成
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { //
+
+              /// 天井
+              // 天井の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-            }
-          }
-        }
 
-        // 天井の北向きの壁の頂点データ作成
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y-1][x] === 0) { //
+              // 天井の北向きの壁の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingNorthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-            }
-          }
-        }
 
-        // 天井の東向きの壁の頂点データ作成
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y][x+1] === 0) { //
+              // 天井の東向きの壁の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingEastWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-            }
-          }
-        }
 
-        // 天井の南向きの壁の頂点データ作成
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y+1][x] == 0) { //
+              // 天井の南向きの壁の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingSouthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-            }
-          }
-        }
 
-        // 天井の西向きの壁の頂点データ作成
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { // && mapData[y][x-1] == 0) { //
+              // 天井の西向きの壁の頂点データ作成
               var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
               var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
               this.setupCeilingWestWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
               this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
+
             }
           }
         }

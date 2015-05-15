@@ -112,9 +112,9 @@ module WrtGame {
             case L_WEST: currentResult = L_EAST; break;
           }
         } else if (moveCommand === L_MOVE_UPPER) {
-          currentResult = L_MOVE_UPPER;
+          currentResult = L_UPPER;
         } else if (moveCommand === L_MOVE_LOWER) {
-          currentResult = L_MOVE_LOWER;
+          currentResult = L_LOWER;
         }
 
         return currentResult;
@@ -229,7 +229,7 @@ module WrtGame {
               this._player_moving_f = true;
             }
             break;
-          case L_MOVE_UPPER:
+          case L_UPPER:
             this._player_h += moveDelta;
             this._player_h_int = Math.ceil(this._player_h)-1;
             if (!map.isCouldPassAt(this._player_y_int, this._player_x_int, this._player_h_int+1)) {
@@ -239,11 +239,11 @@ module WrtGame {
               this._player_moving_f = true;
             }
             break;
-          case L_MOVE_LOWER:
+          case L_LOWER:
             this._player_h -= moveDelta;
             this._player_h_int = Math.floor(this._player_h)+1;
             if (!map.isCouldPassAt(this._player_y_int, this._player_x_int, this._player_h_int-1)) {
-//                            this._player_h = this._player_h_int; // ここをコメントアウトすることで、空中浮遊モードの場合に、稼働中のプラットフォームの床に自然に接触できる
+              this._player_h = this._player_h_int; // ここをコメントアウトすることで、空中浮遊モードの場合に、稼働中のプラットフォームの床に自然に接触できる
               this._player_moving_f = false;
             } else {
               this._player_moving_f = true;
@@ -290,7 +290,7 @@ module WrtGame {
               this._player_moving_f = false;
             }
             break;
-          case L_MOVE_UPPER:
+          case L_UPPER:
             dest = Math.ceil(this._player_h);
             this._player_h_int = dest;
             this._player_h += moveDelta;
@@ -299,7 +299,7 @@ module WrtGame {
               this._player_moving_f = false;
             }
             break;
-          case L_MOVE_LOWER:
+          case L_LOWER:
             dest = Math.floor(this._player_h);
             this._player_h_int = dest;
             this._player_h -= moveDelta;

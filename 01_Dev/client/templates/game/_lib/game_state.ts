@@ -9,6 +9,8 @@ module WrtGame {
   export var KEY_CODE_Q = 81;
   export var KEY_CODE_E = 69;
   export var KEY_CODE_X = 88;
+  export var KEY_CODE_T = 84;
+  export var KEY_CODE_G = 71;
 
   export var KEY_INFO_W = [KEY_CODE_W, "KEY_W"];
   export var KEY_INFO_A = [KEY_CODE_A, "KEY_A"];
@@ -17,6 +19,8 @@ module WrtGame {
   export var KEY_INFO_Q = [KEY_CODE_Q, "KEY_Q"];
   export var KEY_INFO_E = [KEY_CODE_E, "KEY_E"];
   export var KEY_INFO_X = [KEY_CODE_X, "KEY_X"];
+  export var KEY_INFO_T = [KEY_CODE_T, "KEY_T"];
+  export var KEY_INFO_G = [KEY_CODE_G, "KEY_G"];
 
   export var L_NO_MOVE = "L_NO_MOVE";
   export var L_MOVE_FORWARD = "L_MOVE_FORWARD";
@@ -33,8 +37,10 @@ module WrtGame {
   export var L_WEST = "L_WEST";
   export var L_EAST = "L_EAST";
   export var L_SOUTH = "L_SOUTH";
+  export var L_UPPER = "L_UPPER";
+  export var L_LOWER = "L_LOWER";
 
-  export var flyMode_f = false;
+  export var flyMode_f = true;
 
   /**
    *  ゲームの状態を保持するクラス
@@ -43,8 +49,8 @@ module WrtGame {
     private static _instance:GameState;
     private _logicalMovementState:any;
     private _allowedStateKeyCode:Array<Number>;
-    private _allowedStateKeyInfo:Array<any> = [KEY_INFO_W, KEY_INFO_A, KEY_INFO_S, KEY_INFO_D, KEY_INFO_Q, KEY_INFO_E, KEY_INFO_X];
-    private _logicalMovementCommand:Array<any> = [L_MOVE_FORWARD, L_TURN_LEFT, L_TURN_BACK, L_TURN_RIGHT, L_MOVE_LEFT, L_MOVE_RIGHT, L_MOVE_BACKWARD];
+    private _allowedStateKeyInfo:Array<any> = [KEY_INFO_W, KEY_INFO_A, KEY_INFO_S, KEY_INFO_D, KEY_INFO_Q, KEY_INFO_E, KEY_INFO_X, KEY_INFO_T, KEY_INFO_G];
+    private _logicalMovementCommand:Array<any> = [L_MOVE_FORWARD, L_TURN_LEFT, L_TURN_BACK, L_TURN_RIGHT, L_MOVE_LEFT, L_MOVE_RIGHT, L_MOVE_BACKWARD, L_MOVE_UPPER, L_MOVE_LOWER];
 
     constructor() {
       this._allowedStateKeyCode = this.createAllowedStateKeyCodes();

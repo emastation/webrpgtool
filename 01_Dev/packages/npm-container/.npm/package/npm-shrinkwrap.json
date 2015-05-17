@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "typescript": {
+      "version": "1.4.1"
+    },
+    "typescript-simple": {
+      "version": "1.0.3"
+    }
+  }
+}

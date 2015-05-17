@@ -16,6 +16,7 @@ module WrtGame {
 
     private _timeLeft:number = 0; // プラットフォームを動かし始めてからの経過時間
     private _direction:number = 1; // プラットフォームが動く上下の方向
+    private _remainLoopN:number = 0;
 
     // コンストラクタの宣言
     constructor(x:number, y:number, heightMap:any, parameter:string) {
@@ -39,12 +40,15 @@ module WrtGame {
         this.levels[1] = tmpLevel;
       }
       
+      this.initDirection();
+    }
+
+    private initDirection() {
       if (this.currentLevel === this.levels[0]) { // プラットフォームの現在レベルがlevels[0]であれば、
         this._direction = 1; // プラットフォームは上に動かす
       } else {
         this._direction = -1; // そうでなければ、下に動かす
       }
-
     }
 
     public move() {
@@ -56,20 +60,31 @@ module WrtGame {
 
 
       if (this.platformMode === 'A') { // マニュアルモードのプラットフォームであれば、プレーヤーが乗っかった時に動かす
+        this._remainLoopN = -1;
         this.moveInner(
-            delta, time, breakTime, this._floorSprite3D.mesh, 60, true
+            delta, time, breakTime, this._floorSprite3D.mesh, 60
         );
       } else if (this.platformMode === 'M') {
+        // もし、プレーヤーがこのプラットフォームに乗っているなら
+        var mapMovement = MapMovement.getInstance();
+        if (mapMovement.playerXInteger === this.x_onMap && mapMovement.playerYInteger === this.y_onMap) {
+          this._fired = true;
+          if (this._direction > 0) {
+            this._remainLoopN = 0;
+          } else {
+            this._remainLoopN = 0;
+          }
+        }
         if (this._fired) {
           this.moveInner(
-              delta, time, breakTime, this._floorSprite3D.mesh, 60, false
+              delta, time, breakTime, this._floorSprite3D.mesh, 60
           );
         }
       }
 
     }
 
-    private moveInner(delta:number, time:number, breakTime:number, sprite:any, fps:number, loop_f:boolean) {
+    private moveInner(delta:number, time:number, breakTime:number, sprite:any, fps:number) {
       this._timeLeft += 1 / fps;
 
       var newHeight = sprite.position.y + delta * this._direction;
@@ -83,7 +98,7 @@ module WrtGame {
       }
       sprite.position = new BABYLON.Vector3(sprite.position.x, newHeight, sprite.position.z);
 
-      // もし、プレーヤーがこのプラットフォームに乗っているなら
+      // もし、プレーヤーがこのプラットフォームに乗っているなら、プレーヤーの高さを更新する
       var mapMovement = MapMovement.getInstance();
       if (mapMovement.playerXInteger === this.x_onMap && mapMovement.playerYInteger === this.y_onMap) {
         if (flyMode_f) {
@@ -98,12 +113,14 @@ module WrtGame {
       this.heightMap[this.y_onMap][this.x_onMap][0] = sprite.position.y;
 
       if(this._timeLeft > time+breakTime) { // 動かし終わったら、次に動かすまでbreakTime時間だけ休む
-        if(loop_f) {
+        if(this._remainLoopN !== 0) { // -1か正の数であれば
           this._timeLeft = 0;
           this._direction *= -1;
+          this._remainLoopN -= 1;
         } else {
-
           this._fired = false;
+          this._timeLeft = 0;
+          this.initDirection();
         }
       }
     }

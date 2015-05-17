@@ -18,6 +18,12 @@ module WrtGame {
     return exist_f;
   }
 
+  /**
+   * タイプ文字の後ろにある[*]のパラメーター文字列を返す
+   * @param str_array
+   * @param typeIdentifier
+   * @returns {any}
+   */
   export function getTypeParameter(str_array:any, typeIdentifier:string): string
   {
     var exist_f:boolean = false;

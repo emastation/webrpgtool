@@ -96,6 +96,8 @@ module WrtGame {
       // 垂直方向の向きを変える
       mapMovement.faceUpOrLow(1/60*0.5);
 
+      flatMap.movePlatforms();
+
       // カメラの位置・回転をセット
       camera.position = this.convertBabylonPlayerPosition(mapMovement.playerX, mapMovement.playerH, mapMovement.playerY, mapMovement.playerAngle);
       camera.rotation = new BABYLON.Vector3(-1*mapMovement.playerElevationAngle, mapMovement.playerAngle, 0);

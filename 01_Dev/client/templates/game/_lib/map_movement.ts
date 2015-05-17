@@ -187,7 +187,9 @@ module WrtGame {
       var gameState = WrtGame.GameState.getInstance();
 
       // 移動キー（回転キーは除く）を押していた場合
-      if(this._directionToMove !== null && !_.contains([L_NO_MOVE, L_FACE_UP, L_FACE_LOW], gameState.logicalMovementState)) {
+      if(this._directionToMove !== null &&
+          _.contains([L_MOVE_FORWARD, L_MOVE_BACKWARD, L_MOVE_LEFT, L_MOVE_RIGHT, L_MOVE_UPPER, L_MOVE_LOWER],
+              gameState.logicalMovementState)) {
         switch ( this._directionToMove ){ // 向いている方角によって、目的の座標を適切に求める
           case L_NORTH:
             this._player_y -= moveDelta; // 座標を変位させる

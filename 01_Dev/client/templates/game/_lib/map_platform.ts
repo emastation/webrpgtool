@@ -72,14 +72,27 @@ module WrtGame {
     private moveInner(delta:number, time:number, breakTime:number, sprite:any, fps:number, loop_f:boolean) {
       this._timeLeft += 1 / fps;
 
-      sprite.position = new BABYLON.Vector3(sprite.position.x, sprite.position.y + delta * this._direction, sprite.position.z);
-      if (sprite.position.y > this.levels[1]) {
-        sprite.position.y = this.levels[1];
+      var newHeight = sprite.position.y + delta * this._direction;
+      if (newHeight > this.levels[1]) {
+        newHeight = this.levels[1];
         this.currentLevel = this.levels[1];
       }
-      if (sprite.position.y < this.levels[0]) {
-        sprite.position.y = this.levels[0];
+      if (newHeight < this.levels[0]) {
+        newHeight = this.levels[0];
         this.currentLevel = this.levels[0];
+      }
+      sprite.position = new BABYLON.Vector3(sprite.position.x, newHeight, sprite.position.z);
+
+      // もし、プレーヤーがこのプラットフォームに乗っているなら
+      var mapMovement = MapMovement.getInstance();
+      if (mapMovement.playerXInteger === this.x_onMap && mapMovement.playerYInteger === this.y_onMap) {
+        if (flyMode_f) {
+          if (newHeight > mapMovement.playerH) {
+            mapMovement.playerH = newHeight;
+          }
+        } else {
+          mapMovement.playerH = newHeight;
+        }
       }
 
       this.heightMap[this.y_onMap][this.x_onMap][0] = sprite.position.y;

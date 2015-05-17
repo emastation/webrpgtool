@@ -195,7 +195,7 @@ module WrtGame {
             this._player_y -= moveDelta; // 座標を変位させる
             this._player_y_int = Math.floor(this._player_y)+1; // 現在位置の整数を求める
             //if (mapData[this._player_y_int-1][this._player_x_int] === 0) { // もし、次の移動先が壁だったら
-            if (!map.isCouldPassAt(this._player_y_int-1, this._player_x_int, this._player_h_int)) { // もし、次の移動先が壁だったら
+            if (!map.isCouldPassAt(this._player_y_int-1, this._player_x_int, this._player_h_int, this._player_h)) { // もし、次の移動先が壁だったら
               this._player_y = this._player_y_int; // 座標値を整数値にする（止まる）
               this._player_moving_f = false; // 止まる
             } else {
@@ -206,7 +206,7 @@ module WrtGame {
             this._player_x += moveDelta;
             this._player_x_int = Math.ceil(this._player_x)-1;
             //if (mapData[this._player_y_int][this._player_x_int+1] === 0) {
-            if (!map.isCouldPassAt(this._player_y_int, this._player_x_int+1, this._player_h_int)) {
+            if (!map.isCouldPassAt(this._player_y_int, this._player_x_int+1, this._player_h_int, this._player_h)) {
               this._player_x = this._player_x_int;
               this._player_moving_f = false;
             } else {
@@ -217,7 +217,7 @@ module WrtGame {
             this._player_y += moveDelta;
             this._player_y_int = Math.ceil(this._player_y)-1;
             //if (mapData[this._player_y_int+1][this._player_x_int] === 0) {
-            if (!map.isCouldPassAt(this._player_y_int+1, this._player_x_int, this._player_h_int)) {
+            if (!map.isCouldPassAt(this._player_y_int+1, this._player_x_int, this._player_h_int, this._player_h)) {
               this._player_y = this._player_y_int;
               this._player_moving_f = false;
             } else {
@@ -228,7 +228,7 @@ module WrtGame {
             this._player_x -= moveDelta;
             this._player_x_int = Math.floor(this._player_x)+1;
             //if (mapData[this._player_y_int][this._player_x_int-1] === 0) {
-            if (!map.isCouldPassAt(this._player_y_int, this._player_x_int-1, this._player_h_int)) {
+            if (!map.isCouldPassAt(this._player_y_int, this._player_x_int-1, this._player_h_int, this._player_h)) {
               this._player_x = this._player_x_int;
               this._player_moving_f = false;
             } else {
@@ -238,7 +238,7 @@ module WrtGame {
           case L_UPPER:
             this._player_h += moveDelta;
             this._player_h_int = Math.ceil(this._player_h)-1;
-            if (!map.isCouldPassAt(this._player_y_int, this._player_x_int, this._player_h_int+1)) {
+            if (!map.isCouldPassAt(this._player_y_int, this._player_x_int, this._player_h_int+1, null)) {
               this._player_h = this._player_h_int;
               this._player_moving_f = false;
             } else {
@@ -248,8 +248,10 @@ module WrtGame {
           case L_LOWER:
             this._player_h -= moveDelta;
             this._player_h_int = Math.floor(this._player_h)+1;
-            if (!map.isCouldPassAt(this._player_y_int, this._player_x_int, this._player_h_int-1)) {
-              this._player_h = this._player_h_int; // ここをコメントアウトすることで、空中浮遊モードの場合に、稼働中のプラットフォームの床に自然に接触できる
+            if (!map.isCouldPassAt(this._player_y_int, this._player_x_int, this._player_h_int-1, null)) {
+              if (!map.isMovingPlatform(this._player_y_int, this._player_x_int)) {
+                this._player_h = this._player_h_int; // ここをコメントアウトすることで、空中浮遊モードの場合に、稼働中のプラットフォームの床に自然に接触できる
+              }
               this._player_moving_f = false;
             } else {
               this._player_moving_f = true;
@@ -346,11 +348,24 @@ module WrtGame {
     public get playerH():number {
       return this._player_h;
     }
+    public set playerH(height:number) {
+      this._player_h = height;
+      var floatingValue = height - Math.floor(height);
+      if (floatingValue === 0) {
+        this._player_h_int = height;
+      }
+    }
     public get playerAngle():number {
       return this._player_angle;
     }
     public get playerElevationAngle():number {
       return this._elevationAngle;
+    }
+    public get playerXInteger():number {
+      return this._player_x_int;
+    }
+    public get playerYInteger():number {
+      return this._player_y_int;
     }
   }
 }

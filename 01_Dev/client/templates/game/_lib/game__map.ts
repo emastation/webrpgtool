@@ -218,9 +218,16 @@ module WrtGame {
 
     }
 
-    public isCouldPassAt(x:number, y:number, h:number): boolean {
+    public isCouldPassAt(x:number, y:number, h:number, h_f:number): boolean {
       var floorHeight = this.heightMapData[x][y][0];
       var ceilingHeight = this.heightMapData[x][y][1];
+
+      if (h_f !== null) {
+        // 浮動小数点を含む中途半端な高さだったら移動を許可しない
+        if (h_f - Math.floor(h_f) > 0) {
+          return false;
+        }
+      }
 
       if (flyMode_f) {
         // 自分より下の高さのタイルに移動できる判定処理（空中浮遊モード時に使用）
@@ -238,6 +245,18 @@ module WrtGame {
         }
       }
       return false;
+    }
+
+    /**
+     * 稼働中のプラットフォームかどうか。指定されたマップチップの高さが浮動小数点値だったら、稼働中のプラットフォームと判断する
+     */
+    public isMovingPlatform(x:number, y:number):boolean {
+      var floorHeight = this.heightMapData[x][y][0];
+      if (floorHeight - Math.floor(floorHeight) > 0) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     protected set map(map:any) {

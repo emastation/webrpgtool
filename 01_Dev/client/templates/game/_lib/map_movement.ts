@@ -28,6 +28,7 @@ module WrtGame {
     private _player_moving_f = false; // falseならプレーヤーの位置移動中でない。trueなら位置移動中。
 
     private _maxElevationAngle = Math.PI/4.1;
+    private _onPlatformNow = false;
 
     private converterJson = {
       L_TURN_LEFT: {
@@ -366,6 +367,12 @@ module WrtGame {
     }
     public get playerYInteger():number {
       return this._player_y_int;
+    }
+    public get onPlatformNow():boolean {
+      return this._onPlatformNow;
+    }
+    public set onPlatformNow(flg:boolean) {
+      this._onPlatformNow = flg;
     }
   }
 }

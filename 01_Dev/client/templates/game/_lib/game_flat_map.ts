@@ -488,8 +488,17 @@ module WrtGame {
     }
 
     public movePlatforms() {
+      var isPlayerOnAnyPlatform = false;
       for (var i=0; i<this._platforms.length; i++) {
         this._platforms[i].move();
+        isPlayerOnAnyPlatform = isPlayerOnAnyPlatform || this._platforms[i].isPlayerOnThisPlatform();
+      }
+
+      var mapMovement = MapMovement.getInstance();
+      if (isPlayerOnAnyPlatform) {
+        mapMovement.onPlatformNow = true;
+      } else {
+        mapMovement.onPlatformNow = false;
       }
     }
   }

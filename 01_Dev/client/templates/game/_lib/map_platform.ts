@@ -12,11 +12,12 @@ module WrtGame {
     private maxCeilingHeight:number = 20; // 天井の最高の高さ
     private _floorSprite3D:any = {};
     private _ceilingSprite3D:any = {};
-    private _fired:boolean = false; // プラットフォームが起動されるとtrueになる。
+    private _loopN:number = 0; // プラットフォームの上下の動きの繰り返し数。0なら片道。1なら往復。
 
     private _timeLeft:number = 0; // プラットフォームを動かし始めてからの経過時間
     private _direction:number = 1; // プラットフォームが動く上下の方向
-    private _remainLoopN:number = 0;
+    private _remainLoopN:number = 0; // プラットフォームの残り繰り返し数
+    private _fired:boolean = false; // プラットフォームが起動されるとtrueになる。
 
     // コンストラクタの宣言
     constructor(x:number, y:number, heightMap:any, parameter:string) {
@@ -30,6 +31,8 @@ module WrtGame {
       for (var i=0; i<this.levels.length; i++) {
         this.levels[i] = parseInt(this.levels[i], 10);
       }
+
+      this._loopN = parseInt(parameter.split('|')[2]);
 //            console.log("パラメータ:", this.levels);
 
       this.currentLevel = this.heightMap[this.y_onMap][this.x_onMap][0]; //this.levels[0];
@@ -58,7 +61,6 @@ module WrtGame {
       var delta = 1 / 60 * span / time; //60は仮定するFPS値
       var breakTime = 1;
 
-
       if (this.platformMode === 'A') { // マニュアルモードのプラットフォームであれば、プレーヤーが乗っかった時に動かす
         this._remainLoopN = -1;
         this.moveInner(
@@ -68,9 +70,11 @@ module WrtGame {
         // もし、プレーヤーがこのプラットフォームに乗っているなら
         var mapMovement = MapMovement.getInstance();
         if (mapMovement.playerXInteger === this.x_onMap && mapMovement.playerYInteger === this.y_onMap) {
-          this._fired = true;
+          if(!mapMovement.onPlatformNow) { // それまで、プラットフォーム上にいなかったら
+            this._fired = true;
+          }
           if (this._direction > 0) {
-            this._remainLoopN = 0;
+            this._remainLoopN = this._loopN;
           } else {
             this._remainLoopN = 0;
           }
@@ -82,6 +86,15 @@ module WrtGame {
         }
       }
 
+    }
+
+    public isPlayerOnThisPlatform():boolean {
+      var mapMovement = MapMovement.getInstance();
+      if (mapMovement.playerXInteger === this.x_onMap && mapMovement.playerYInteger === this.y_onMap) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     private moveInner(delta:number, time:number, breakTime:number, sprite:any, fps:number) {

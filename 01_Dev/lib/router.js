@@ -50,6 +50,9 @@ Router.route('/codes', {
   }
 });
 
+Router.route('/codes/submit', {name: 'codeSubmit'});
+
+
 Router.route('/game/:_id', {
   name: 'gamePage',
   waitOn: function() {

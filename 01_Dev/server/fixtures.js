@@ -82,12 +82,14 @@ if (Codes.find().count() === 0) {
   Codes.insert({
     codeId: 0,
     name: 'コード１',
-    code: 'Hello World!'
+    typescript: 'Hello World!',
+    javascript: 'Hello World!'
   });
   Codes.insert({
     codeId: 1,
     name: 'コード２',
-    code: 'Hello Meteor!'
+    typescript: 'Hello Meteor!',
+    javascript: 'Hello Meteor !'
   });
 }
 

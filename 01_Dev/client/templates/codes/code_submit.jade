@@ -1,0 +1,16 @@
+template(name="codeSubmit")
+  form(class="main form")
+    div(class="form-group row")
+      div(class="col-xs-12")
+        label(class="control-label" for="name") Name
+        div(class="controls")
+          input(name="name" id="name" type="text" value="" placeholder="Name your code" class="form-control")
+        div(class="col-xs-6")
+          label(class="control-label" for="typescript") Typescript
+          div(class="controls")
+            textarea(name="typescript" id="typescript" value="" placeholder="Name your code" class="form-control")
+        div(class="col-xs-6")
+          label(class="control-label" for="javascript") Javascript
+          div(class="controls")
+            textarea(name="javascript" id="javascript" value="" placeholder="Name your code" class="form-control")
+    input(type="submit" value="Submit" class="btn btn-primary")

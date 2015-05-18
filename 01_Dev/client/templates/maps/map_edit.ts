@@ -93,7 +93,7 @@ var updateMap = function(currentMapId, map) {
       alert(error.reason);
     }
   });
-}
+};
 
 var updateSelectedClass = function(target) {
   $("a[id^='texture_']>div").removeClass('selected');
@@ -102,7 +102,7 @@ var updateSelectedClass = function(target) {
   $("a[id^='ceilingheight_']>div").removeClass('selected');
 
   $(target).addClass('selected');
-}
+};
 
 Template.mapEdit.events({
   'submit form': function(e) {
@@ -116,7 +116,7 @@ Template.mapEdit.events({
       height: parseInt($(e.target).find('[name=height]').val(), 10),
       type_array: $(e.target).find('[name=type_array]').val(),
       height_array: $(e.target).find('[name=height_array]').val()
-    }
+    };
 
     Maps.update(currentMapId, {$set: mapProperties}, function(error) {
       if (error) {

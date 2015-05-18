@@ -8,7 +8,7 @@ Codes.allow({
 Codes.deny({
   update: function(userId, post, fieldNames) {
     // may only edit the following two fields:
-    return (_.without(fieldNames, 'title', 'code').length > 0);
+    return (_.without(fieldNames, 'title', 'typescript', 'javascript').length > 0);
   }
 });
 
@@ -16,11 +16,16 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
   codeInsert: function(codeAttributes) {
     check(Meteor.userId(), String);
     check(codeAttributes, {
-      title: String,
-      code: String
+      name: String,
+      typescript: String,
+      javascript: String
     });
 
-    var codeWithSameTitle = Codes.findOne({title: codeAttributes.title});
+    var typescriptSimpleAPI = Meteor.npmRequire('typescript-simple');
+    codeAttributes.javascript = typescriptSimpleAPI(codeAttributes.typescript);
+    console.log(codeAttributes.javascript);
+
+    var codeWithSameTitle = Codes.findOne({name: codeAttributes.name});
     if (codeWithSameTitle) {
       return {
         codeExists: true,
@@ -39,6 +44,29 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
 
     return {
       _id: codeId
+    };
+  },
+  codeUpdate: function(obj) {
+    check(Meteor.userId(), String);
+    check(obj, Object);
+    check(obj.codeAttributes, {
+      name: String,
+      typescript: String,
+      javascript: String,
+      userId: String,
+      author: String,
+      submitted: Date
+    });
+
+    var typescriptSimpleAPI = Meteor.npmRequire('typescript-simple');
+    obj.codeAttributes.javascript = typescriptSimpleAPI(obj.codeAttributes.typescript);
+
+    Codes.update(obj.codeId, {$set: obj.codeAttributes}, function(error) {
+      return error;
+    });
+
+    return {
+      _id: obj.codeId
     };
   }
 });

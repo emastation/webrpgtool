@@ -52,6 +52,17 @@ Router.route('/codes', {
 
 Router.route('/codes/submit', {name: 'codeSubmit'});
 
+Router.route('/codes/:_id/edit', {
+  name: 'codeEdit',
+  waitOn: function() {
+    return Meteor.subscribe('codes');
+  },
+  data: function() {
+    return {
+      code: Codes.findOne(this.params._id)
+    };
+  }
+});
 
 Router.route('/game/:_id', {
   name: 'gamePage',

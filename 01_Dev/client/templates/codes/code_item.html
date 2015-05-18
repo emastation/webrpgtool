@@ -1,7 +1,7 @@
 <template name="codeItem">
   <div class="code">
     <div class="code-content">
-      <h3>{{name}}</h3>
+      <h3><a href="{{pathFor 'codeEdit'}}">{{name}}</a></h3>
       <p>
         <label>コード</label>
         <textarea>{{typescript}}</textarea>

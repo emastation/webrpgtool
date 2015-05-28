@@ -93,3 +93,12 @@ if (Codes.find().count() === 0) {
   });
 }
 
+if (Stories.find().count() === 0) {
+  Stories.insert({
+    title: 'Story_1'
+  });
+  Stories.insert({
+    title: 'Story_2'
+  });
+}
+

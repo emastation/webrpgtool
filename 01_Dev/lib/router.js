@@ -78,6 +78,9 @@ Router.route('/game/:_id', {
   }
 });
 
+Router.route('/stories', {
+  name: 'StoryList'
+});
 
 var requireLogin = function() {
   if (! Meteor.user()) {

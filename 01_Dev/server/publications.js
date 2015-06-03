@@ -13,3 +13,7 @@ Meteor.publish('map_tile_types', function() {
 Meteor.publish('codes', function() {
   return Codes.find();
 });
+
+Meteor.publish('stories', function() {
+  return Stories.find();
+});

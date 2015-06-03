@@ -1,4 +1,9 @@
 <template name="mapsList">
+  <div class="mapSubmit">
+    {{#if currentUser}}
+      {{> mapSubmit}}
+    {{/if}}
+  </div>
   <div class="maps">
     {{#each maps}}
       {{> mapItem}}

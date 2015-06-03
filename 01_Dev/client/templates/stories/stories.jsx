@@ -1,5 +1,5 @@
 var StoryList = ReactMeteor.createClass({
-  templateName: "StoryList",
+  templateName: "storiesList",
 
   startMeteorSubscriptions: function() {
     Meteor.subscribe("stories");

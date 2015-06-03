@@ -79,7 +79,7 @@ Router.route('/game/:_id', {
 });
 
 Router.route('/stories', {
-  name: 'StoryList'
+  name: 'storiesList'
 });
 
 var requireLogin = function() {

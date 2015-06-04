@@ -69,6 +69,7 @@ var StoryList = ReactMeteor.createClass({
     </form>;
 
     return <div className="StoryList">
+        <IncludeTemplate template={Template.spinner} />
         { form }
         <div className="inner">{ stories }</div>
       </div>;

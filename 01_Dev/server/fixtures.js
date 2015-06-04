@@ -94,11 +94,17 @@ if (Codes.find().count() === 0) {
 }
 
 if (Stories.find().count() === 0) {
-  Stories.insert({
-    title: 'Story_1'
-  });
-  Stories.insert({
-    title: 'Story_2'
-  });
+  [
+    {title: 'Story_1'},
+    {title: 'Story_2'},
+    {title: 'Story_3'},
+    {title: 'Story_4'}
+  ].forEach(function (attribute, i) {
+        Stories.insert({
+          title: attribute.title,
+          order: i
+        });
+      }
+  );
 }
 

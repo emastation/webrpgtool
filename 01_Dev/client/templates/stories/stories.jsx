@@ -1,10 +1,36 @@
 var Story = React.createClass({
 
+  deleteStory: function(id) {
+
+    var storyToDelete = Stories.findOne(id);
+    var countStories = Stories.find().count();
+    var selector = {};
+    selector["order"] = {$gt: storyToDelete.order, $lt: countStories};
+    ids = _.pluck(Stories.find(selector, {fields: {_id: 1}}).fetch(), '_id');
+
+    modifier = {$inc: {}};
+    modifier.$inc["order"] = -1;
+
+    selector = {_id: {$in: ids}};
+
+    var query = {selector:selector, modifier:modifier, flg: {multi: true}};
+    Meteor.call('storyUpdateDueToSomeOneDeleted', query, function(error, result) { // display the error to the user and abort
+//      if (error)
+//        return alert(error.reason);
+    });
+
+    Stories.remove(id);
+
+  },
+
   render: function() {
     return <li data-id={this.props.story._id} data-order={this.props.story.order} className="sortable-item removable well well-sm">
       <i className="sortable-handle mdi-action-view-headline pull-right">=</i>
       <span className="name">{this.props.story.title}</span>
       <span className="badge">{this.props.story.order}</span>
+      <button type="button" className="close" data-dismiss="alert" onClick={this.deleteStory.bind(this, this.props.story._id)}>
+        <span aria-hidden="true">&times;</span><span className="sr-only">Close</span>
+      </button>
     </li>
   }
 });

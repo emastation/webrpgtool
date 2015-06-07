@@ -31,5 +31,10 @@ Meteor.methods({
     return {
       _id: storyId
     };
+  },
+  storyUpdateDueToSomeOneDeleted: function (obj) {
+    check(Meteor.userId(), String);
+    check(obj, Object);
+    Stories.update(obj.selector, obj.modifier, obj.flg);
   }
 });

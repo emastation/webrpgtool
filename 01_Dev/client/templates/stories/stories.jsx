@@ -2,6 +2,12 @@ var Story = React.createClass({
 
   collectionName: "stories",
 
+  getInitialState: function() {
+    return {
+      editable: false
+    };
+  },
+
   insertStory: function(id, evt) {
     var storyModelClicked = Stories.findOne(id);
     var storyDomClicked = $("li[data-id='" + id + "']").get(0);
@@ -60,13 +66,47 @@ var Story = React.createClass({
 
   },
 
+  editableThisStory: function() {
+    this.setState({
+      editable: true
+    });
+  },
+
+  completeEditing: function(id, evt) {
+
+    if (!_.isUndefined(evt.keyCode) && evt.keyCode !== 13) {// 何らかのキーが押されていて、それがEnterキー以外だった場合
+      return; // 処理を抜ける
+    }
+
+    var story = {
+      title: evt.target.textContent
+    };
+
+    Stories.update(id, {$set: story}, function(error) {
+      if (error) {
+        // display the error to the user
+        alert(error.reason);
+      }
+    });
+
+    evt.target.blur();
+
+    this.setState({
+      editable: false
+    });
+  },
+
   render: function() {
     return <li data-id={this.props.story._id} data-order={this.props.story.order} className="sortable-item removable well well-sm">
       <i className="sortable-handle mdi-action-view-headline pull-right">=</i>
       <button type="button" className="close" data-dismiss="alert" onClick={this.insertStory.bind(this, this.props.story._id)}>
         <span aria-hidden="true">+</span><span className="sr-only">Plus</span>
       </button>
-      <span className="name">{this.props.story.title}</span>
+      <span className="name" contentEditable={this.state.editable}
+            onClick={this.editableThisStory}
+            onBlur={this.completeEditing.bind(this, this.props.story._id)}
+            onKeyDown={this.completeEditing.bind(this, this.props.story._id)}
+          >{this.props.story.title}</span>
       <span className="badge">{this.props.story.order}</span>
       <button type="button" className="close" data-dismiss="alert" onClick={this.deleteStory.bind(this, this.props.story._id)}>
         <span aria-hidden="true">&times;</span><span className="sr-only">Close</span>

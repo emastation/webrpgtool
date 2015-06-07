@@ -1,5 +1,42 @@
 var Story = React.createClass({
 
+  collectionName: "stories",
+
+  insertStory: function(id, evt) {
+    var storyModelClicked = Stories.findOne(id);
+    var storyDomClicked = $("li[data-id='" + id + "']").get(0);
+    var countStories = Stories.find().count();
+
+    var selector = {};
+    selector["order"] = {$gte: storyModelClicked.order, $lt: countStories};
+    ids = _.pluck(Stories.find(selector, {fields: {_id: 1}}).fetch(), '_id');
+
+    modifier = {$inc: {}};
+    modifier.$inc["order"] = 1;
+
+    selector = {_id: {$in: ids}};
+
+    var query = {selector:selector, modifier:modifier, flg: {multi: true}};
+    Meteor.call('storyUpdateDueToSomeOneDeleted', query, function(error, result) { // display the error to the user and abort
+//      if (error)
+//        return alert(error.reason);
+    });
+
+    var story = {
+      title: 'Untitled',
+      order: storyModelClicked.order
+    };
+
+    Meteor.call('storyInsert', story, function(error, result) { // display the error to the user and abort
+      if (error)
+        return alert(error.reason);
+
+      if (result.storyExists)
+        return alert('This title has already been posted');
+    });
+
+  },
+
   deleteStory: function(id) {
 
     var storyToDelete = Stories.findOne(id);
@@ -26,6 +63,9 @@ var Story = React.createClass({
   render: function() {
     return <li data-id={this.props.story._id} data-order={this.props.story.order} className="sortable-item removable well well-sm">
       <i className="sortable-handle mdi-action-view-headline pull-right">=</i>
+      <button type="button" className="close" data-dismiss="alert" onClick={this.insertStory.bind(this, this.props.story._id)}>
+        <span aria-hidden="true">+</span><span className="sr-only">Plus</span>
+      </button>
       <span className="name">{this.props.story.title}</span>
       <span className="badge">{this.props.story.order}</span>
       <button type="button" className="close" data-dismiss="alert" onClick={this.deleteStory.bind(this, this.props.story._id)}>
@@ -98,7 +138,8 @@ var StoryList = ReactMeteor.createClass({
     e.preventDefault();
 
     var story = {
-      title: this.state.newStoryTitle.trim()
+      title: this.state.newStoryTitle.trim(),
+      order: -1
     };
 
     Meteor.call('storyInsert', story, function(error, result) { // display the error to the user and abort

@@ -114,22 +114,7 @@
             }
             else {
 //                items.splice(newIndex, 0, items.splice(oldIndex, 1)[0]);
-
-              // added by emadurandal [Begin]
-              var itemEl = evt.item;  // dragged HTMLElement
-              evt._id = itemEl.dataset.id;
-              if (evt.newIndex < evt.oldIndex) {
-                // Element moved up in the list. The dropped element has a next sibling for sure.
-                var orderNextItem = parseInt(itemEl.nextElementSibling.dataset.order);
-                this.adjustOrders(evt._id, null, orderNextItem);
-              } else if (evt.newIndex > evt.oldIndex) {
-                // Element moved down in the list. The dropped element has a previous sibling for sure.
-                var orderPrevItem = parseInt(itemEl.previousElementSibling.dataset.order);
-                this.adjustOrders(evt._id, orderPrevItem, null);
-              } else {
-                // do nothing - drag and drop in the same location
-              }
-              // added by emadurandal [End]
+              this.onUpdate(evt);
             }
 
             evt.from.insertBefore(evt.item, _nextSibling);
@@ -153,6 +138,24 @@
       this._sortableInstance = null;
     },
 
+
+    onUpdate: function(evt) {
+      // added by emadurandal [Begin]
+      var itemEl = evt.item;  // dragged HTMLElement
+      evt._id = itemEl.dataset.id;
+      if (evt.newIndex < evt.oldIndex) {
+        // Element moved up in the list. The dropped element has a next sibling for sure.
+        var orderNextItem = parseInt(itemEl.nextElementSibling.dataset.order);
+        this.adjustOrders(evt._id, null, orderNextItem);
+      } else if (evt.newIndex > evt.oldIndex) {
+        // Element moved down in the list. The dropped element has a previous sibling for sure.
+        var orderPrevItem = parseInt(itemEl.previousElementSibling.dataset.order);
+        this.adjustOrders(evt._id, orderPrevItem, null);
+      } else {
+        // do nothing - drag and drop in the same location
+      }
+      // added by emadurandal [End]
+    },
 
     /**
      * When an element was moved, adjust its orders and possibly the order of

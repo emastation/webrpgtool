@@ -114,7 +114,7 @@
             }
             else {
 //                items.splice(newIndex, 0, items.splice(oldIndex, 1)[0]);
-              this.onUpdate(evt);
+              this.onUpdate(evt, this.collectionName);
             }
 
             evt.from.insertBefore(evt.item, _nextSibling);
@@ -139,18 +139,18 @@
     },
 
 
-    onUpdate: function(evt) {
+    onUpdate: function(evt, collectionName) {
       // added by emadurandal [Begin]
       var itemEl = evt.item;  // dragged HTMLElement
       evt._id = itemEl.dataset.id;
       if (evt.newIndex < evt.oldIndex) {
         // Element moved up in the list. The dropped element has a next sibling for sure.
         var orderNextItem = parseInt(itemEl.nextElementSibling.dataset.order);
-        this.adjustOrders(evt._id, null, orderNextItem);
+        this.adjustOrders(evt._id, null, orderNextItem, collectionName);
       } else if (evt.newIndex > evt.oldIndex) {
         // Element moved down in the list. The dropped element has a previous sibling for sure.
         var orderPrevItem = parseInt(itemEl.previousElementSibling.dataset.order);
-        this.adjustOrders(evt._id, orderPrevItem, null);
+        this.adjustOrders(evt._id, orderPrevItem, null, collectionName);
       } else {
         // do nothing - drag and drop in the same location
       }
@@ -183,19 +183,19 @@
      * @param {Number} orderPrevItem - the order of the item before it, or null
      * @param {Number} orderNextItem - the order of the item after it, or null
      */
-    adjustOrders : function adjustOrders(itemId, orderPrevItem, orderNextItem) {
+    adjustOrders : function adjustOrders(itemId, orderPrevItem, orderNextItem, collectionName) {
       var orderField = "order";//templateInstance.options.sortField;
       var selector = {}, modifier = {$set: {}};
       var ids = [];
 
-      var collection = Mongo.Collection.get(this.collectionName);
+      var collection = Mongo.Collection.get(collectionName);
       var startOrder = collection.findOne(itemId)[orderField];
       if (orderPrevItem !== null) {
         // Element has a previous sibling, therefore it was moved down in the list.
         // Decrease the order of intervening elements.
         selector[orderField] = {$lte: orderPrevItem, $gt: startOrder};
         ids = _.pluck(collection.find(selector, {fields: {_id: 1}}).fetch(), '_id');
-        Meteor.call('rubaxa:sortable/collection-update', this.collectionName, ids, orderField, -1);
+        Meteor.call('rubaxa:sortable/collection-update', collectionName, ids, orderField, -1);
 
         // Set the order of the dropped element to the order of its predecessor, whose order was decreased
         modifier.$set[orderField] = orderPrevItem;
@@ -203,7 +203,7 @@
         // element moved up the list, increase order of intervening elements
         selector[orderField] = {$gte: orderNextItem, $lt: startOrder};
         ids = _.pluck(collection.find(selector, {fields: {_id: 1}}).fetch(), '_id');
-        Meteor.call('rubaxa:sortable/collection-update', this.collectionName, ids, orderField, 1);
+        Meteor.call('rubaxa:sortable/collection-update', collectionName, ids, orderField, 1);
 
         // Set the order of the dropped element to the order of its successor, whose order was increased
         modifier.$set[orderField] = orderNextItem;

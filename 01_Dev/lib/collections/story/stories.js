@@ -2,7 +2,7 @@ Stories = new Mongo.Collection('stories');
 
 Stories.allow({
   update: function(userId, post) { return true; },
-  remove: function(userId, post) { return true; }, //ownsDocument(userId, post); }
+  remove: function(userId, post) { return true; } //ownsDocument(userId, post); }
 });
 /*
 Stories.deny({

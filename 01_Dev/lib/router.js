@@ -82,6 +82,11 @@ Router.route('/stories', {
   name: 'storiesList'
 });
 
+Router.route('/story:_id', {
+  name: 'storyPage'
+});
+
+
 var requireLogin = function() {
   if (! Meteor.user()) {
     if (Meteor.loggingIn()) { // p116に説明あり

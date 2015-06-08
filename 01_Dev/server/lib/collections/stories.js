@@ -1,4 +1,3 @@
-Sortable.collections = ['stories'];
 
 
 Meteor.methods({

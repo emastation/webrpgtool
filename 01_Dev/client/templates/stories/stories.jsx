@@ -8,6 +8,10 @@ var Story = React.createClass({
     };
   },
 
+  goToStoryPage: function(id) {
+    Router.go('storyPage', {_id: id});
+  },
+
   insertStory: function(id, evt) {
     var storyModelClicked = Stories.findOne(id);
     var storyDomClicked = $("li[data-id='" + id + "']").get(0);
@@ -102,18 +106,23 @@ var Story = React.createClass({
   render: function() {
 
     if (this.props.meteorUserExist) {
-      var sortableHandle = <i className="sortable-handle mdi-action-view-headline pull-right">=</i>;
-      var plusButton = <button type="button" className="close" data-dismiss="alert" onClick={this.insertStory.bind(this, this.props.story._id)}>
+      var sortableHandle = <i className="sortable-handle mdi-action-view-headline pull-left">=&nbsp;</i>;
+      var plusButton = <button type="button" className="plus" data-dismiss="alert" onClick={this.insertStory.bind(this, this.props.story._id)}>
         <span aria-hidden="true">+</span><span className="sr-only">Plus</span>
       </button>;
 
       var closeButton = <button type="button" className="close" data-dismiss="alert" onClick={this.deleteStory.bind(this, this.props.story._id)}>
         <span aria-hidden="true">&times;</span><span className="sr-only">Close</span>
       </button>;
+
+      var editButton =  <button type="button" className="edit pull-right" data-dismiss="alert" onClick={this.goToStoryPage.bind(this, this.props.story._id)}>
+        <span aria-hidden="true">Edit</span><span className="sr-only">Edit</span>
+      </button>;
     } else {
       var sortableHandle = {};
       var plusButton = {};
       var closeButton = {};
+      var editButton = {};
     }
 
     var contentEditable = this.state.editable && this.props.meteorUserExist;
@@ -127,6 +136,7 @@ var Story = React.createClass({
             onKeyDown={this.completeEditing.bind(this, this.props.story._id)}
           >{this.props.story.title}</span>
       <span className="badge">{this.props.story.order}</span>
+      { editButton }
       { closeButton }
     </li>
   }

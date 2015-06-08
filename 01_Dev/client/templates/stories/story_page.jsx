@@ -1,7 +1,14 @@
 var Sentence = React.createClass({
 
   render: function() {
+    if (this.props.meteorUserExist) {
+      var sortableHandle = <i className="sortable-handle mdi-action-view-headline pull-left">=&nbsp;</i>;
+    } else {
+      var sortableHandle = {};
+    }
+
     return <li data-id={this.props.storyItem._id} data-order={this.props.storyItem.order} className="sortable-item removable well well-sm">
+      { sortableHandle }
       <span className="name">{this.props.sentence.text}</span>
       <span className="badge">{this.props.storyItem.order}</span>
     </li>
@@ -12,18 +19,19 @@ var SortableStoryItems = React.createClass({
   mixins: [window.SortableMixin],
 
   sortableOptions: {
-    handle: ".sortable-handle"
+    handle: ".sortable-handle",
+    model: "storyItems"
   },
 
   collectionName: "storyItems",
 
   renderSentence: function(model, i) {
-    return <Sentence key={model._id} sentence={model} storyItem={ this.props.storyItems[i] } meteorUserExist={this.props.meteorUserExist} />;
+    return <Sentence key={model._id} sentence={this.props.sentences[i]} storyItem={ model } meteorUserExist={this.props.meteorUserExist} />;
   },
 
   render: function() {
     return <ul className="StoryItemList" key="1">
-      { this.props.items.map(this.renderSentence) }
+      { this.props.storyItems.map(this.renderSentence) }
     </ul>;
   }
 });
@@ -54,7 +62,13 @@ var StoryPage = ReactMeteor.createClass({
     });
 
     var selector = {_id: {$in: sentenceIds}};
-    var sentences = Sentences.find(selector).fetch();
+    var sentencesTmp = Sentences.find(selector).fetch();
+    var sentences = [];
+    storyItems.map(function(storyItem){
+      var sentence = _.where(sentencesTmp, { '_id': storyItem.contentId })[0];
+      sentences.push(sentence);
+    });
+
 
     return {
       displaySubmitForm: Meteor.userId() ? true : false,
@@ -147,7 +161,7 @@ var StoryPage = ReactMeteor.createClass({
 
     return <div className="StoryPage">
       { form }
-      <SortableStoryItems items={ this.state.sentences } storyItems={ this.state.storyItems } meteorUserExist={this.state.displaySubmitForm} />
+      <SortableStoryItems sentences={ this.state.sentences } storyItems={ this.state.storyItems } meteorUserExist={this.state.displaySubmitForm} />
     </div>;
 
   }

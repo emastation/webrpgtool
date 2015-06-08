@@ -8,7 +8,7 @@ StoryItems.allow({
 StoryItems.deny({
   update: function(userId, post, fieldNames) {
     // may only edit the following two fields:
-    return (_.without(fieldNames, 'contentId', 'comment').length > 0);
+    return (_.without(fieldNames, 'storyId', 'contentId', 'comment').length > 0);
   }
 });
 
@@ -16,6 +16,7 @@ Meteor.methods({
   storyItemInsert: function(attributes) {
     check(Meteor.userId(), String);
     check(attributes, {
+      storyId: String,
       contentId: String,
       comment: String
     });

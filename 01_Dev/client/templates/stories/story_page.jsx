@@ -26,7 +26,10 @@ var StoryPage = ReactMeteor.createClass({
   submitNewItem: function(e) {
     e.preventDefault();
 
+    var storyId = Router.current().params._id;
+
     var storyItem = {
+      storyId: storyId,
       contentId: '',
       comment: 'This is a sentence.'
     };

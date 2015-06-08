@@ -25,7 +25,15 @@ var SortableStoryItems = React.createClass({
     model: "storyItems"
   },
 
-  collectionName: "storyItems",
+  collectionName: "storyItems", // SortableMixinに、どのCollectionのorderを操作するか指定する
+  sortingScope: "storyId", // collectionNameで指定したCollectionで、orderの管理を分ける基準となるScopeプロパティを指定する
+  sortingScopeValue: '', // collectionNameで指定したCollectionで、このコンポーネントで操作する対象のScopeプロパティの値を指定する
+
+  getInitialState: function() {
+    this.sortingScopeValue = Router.current().params._id;
+    return {
+    };
+  },
 
   renderSentence: function(model, i) {
     return <Sentence key={model._id} sentence={this.props.sentences[i]} storyItem={ model } meteorUserExist={this.props.meteorUserExist} />;
@@ -48,7 +56,6 @@ var StoryPage = ReactMeteor.createClass({
       newText: ''
     };
   },
-
   startMeteorSubscriptions: function() {
     Meteor.subscribe("storyItems");
     Meteor.subscribe("sentences");

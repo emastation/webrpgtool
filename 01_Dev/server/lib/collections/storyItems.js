@@ -10,7 +10,7 @@ Meteor.methods({
     });
 
     if (attributes.order < 0) {
-      var order = StoryItems.find().count();
+      var order = StoryItems.find({storyId:attributes.storyId}).count();
     } else {
       var order = attributes.order
     }

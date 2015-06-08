@@ -7,9 +7,11 @@ var Sentence = React.createClass({
       var sortableHandle = {};
     }
 
+    var text = _.isUndefined(this.props.sentence) ? '' : this.props.sentence.text;
+
     return <li data-id={this.props.storyItem._id} data-order={this.props.storyItem.order} className="sortable-item removable well well-sm">
       { sortableHandle }
-      <span className="name">{this.props.sentence.text}</span>
+      <span className="name">{text}</span>
       <span className="badge">{this.props.storyItem.order}</span>
     </li>
   }

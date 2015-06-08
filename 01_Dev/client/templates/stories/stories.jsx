@@ -74,6 +74,9 @@ var Story = React.createClass({
 
   completeEditing: function(id, evt) {
 
+    if (!this.props.meteorUserExist) {
+      return;
+    }
     if (!_.isUndefined(evt.keyCode) && evt.keyCode !== 13) {// 何らかのキーが押されていて、それがEnterキー以外だった場合
       return; // 処理を抜ける
     }
@@ -97,20 +100,34 @@ var Story = React.createClass({
   },
 
   render: function() {
-    return <li data-id={this.props.story._id} data-order={this.props.story.order} className="sortable-item removable well well-sm">
-      <i className="sortable-handle mdi-action-view-headline pull-right">=</i>
-      <button type="button" className="close" data-dismiss="alert" onClick={this.insertStory.bind(this, this.props.story._id)}>
+
+    if (this.props.meteorUserExist) {
+      var sortableHandle = <i className="sortable-handle mdi-action-view-headline pull-right">=</i>;
+      var plusButton = <button type="button" className="close" data-dismiss="alert" onClick={this.insertStory.bind(this, this.props.story._id)}>
         <span aria-hidden="true">+</span><span className="sr-only">Plus</span>
-      </button>
-      <span className="name" contentEditable={this.state.editable}
+      </button>;
+
+      var closeButton = <button type="button" className="close" data-dismiss="alert" onClick={this.deleteStory.bind(this, this.props.story._id)}>
+        <span aria-hidden="true">&times;</span><span className="sr-only">Close</span>
+      </button>;
+    } else {
+      var sortableHandle = {};
+      var plusButton = {};
+      var closeButton = {};
+    }
+
+    var contentEditable = this.state.editable && this.props.meteorUserExist;
+
+    return <li data-id={this.props.story._id} data-order={this.props.story.order} className="sortable-item removable well well-sm">
+      { sortableHandle }
+      { plusButton }
+      <span className="name" contentEditable={contentEditable}
             onClick={this.editableThisStory}
             onBlur={this.completeEditing.bind(this, this.props.story._id)}
             onKeyDown={this.completeEditing.bind(this, this.props.story._id)}
           >{this.props.story.title}</span>
       <span className="badge">{this.props.story.order}</span>
-      <button type="button" className="close" data-dismiss="alert" onClick={this.deleteStory.bind(this, this.props.story._id)}>
-        <span aria-hidden="true">&times;</span><span className="sr-only">Close</span>
-      </button>
+      { closeButton }
     </li>
   }
 });
@@ -127,14 +144,14 @@ SortableStories = React.createClass({
     },
     */
 //    animation: 100,
-//    handle: ".sortable-handle"
+    handle: ".sortable-handle"
 //    model: "stories"
   },
 
   collectionName: "stories",
 
   renderStory: function(model) {
-    return <Story key={model._id} story={model} />;
+    return <Story key={model._id} story={model} meteorUserExist={this.props.meteorUserExist} />;
   },
 
   render: function() {
@@ -154,6 +171,7 @@ var StoryList = ReactMeteor.createClass({
 
   getInitialState: function() {
     return {
+      displaySubmitForm: false,
       newStoryTitle: ''
     };
   },
@@ -162,6 +180,7 @@ var StoryList = ReactMeteor.createClass({
     var stories = Stories.find({}, {sort: { order: 1 }}).fetch();
 //    var stories = Stories.find({}, {sort: { order: 1 }});
     return {
+      displaySubmitForm: Meteor.userId() ? true : false,
       stories: stories
     };
   },
@@ -198,21 +217,24 @@ var StoryList = ReactMeteor.createClass({
 
   render: function() {
 
-    var form = <form className="main form" onSubmit={this.submitNewStory}>
-      <div className="form-group">
-        <label className="control-label" htmlFor="title">タイトル</label>
-        <div className="controls">
-          <input name="title" id="title" type="text" value={this.state.newStoryTitle} placeholder="Name your new story's title." className="form-control" onChange={this.newStoryTitleChange}/>
+    if (this.state.displaySubmitForm) {
+      var form = <form className="main form" onSubmit={this.submitNewStory}>
+        <div className="form-group">
+          <label className="control-label" htmlFor="title">タイトル</label>
+          <div className="controls">
+            <input name="title" id="title" type="text" value={this.state.newStoryTitle} placeholder="Name your new story's title." className="form-control" onChange={this.newStoryTitleChange}/>
+          </div>
         </div>
-      </div>
-      <input type="submit" value="Submit" className="btn btn-primary"/>
-    </form>;
-
+        <input type="submit" value="Submit" className="btn btn-primary"/>
+      </form>;
+    } else {
+      var form = {}
+    }
 
     // JSXテンプレートでSortableする方法（実装途中）
     return <div className="StoryList">
           { form }
-          <SortableStories items={ this.state.stories } />
+          <SortableStories items={ this.state.stories } meteorUserExist={this.state.displaySubmitForm} />
         </div>
 
   }

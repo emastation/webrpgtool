@@ -31,7 +31,8 @@ var StoryPage = ReactMeteor.createClass({
     var storyItem = {
       storyId: storyId,
       contentId: '',
-      comment: 'This is a sentence.'
+      comment: 'This is a sentence.',
+      order: -1
     };
 
     var that = this;
@@ -70,9 +71,13 @@ var StoryPage = ReactMeteor.createClass({
       });
     }).then(function() {
       console.log("OK!");
+      that.setState({
+        newText: ''
+      });
     }).catch(function(err) {
       console.log(err);
     });
+
   },
 
   render: function() {

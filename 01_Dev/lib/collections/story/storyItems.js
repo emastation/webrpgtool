@@ -12,36 +12,3 @@ StoryItems.deny({
   }
 });
 
-Meteor.methods({
-  storyItemInsert: function(attributes) {
-    check(Meteor.userId(), String);
-    check(attributes, {
-      storyId: String,
-      contentId: String,
-      comment: String
-    });
-
-    /*
-     var sameTitleRecord = Stories.findOne({text: attributes.text});
-     if (sameTitleRecord) {
-     return {
-     alreadyExists: true,
-     _id: sameTitleRecord._id
-     }
-     }
-     */
-
-    var user = Meteor.user();
-    var recordObj = _.extend(attributes, {
-      userId: user._id,
-      author: user.username,
-      submitted: new Date()
-    });
-
-    var id = StoryItems.insert(recordObj);
-
-    return {
-      _id: id
-    };
-  }
-});

@@ -38,9 +38,56 @@ Meteor.methods({
       _id: storyId
     };
   },
-  storyUpdateDueToSomeOneDeleted: function (obj) {
+
+  storyUpdateDueToSomeOneInserted: function (story) {
     check(Meteor.userId(), String);
-    check(obj, Object);
-    Stories.update(obj.selector, obj.modifier, obj.flg);
+    check(story, Object);
+
+    var countStories = Stories.find().count();
+
+    var selector = {};
+    selector["order"] = {$gte: story.order, $lt: countStories};
+    var ids = _.pluck(Stories.find(selector, {fields: {_id: 1}}).fetch(), '_id');
+
+    var modifier = {$inc: {}};
+    modifier.$inc["order"] = 1;
+
+    selector = {_id: {$in: ids}};
+
+    Stories.update(selector, modifier, {multi: true});
+
+    var resultInsert = Meteor.call('storyInsert', story);
+    if (!_.isUndefined(resultInsert.storyExists && resultInsert.storyExists === true)) {
+
+      // Undo adjust orders
+      modifier.$inc["order"] = -1;
+      Stories.update(selector, modifier, {multi: true});
+
+      return resultInsert;
+    }
+
+    return resultInsert;
+  },
+
+
+  storyUpdateDueToSomeOneDeleted: function (idToDelete) {
+    check(Meteor.userId(), String);
+    check(idToDelete, String);
+
+    var storyToDelete = Stories.findOne(idToDelete);
+
+    var countStories = Stories.find().count();
+    var selector = {};
+    selector["order"] = {$gt: storyToDelete.order, $lt: countStories};
+    var ids = _.pluck(Stories.find(selector, {fields: {_id: 1}}).fetch(), '_id');
+
+    var modifier = {$inc: {}};
+    modifier.$inc["order"] = -1;
+
+    selector = {_id: {$in: ids}};
+
+    Stories.update(selector, modifier, {multi: true});
+
+    Stories.remove(idToDelete);
   }
 });

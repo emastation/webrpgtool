@@ -17,3 +17,11 @@ Meteor.publish('codes', function() {
 Meteor.publish('stories', function() {
   return Stories.find();
 });
+
+Meteor.publish('storyItems', function() {
+  return StoryItems.find();
+});
+
+Meteor.publish('sentences', function() {
+  return Sentences.find();
+});

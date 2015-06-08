@@ -1,3 +1,34 @@
+var Sentence = React.createClass({
+
+  render: function() {
+    return <li data-id={this.props.storyItem._id} data-order={this.props.storyItem.order} className="sortable-item removable well well-sm">
+      <span className="name">{this.props.sentence.text}</span>
+      <span className="badge">{this.props.storyItem.order}</span>
+    </li>
+  }
+});
+
+var SortableStoryItems = React.createClass({
+  mixins: [window.SortableMixin],
+
+  sortableOptions: {
+    handle: ".sortable-handle"
+  },
+
+  collectionName: "storyItems",
+
+  renderSentence: function(model, i) {
+    return <Sentence key={model._id} sentence={model} storyItem={ this.props.storyItems[i] } meteorUserExist={this.props.meteorUserExist} />;
+  },
+
+  render: function() {
+    return <ul className="StoryItemList" key="1">
+      { this.props.items.map(this.renderSentence) }
+    </ul>;
+  }
+});
+
+
 var StoryPage = ReactMeteor.createClass({
   templateName: "storyPage",
 
@@ -8,11 +39,27 @@ var StoryPage = ReactMeteor.createClass({
     };
   },
 
+  startMeteorSubscriptions: function() {
+    Meteor.subscribe("storyItems");
+    Meteor.subscribe("sentences");
+  },
+
   getMeteorState: function() {
-    var stories = StoryItems.find({}, {sort: { order: 1 }}).fetch();
+    var storyId = Router.current().params._id;
+
+    var storyItems = StoryItems.find({storyId:storyId}, {sort: { order: 1 }}).fetch();
+    var sentenceIds = [];
+    storyItems.map(function(storyItem){
+      sentenceIds.push(storyItem.contentId);
+    });
+
+    var selector = {_id: {$in: sentenceIds}};
+    var sentences = Sentences.find(selector).fetch();
+
     return {
       displaySubmitForm: Meteor.userId() ? true : false,
-      stories: stories
+      storyItems: storyItems,
+      sentences: sentences
     };
   },
 
@@ -100,7 +147,7 @@ var StoryPage = ReactMeteor.createClass({
 
     return <div className="StoryPage">
       { form }
-      Hello {storyId}.
+      <SortableStoryItems items={ this.state.sentences } storyItems={ this.state.storyItems } meteorUserExist={this.state.displaySubmitForm} />
     </div>;
 
   }

@@ -98,54 +98,20 @@ var StoryPage = ReactMeteor.createClass({
 
     var storyId = Router.current().params._id;
 
-    var storyItem = {
+    var attributes = {
       storyId: storyId,
-      contentId: '',
-      comment: 'This is a sentence.',
-      order: -1
+      comment: "This is a sentence.",
+      text: this.state.newText
     };
 
     var that = this;
-    var promise = new RSVP.Promise(function(fulfill, reject) {
-      Meteor.call('storyItemInsert', storyItem, function(err, resOne) {
-        if (err) {
-          return reject(err);
-        }
-        fulfill(resOne);
-      });
-    });
-    promise.then(function(resOne) {
-      return new RSVP.Promise(function(fulfill, reject) {
-        var sentence = {
-          text: that.state.newText,
-          storyItemId: resOne._id
-        };
-        Meteor.call('sentenceInsert', sentence, function(err, resTwo) {
-          if (err) {
-            return reject(err);
-          }
-          fulfill({resOne:resOne, resTwo:resTwo});
-        });
-      });
-    }).then(function(obj) {
-      return new RSVP.Promise(function(fulfill, reject) {
-        var storyItem = {
-          contentId: obj.resTwo._id
-        };
-        StoryItems.update(obj.resOne._id, {$set: storyItem}, function(err) {
-          if (err) {
-            reject(err);
-          }
-          fulfill();
-        });
-      });
-    }).then(function() {
-      console.log("OK!");
+    Meteor.call('sentencePush', attributes, function(error, result) {
+      if (error) {
+        return alert(err.reason);
+      }
       that.setState({
         newText: ''
       });
-    }).catch(function(err) {
-      console.log(err);
     });
 
   },

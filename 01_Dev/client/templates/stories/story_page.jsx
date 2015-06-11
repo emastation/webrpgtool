@@ -1,12 +1,24 @@
 var Sentence = React.createClass({
 
-  deleteSentence: function(id) {
+  insertSentence: function(id) {
+    var storyItemModelClicked = StoryItems.findOne(id);
     var attributes = {
-      id: id,
-      sortingScopeValue: Router.current().params._id
+      storyId: Router.current().params._id,
+      comment: "This is a sentence.",
+      text: 'New Sentence',
+      order: storyItemModelClicked.order
     };
 
-    Meteor.call('storyItemDelete', attributes, function(error, result) {
+    Meteor.call('sentenceInsert', attributes, function(error, result) { // display the error to the user and abort
+      if (error)
+        return alert(error.reason);
+
+    });
+  },
+
+  deleteSentence: function(id) {
+
+    Meteor.call('storyItemDelete', id, function(error, result) {
       if (error) {
         return alert(error.reason);
       }
@@ -16,18 +28,23 @@ var Sentence = React.createClass({
   render: function() {
     if (this.props.meteorUserExist) {
       var sortableHandle = <i className="sortable-handle mdi-action-view-headline pull-left">=&nbsp;</i>;
+      var plusButton = <button type="button" className="plus" data-dismiss="alert" onClick={this.insertSentence.bind(this, this.props.storyItem._id)}>
+        <span aria-hidden="true">+</span><span className="sr-only">Plus</span>
+      </button>;
       var closeButton = <button type="button" className="close" data-dismiss="alert" onClick={this.deleteSentence.bind(this, this.props.storyItem._id)}>
         <span aria-hidden="true">&times;</span><span className="sr-only">Close</span>
       </button>;
     } else {
       var sortableHandle = {};
-      var closeButton = {}
+      var plusButton = {};
+      var closeButton = {};
     }
 
     var text = _.isUndefined(this.props.sentence) ? '' : this.props.sentence.text;
 
     return <li data-id={this.props.storyItem._id} data-order={this.props.storyItem.order} className="sortable-item removable well well-sm">
       { sortableHandle }
+      { plusButton }
       <span className="name">{text}</span>
       <span className="badge">{this.props.storyItem.order}</span>
       { closeButton }

@@ -26,7 +26,6 @@ var SortableStoryItems = React.createClass({
   },
 
   collectionName: "storyItems", // SortableMixinに、どのCollectionのorderを操作するか指定する
-  sortingScope: "storyId", // collectionNameで指定したCollectionで、orderの管理を分ける基準となるScopeプロパティを指定する
   sortingScopeValue: '', // collectionNameで指定したCollectionで、このコンポーネントで操作する対象のScopeプロパティの値を指定する
 
   getInitialState: function() {

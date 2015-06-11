@@ -194,7 +194,7 @@
         // Element has a previous sibling, therefore it was moved down in the list.
         // Decrease the order of intervening elements.
         selector[orderField] = {$lte: orderPrevItem, $gt: startOrder};
-        selector[this.sortingScope] = this.sortingScopeValue;
+        selector[collection.sortingScope] = this.sortingScopeValue;
         ids = _.pluck(collection.find(selector, {fields: {_id: 1}}).fetch(), '_id');
         Meteor.call('rubaxa:sortable/collection-update', collectionName, ids, orderField, -1);
 
@@ -203,7 +203,7 @@
       } else {
         // element moved up the list, increase order of intervening elements
         selector[orderField] = {$gte: orderNextItem, $lt: startOrder};
-        selector[this.sortingScope] = this.sortingScopeValue;
+        selector[collection.sortingScope] = this.sortingScopeValue;
         ids = _.pluck(collection.find(selector, {fields: {_id: 1}}).fetch(), '_id');
         Meteor.call('rubaxa:sortable/collection-update', collectionName, ids, orderField, 1);
 

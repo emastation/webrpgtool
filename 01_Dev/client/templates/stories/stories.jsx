@@ -20,7 +20,7 @@ var Story = React.createClass({
       order: storyModelClicked.order
     };
 
-    Meteor.call('storyUpdateDueToSomeOneInserted', story, function(error, result) { // display the error to the user and abort
+    Meteor.call('storyInsert', story, function(error, result) { // display the error to the user and abort
       if (error)
         return alert(error.reason);
 
@@ -33,7 +33,7 @@ var Story = React.createClass({
 
   deleteStory: function(id) {
 
-    Meteor.call('storyUpdateDueToSomeOneDeleted', id, function(error, result) { // display the error to the user and abort
+    Meteor.call('storyDelete', id, function(error, result) { // display the error to the user and abort
 //      if (error)
 //        return alert(error.reason);
     });
@@ -180,7 +180,7 @@ var StoryList = ReactMeteor.createClass({
       order: -1
     };
 
-    Meteor.call('storyInsert', story, function(error, result) { // display the error to the user and abort
+    Meteor.call('storyCreate', story, function(error, result) { // display the error to the user and abort
       if (error)
         return alert(error.reason);
 

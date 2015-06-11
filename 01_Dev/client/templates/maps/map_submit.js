@@ -18,7 +18,7 @@ Template.mapSubmit.events({
       "0 1,0 1,0 1,0 1,0 1\n"
     };
 
-    Meteor.call('mapInsert', map, function(error, result) { // display the error to the user and abort
+    Meteor.call('mapCreate', map, function(error, result) { // display the error to the user and abort
       if (error)
         return alert(error.reason);
 

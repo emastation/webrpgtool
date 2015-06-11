@@ -3,7 +3,7 @@
 Meteor.methods({
 
   // リストの末尾に追加したい場合は、storyAttributes.orderにマイナスの値を渡すこと。途中に入れる場合は、適切なorder値を指定すること。
-  storyInsert: function(storyAttributes) {
+  storyCreate: function(storyAttributes) {
     check(Meteor.userId(), String);
     check(storyAttributes, {
       title: String,
@@ -39,7 +39,7 @@ Meteor.methods({
     };
   },
 
-  storyUpdateDueToSomeOneInserted: function (story) {
+  storyInsert: function (story) {
     check(Meteor.userId(), String);
     check(story, Object);
 
@@ -56,7 +56,7 @@ Meteor.methods({
 
     Stories.update(selector, modifier, {multi: true});
 
-    var resultInsert = Meteor.call('storyInsert', story);
+    var resultInsert = Meteor.call('storyCreate', story);
     if (!_.isUndefined(resultInsert.storyExists && resultInsert.storyExists === true)) {
 
       // Undo adjust orders
@@ -70,7 +70,7 @@ Meteor.methods({
   },
 
 
-  storyUpdateDueToSomeOneDeleted: function (idToDelete) {
+  storyDelete: function (idToDelete) {
     check(Meteor.userId(), String);
     check(idToDelete, String);
 

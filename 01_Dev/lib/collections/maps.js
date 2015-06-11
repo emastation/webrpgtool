@@ -13,7 +13,7 @@ Maps.deny({
 });
 
 Meteor.methods({ // クライアントから呼ばれるサーバーコード。クライアントからアクセス可能にするためにlib以下のファイルに定義する。
-  mapInsert: function(mapAttributes) {
+  mapCreate: function(mapAttributes) {
     check(Meteor.userId(), String);
     check(mapAttributes, {
       title: String,

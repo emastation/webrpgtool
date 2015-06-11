@@ -106,7 +106,7 @@ var StoryPage = ReactMeteor.createClass({
     var that = this;
     Meteor.call('sentencePush', attributes, function(error, result) {
       if (error) {
-        return alert(err.reason);
+        return alert(error.reason);
       }
       that.setState({
         newText: ''

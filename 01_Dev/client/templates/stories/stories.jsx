@@ -14,7 +14,6 @@ var Story = React.createClass({
 
   insertStory: function(id, evt) {
     var storyModelClicked = Stories.findOne(id);
-    var storyDomClicked = $("li[data-id='" + id + "']").get(0);
 
     var story = {
       title: 'Untitled',

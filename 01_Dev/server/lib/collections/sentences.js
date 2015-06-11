@@ -1,5 +1,5 @@
 Meteor.methods({
-  sentenceInsert: function(attributes) {
+  sentenceCreate: function(attributes) {
     check(Meteor.userId(), String);
     check(attributes, {
       text: String,
@@ -36,14 +36,14 @@ Meteor.methods({
       order: -1
     };
 
-    var storyItemId = Meteor.call('storyItemInsert', storyItemAttributes);
+    var storyItemId = Meteor.call('storyItemCreate', storyItemAttributes);
 
     var sentenceAttributes = {
       text: attributes.text,
       storyItemId: storyItemId._id
     };
 
-    var sentenceId = Meteor.call('sentenceInsert', sentenceAttributes);
+    var sentenceId = Meteor.call('sentenceCreate', sentenceAttributes);
 
     var storyItemAttributes = {
       contentId: sentenceId._id

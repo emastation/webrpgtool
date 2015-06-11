@@ -1,6 +1,6 @@
 Meteor.methods({
   // リストの末尾に追加したい場合は、attributes.orderにマイナスの値を渡すこと。途中に入れる場合は、適切なorder値を指定すること。
-  storyItemInsert: function(attributes) {
+  storyItemCreate: function(attributes) {
     check(Meteor.userId(), String);
     check(attributes, {
       storyId: String,

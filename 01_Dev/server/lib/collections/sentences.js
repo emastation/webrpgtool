@@ -31,6 +31,7 @@ Meteor.methods({
     var storyItemAttributes = {
       storyId: attributes.storyId,
       contentId: '',
+      contentType: 'sentence',
       comment: attributes.comment,
       order: -1
     };
@@ -54,5 +55,12 @@ Meteor.methods({
       storyItemId: storyItemId._id,
       sentenceId: sentenceId._id
     };
+  },
+
+  sentenceDelete: function(id) {
+    check(Meteor.userId(), String);
+    check(id, String);
+
+    Sentences.remove(id);
   }
 });

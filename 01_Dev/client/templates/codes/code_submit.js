@@ -8,7 +8,7 @@ Template.codeSubmit.events({
       javascript: $(e.target).find('[name=javascript]').val()
     };
 
-    Meteor.call('codeInsert', code, function(error, result) { // display the error to the user and abort
+    Meteor.call('codeCreate', code, function(error, result) { // display the error to the user and abort
       if (error)
         return alert(error.reason);
 

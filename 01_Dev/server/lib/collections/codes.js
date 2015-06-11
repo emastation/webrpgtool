@@ -1,5 +1,5 @@
 Meteor.methods({ // クライアントから呼ばれるサーバーコード。クライアントからアクセス可能にするためにlib以下のファイルに定義する。
-  codeInsert: function (codeAttributes) {
+  codeCreate: function (codeAttributes) {
     check(Meteor.userId(), String);
     check(codeAttributes, {
       name: String,

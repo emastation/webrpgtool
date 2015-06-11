@@ -1,10 +1,27 @@
 var Sentence = React.createClass({
 
+  deleteSentence: function(id) {
+    var attributes = {
+      id: id,
+      sortingScopeValue: Router.current().params._id
+    };
+
+    Meteor.call('storyItemDelete', attributes, function(error, result) {
+      if (error) {
+        return alert(error.reason);
+      }
+    });
+  },
+
   render: function() {
     if (this.props.meteorUserExist) {
       var sortableHandle = <i className="sortable-handle mdi-action-view-headline pull-left">=&nbsp;</i>;
+      var closeButton = <button type="button" className="close" data-dismiss="alert" onClick={this.deleteSentence.bind(this, this.props.storyItem._id)}>
+        <span aria-hidden="true">&times;</span><span className="sr-only">Close</span>
+      </button>;
     } else {
       var sortableHandle = {};
+      var closeButton = {}
     }
 
     var text = _.isUndefined(this.props.sentence) ? '' : this.props.sentence.text;
@@ -13,6 +30,7 @@ var Sentence = React.createClass({
       { sortableHandle }
       <span className="name">{text}</span>
       <span className="badge">{this.props.storyItem.order}</span>
+      { closeButton }
     </li>
   }
 });

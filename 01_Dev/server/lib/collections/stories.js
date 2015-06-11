@@ -41,7 +41,10 @@ Meteor.methods({
 
   storyInsert: function (story) {
     check(Meteor.userId(), String);
-    check(story, Object);
+    check(story, {
+      title: String,
+      order: Number
+    });
 
     var countStories = Stories.find().count();
 

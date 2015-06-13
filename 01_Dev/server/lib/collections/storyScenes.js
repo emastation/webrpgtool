@@ -27,5 +27,27 @@ Meteor.methods({
     return {
       _id: id
     };
+  },
+
+  storySceneDelete: function (idToDelete) {
+    check(Meteor.userId(), String);
+    check(idToDelete, String);
+
+    var storySceneToDelete = StoryScenes.findOne(idToDelete);
+
+    var countStoryScenes = StoryScenes.find({storyId: storySceneToDelete.storyId}).count();
+    var selector = {};
+    selector["order"] = {$gt: storySceneToDelete.order, $lt: countStoryScenes};
+    selector[StoryScenes.sortingScope] = storySceneToDelete.storyId;
+    var ids = _.pluck(StoryScenes.find(selector, {fields: {_id: 1}}).fetch(), '_id');
+
+    var modifier = {$inc: {}};
+    modifier.$inc["order"] = -1;
+
+    selector = {_id: {$in: ids}};
+
+    StoryScenes.update(selector, modifier, {multi: true});
+
+    StoryScenes.remove(idToDelete);
   }
 });

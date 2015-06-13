@@ -86,7 +86,7 @@ Router.route('/story/:_id', {
   name: 'storyPage'
 });
 
-Router.route('/storyScene/:_id', {
+Router.route('/story/:_id/scene/:_id2', {
   name: 'storyScenePage'
 });
 

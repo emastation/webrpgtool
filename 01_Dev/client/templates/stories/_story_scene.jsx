@@ -1,13 +1,13 @@
 StoryScene = React.createClass({
 
-  goToStoryScenePage: function(id) {
-    Router.go('storyScenePage', {_id: id});
+  goToStoryScenePage: function(storyScene) {
+    Router.go('storyScenePage', {_id: storyScene.storyId, _id2: storyScene._id});
   },
 
   render: function() {
     if (this.props.meteorUserExist) {
       var sortableHandle = <i className="sortable-handle mdi-action-view-headline pull-left">=&nbsp;</i>;
-      var editButton =  <button type="button" className="edit pull-right" data-dismiss="alert" onClick={this.goToStoryScenePage.bind(this, this.props.storyScene._id)}>
+      var editButton =  <button type="button" className="edit pull-right" data-dismiss="alert" onClick={this.goToStoryScenePage.bind(this, this.props.storyScene)}>
         <span aria-hidden="true">Edit</span><span className="sr-only">Edit</span>
       </button>;
     } else {

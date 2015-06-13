@@ -15,7 +15,7 @@ Sentence = React.createClass({
   insertSentence: function(id) {
     var storyItemModelClicked = StoryItems.findOne(id);
     var attributes = {
-      storyId: Router.current().params._id,
+      sceneId: Router.current().params._id2,
       comment: "This is a sentence.",
       text: 'New Sentence',
       order: storyItemModelClicked.order

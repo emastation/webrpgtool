@@ -39,6 +39,10 @@ var StoryPage = ReactMeteor.createClass({
     Meteor.subscribe("storyScenes");
   },
 
+  goBackToStoryList: function() {
+    Router.go('storiesList');
+  },
+
   getMeteorState: function() {
     var storyId = Router.current().params._id;
 
@@ -98,6 +102,7 @@ var StoryPage = ReactMeteor.createClass({
 
     return <div className="StoryPage">
       { form }
+      <p><a href="#" onClick={this.goBackToStoryList}>ストーリーリストに戻る</a></p>
       <SortableStoryScenes storyScenes={ this.state.storyScenes } meteorUserExist={this.state.displaySubmitForm} />
     </div>;
 

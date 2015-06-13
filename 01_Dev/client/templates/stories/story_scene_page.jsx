@@ -10,7 +10,7 @@ var SortableStoryItems = React.createClass({
   sortingScopeValue: '', // collectionNameで指定したCollectionで、このコンポーネントで操作する対象のScopeプロパティの値を指定する
 
   getInitialState: function() {
-    this.sortingScopeValue = Router.current().params._id;
+    this.sortingScopeValue = Router.current().params._id2;
     return {
     };
   },
@@ -37,12 +37,19 @@ var StoryScenePage = ReactMeteor.createClass({
     };
   },
   startMeteorSubscriptions: function() {
+    Meteor.subscribe("storyScenes"); // goBackToSceneListのためだけ
     Meteor.subscribe("storyItems");
     Meteor.subscribe("sentences");
   },
 
+  goBackToSceneList: function() {
+    var storyId = Router.current().params._id;
+
+    Router.go('storyPage', {_id: storyId});
+  },
+
   getMeteorState: function() {
-    var sceneId = Router.current().params._id;
+    var sceneId = Router.current().params._id2;
 
     var storyItems = StoryItems.find({sceneId:sceneId}, {sort: { order: 1 }}).fetch();
     var sentenceIds = [];
@@ -76,7 +83,7 @@ var StoryScenePage = ReactMeteor.createClass({
   submitNewItem: function(e) {
     e.preventDefault();
 
-    var sceneId = Router.current().params._id;
+    var sceneId = Router.current().params._id2;
 
     var attributes = {
       sceneId: sceneId,
@@ -114,6 +121,7 @@ var StoryScenePage = ReactMeteor.createClass({
 
     return <div className="StoryPage">
       { form }
+      <p><a href="#" onClick={this.goBackToSceneList}>シーンリストに戻る</a></p>
       <SortableStoryItems sentences={ this.state.sentences } storyItems={ this.state.storyItems } meteorUserExist={this.state.displaySubmitForm} />
     </div>;
 

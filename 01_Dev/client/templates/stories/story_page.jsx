@@ -1,0 +1,106 @@
+var SortableStoryScenes = React.createClass({
+  mixins: [window.SortableMixin],
+
+  sortableOptions: {
+    handle: ".sortable-handle",
+    model: "storyScenes"
+  },
+
+  collectionName: "storyScenes", // SortableMixinに、どのCollectionのorderを操作するか指定する
+  sortingScopeValue: '', // collectionNameで指定したCollectionで、このコンポーネントで操作する対象のScopeプロパティの値を指定する
+
+  getInitialState: function() {
+    this.sortingScopeValue = Router.current().params._id;
+    return {
+    };
+  },
+
+  renderSentence: function(model) {
+    return <StoryScene key={model._id} storyScene={ model } meteorUserExist={this.props.meteorUserExist} />;
+  },
+
+  render: function() {
+    return <ul className="StorySceneList" key="1">
+      { this.props.storyScenes.map(this.renderSentence) }
+    </ul>;
+  }
+});
+
+var StoryPage = ReactMeteor.createClass({
+  templateName: "storyPage",
+
+  getInitialState: function() {
+    return {
+      displaySubmitForm: false,
+      newSceneName: ''
+    };
+  },
+  startMeteorSubscriptions: function() {
+    Meteor.subscribe("storyScenes");
+  },
+
+  getMeteorState: function() {
+    var storyId = Router.current().params._id;
+
+    var storyScenes = StoryScenes.find({storyId:storyId}, {sort: { order: 1 }}).fetch();
+
+    return {
+      displaySubmitForm: Meteor.userId() ? true : false,
+      storyScenes: storyScenes
+    };
+  },
+
+
+  newSceneNameChange: function(e) {
+    this.setState({
+      newSceneName: e.target.value
+    });
+  },
+
+  submitNewItem: function(e) {
+    e.preventDefault();
+
+    var storyId = Router.current().params._id;
+
+    var attributes = {
+      storyId: storyId,
+      name: this.state.newSceneName,
+      order: -1
+    };
+
+    var that = this;
+    Meteor.call('storySceneCreate', attributes, function(error, result) {
+      if (error) {
+        return alert(error.reason);
+      }
+      that.setState({
+        newSceneName: ''
+      });
+    });
+
+  },
+
+  render: function() {
+
+    if (this.state.displaySubmitForm) {
+      var form = <form className="main form" onSubmit={this.submitNewItem}>
+        <div className="form-group">
+          <label className="control-label" htmlFor="title">シーンの新規作成</label>
+          <div className="controls">
+            <input name="title" id="title" type="text" value={this.state.newSceneName} placeholder="新しいシーンの名前を入力してください。" className="form-control" onChange={this.newSceneNameChange}/>
+          </div>
+        </div>
+        <input type="submit" value="Submit" className="btn btn-primary"/>
+      </form>;
+    } else {
+      var form = {}
+    }
+
+    return <div className="StoryPage">
+      { form }
+      <SortableStoryScenes storyScenes={ this.state.storyScenes } meteorUserExist={this.state.displaySubmitForm} />
+    </div>;
+
+  }
+
+});

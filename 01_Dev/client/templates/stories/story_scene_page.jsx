@@ -27,8 +27,8 @@ var SortableStoryItems = React.createClass({
 });
 
 
-var StoryPage = ReactMeteor.createClass({
-  templateName: "storyPage",
+var StoryScenePage = ReactMeteor.createClass({
+  templateName: "storyScenePage",
 
   getInitialState: function() {
     return {
@@ -42,9 +42,9 @@ var StoryPage = ReactMeteor.createClass({
   },
 
   getMeteorState: function() {
-    var storyId = Router.current().params._id;
+    var sceneId = Router.current().params._id;
 
-    var storyItems = StoryItems.find({storyId:storyId}, {sort: { order: 1 }}).fetch();
+    var storyItems = StoryItems.find({sceneId:sceneId}, {sort: { order: 1 }}).fetch();
     var sentenceIds = [];
     storyItems.map(function(storyItem){
       sentenceIds.push(storyItem.contentId);
@@ -76,10 +76,10 @@ var StoryPage = ReactMeteor.createClass({
   submitNewItem: function(e) {
     e.preventDefault();
 
-    var storyId = Router.current().params._id;
+    var sceneId = Router.current().params._id;
 
     var attributes = {
-      storyId: storyId,
+      sceneId: sceneId,
       comment: "This is a sentence.",
       text: this.state.newText
     };
@@ -111,8 +111,6 @@ var StoryPage = ReactMeteor.createClass({
     } else {
       var form = {}
     }
-
-    var storyId = Router.current().params._id;
 
     return <div className="StoryPage">
       { form }

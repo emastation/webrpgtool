@@ -50,13 +50,13 @@ Meteor.methods({
   sentencePush: function(attributes) {
     check(Meteor.userId(), String);
     check(attributes, {
-      storyId: String,
+      sceneId: String,
       comment: String,
       text: String
     });
 
     var storyItemAttributes = {
-      storyId: attributes.storyId,
+      sceneId: attributes.sceneId,
       contentId: '',
       contentType: 'sentence',
       comment: attributes.comment,
@@ -69,40 +69,20 @@ Meteor.methods({
     };
 
     return Meteor.call('sentenceAndStoryItemCreate', data);
-    /*
-    var storyItemId = Meteor.call('storyItemAdd', storyItemAttributes);
 
-    var sentenceAttributes = {
-      text: attributes.text,
-      storyItemId: storyItemId._id
-    };
-
-    var sentenceId = Meteor.call('sentenceCreate', sentenceAttributes);
-
-    var storyItemAttributes = {
-      contentId: sentenceId._id
-    };
-
-    StoryItems.update(storyItemId._id, {$set: storyItemAttributes});
-
-    return {
-      storyItemId: storyItemId._id,
-      sentenceId: sentenceId._id
-    };
-    */
   },
 
   sentenceInsert: function(attributes) {
     check(Meteor.userId(), String);
     check(attributes, {
-      storyId: String,
+      sceneId: String,
       comment: String,
       text: String,
       order: Number
     });
 
     var storyItemAttributes = {
-      storyId: attributes.storyId,
+      sceneId: attributes.sceneId,
       contentId: '',
       contentType: 'sentence',
       comment: attributes.comment,
@@ -116,28 +96,6 @@ Meteor.methods({
 
     return Meteor.call('sentenceAndStoryItemCreate', data);
 
-    /*
-    var storyItemId = Meteor.call('storyItemAdd', storyItemAttributes);
-
-    var sentenceAttributes = {
-      text: attributes.text,
-      storyItemId: storyItemId._id
-    };
-
-    var sentenceId = Meteor.call('sentenceCreate', sentenceAttributes);
-
-    var storyItemAttributes = {
-      contentId: sentenceId._id
-    };
-
-    StoryItems.update(storyItemId._id, {$set: storyItemAttributes});
-
-    return {
-      storyItemId: storyItemId._id,
-      sentenceId: sentenceId._id
-    };
-
-*/
   },
 
   sentenceDelete: function(id) {

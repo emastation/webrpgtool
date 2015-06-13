@@ -82,10 +82,13 @@ Router.route('/stories', {
   name: 'storiesList'
 });
 
-Router.route('/story:_id', {
+Router.route('/story/:_id', {
   name: 'storyPage'
 });
 
+Router.route('/storyScene/:_id', {
+  name: 'storyScenePage'
+});
 
 var requireLogin = function() {
   if (! Meteor.user()) {

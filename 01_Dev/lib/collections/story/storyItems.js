@@ -1,5 +1,5 @@
 StoryItems = new Mongo.Collection('storyItems');
-StoryItems['sortingScope'] = "storyId"; // orderの管理を分ける基準となるScopeプロパティを指定する
+StoryItems['sortingScope'] = "sceneId"; // orderの管理を分ける基準となるScopeプロパティを指定する
 
 StoryItems.allow({
   update: function(userId, post) { return true; },

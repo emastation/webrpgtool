@@ -1,1 +1,1 @@
-Sortable.collections = ['stories', 'storyItems'];
+Sortable.collections = ['stories', 'storyScenes', 'storyItems'];

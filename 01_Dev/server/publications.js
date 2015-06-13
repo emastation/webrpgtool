@@ -18,6 +18,10 @@ Meteor.publish('stories', function() {
   return Stories.find();
 });
 
+Meteor.publish('storyScenes', function() {
+  return StoryScenes.find();
+});
+
 Meteor.publish('storyItems', function() {
   return StoryItems.find();
 });

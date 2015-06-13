@@ -3,7 +3,7 @@ Meteor.methods({
   storyItemCreate: function(attributes) {
     check(Meteor.userId(), String);
     check(attributes, {
-      storyId: String,
+      sceneId: String,
       contentId: String,
       contentType: String,
       comment: String,
@@ -11,7 +11,7 @@ Meteor.methods({
     });
 
     if (attributes.order < 0) {
-      var order = StoryItems.find({storyId:attributes.storyId}).count();
+      var order = StoryItems.find({sceneId:attributes.sceneId}).count();
     } else {
       var order = attributes.order
     }
@@ -34,18 +34,18 @@ Meteor.methods({
   storyItemInsert: function (attributes) {
     check(Meteor.userId(), String);
     check(attributes, {
-      storyId: String,
+      sceneId: String,
       contentId: String,
       contentType: String,
       comment: String,
       order: Number
     });
 
-    var countStoryItems = StoryItems.find({storyId:attributes.storyId}).count();
+    var countStoryItems = StoryItems.find({sceneId:attributes.sceneId}).count();
 
     var selector = {};
     selector["order"] = {$gte: attributes.order, $lt: countStoryItems};
-    selector[StoryItems.sortingScope] = attributes.storyId;
+    selector[StoryItems.sortingScope] = attributes.sceneId;
     var ids = _.pluck(StoryItems.find(selector, {fields: {_id: 1}}).fetch(), '_id');
 
     var modifier = {$inc: {}};
@@ -61,7 +61,7 @@ Meteor.methods({
   storyItemAdd: function (attributes) {
     check(Meteor.userId(), String);
     check(attributes, {
-      storyId: String,
+      sceneId: String,
       contentId: String,
       contentType: String,
       comment: String,
@@ -81,10 +81,10 @@ Meteor.methods({
 
     var storyItemToDelete = StoryItems.findOne(id);
 
-    var countStoryItems = StoryItems.find({storyId:storyItemToDelete.storyId}).count();
+    var countStoryItems = StoryItems.find({sceneId:storyItemToDelete.sceneId}).count();
     var selector = {};
     selector["order"] = {$gt: storyItemToDelete.order, $lt: countStoryItems};
-    selector[StoryItems.sortingScope] = storyItemToDelete.storyId;
+    selector[StoryItems.sortingScope] = storyItemToDelete.sceneId;
     var ids = _.pluck(StoryItems.find(selector, {fields: {_id: 1}}).fetch(), '_id');
 
     var modifier = {$inc: {}};

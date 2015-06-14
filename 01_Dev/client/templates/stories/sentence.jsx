@@ -1,10 +1,47 @@
-Sentence = React.createClass({
+Sentence = ReactMeteor.createClass({
 
   getInitialState: function() {
     return {
-      editable: false
+      editable: false,
+      selectedCharacterId: null,
+      selectedCharacterImageId: null
     };
   },
+
+  startMeteorSubscriptions: function() {
+    Meteor.subscribe("characters");
+    Meteor.subscribe("characterImages");
+  },
+
+  getMeteorState: function() {
+
+    var characters = Characters.find().fetch();
+    var characterImages = CharacterImages.find().fetch();
+    if (characters.length > 0 && characterImages.length > 0) {
+      if (this.state.selectedCharacterId === null) {
+        var characterId = _.isUndefined(this.props.sentence) ? null : this.props.sentence.characterId;
+      } else {
+        var characterId = this.state.selectedCharacterId;
+      }
+      characterImages = CharacterImages.find({characterId: characterId}).fetch();
+      if (this.state.selectedCharacterImageId === null) {
+        var characterImageId = _.isUndefined(this.props.sentence) ? null : this.props.sentence.characterImageId;
+      } else {
+        var characterImageId = this.state.selectedCharacterImageId;
+      }
+
+    } else {
+      var characterId = null;
+      var characterImageId = null;
+    }
+    return {
+      characters: characters,
+      characterImages: characterImages,
+      selectedCharacterId: characterId,
+      selectedCharacterImageId: characterImageId
+    };
+  },
+
 
   editableThisStory: function() {
     this.setState({
@@ -18,6 +55,8 @@ Sentence = React.createClass({
       sceneId: Router.current().params._id2,
       comment: "This is a sentence.",
       text: 'New Sentence',
+      characterId: this.state.selectedCharacterId,
+      characterImageId: this.state.selectedCharacterImageId,
       order: storyItemModelClicked.order
     };
 
@@ -55,8 +94,37 @@ Sentence = React.createClass({
     });
   },
 
-  deleteSentence: function(id) {
+  onChangeSelectCharacterId: function(id, e) {
+    this.setState({selectedCharacterId: e.target.value});
 
+    var sentence = {
+      characterId: e.target.value
+    };
+
+    Sentences.update(id, {$set: sentence}, function(error) {
+      if (error) {
+        // display the error to the user
+        alert(error.reason);
+      }
+    });
+  },
+
+  onChangeSelectCharacterImageId: function(id, e) {
+    this.setState({selectedCharacterImageId: e.target.value});
+
+    var sentence = {
+      characterImageId: e.target.value
+    };
+
+    Sentences.update(id, {$set: sentence}, function(error) {
+      if (error) {
+        // display the error to the user
+        alert(error.reason);
+      }
+    });
+  },
+
+  deleteSentence: function(id) {
     Meteor.call('storyItemDelete', id, function(error, result) {
       if (error) {
         return alert(error.reason);
@@ -65,6 +133,13 @@ Sentence = React.createClass({
   },
 
   render: function() {
+    var characterOptions = this.state.characters.map(function(character) {
+      return <option value={character._id} key={character._id}>{character.name}</option>;
+    });
+    var characterImageOptions = this.state.characterImages.map(function(characterImage) {
+      return <option value={characterImage._id} key={characterImage._id}>{characterImage.pose}</option>;
+    });
+
     if (this.props.meteorUserExist) {
       var sortableHandle = <i className="sortable-handle mdi-action-view-headline pull-left">=&nbsp;</i>;
       var plusButton = <button type="button" className="plus" data-dismiss="alert" onClick={this.insertSentence.bind(this, this.props.storyItem._id)}>
@@ -86,6 +161,12 @@ Sentence = React.createClass({
     return <li data-id={this.props.storyItem._id} data-order={this.props.storyItem.order} className="sortable-item removable well well-sm">
       { sortableHandle }
       { plusButton }
+      <select value={this.state.selectedCharacterId} onChange={this.onChangeSelectCharacterId.bind(this, sentenceId)}>
+        {characterOptions}
+      </select>
+      <select value={this.state.selectedCharacterImageId} onChange={this.onChangeSelectCharacterImageId.bind(this, sentenceId)}>
+        {characterImageOptions}
+      </select>
       <span className="name" contentEditable={contentEditable}
             onClick={this.editableThisStory}
             onBlur={this.completeEditing.bind(this, sentenceId)}

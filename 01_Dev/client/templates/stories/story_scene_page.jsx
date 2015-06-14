@@ -38,6 +38,7 @@ var StoryScenePage = ReactMeteor.createClass({
       selectedCharacterImageId: null
     };
   },
+
   startMeteorSubscriptions: function() {
     Meteor.subscribe("storyScenes"); // goBackToSceneListのためだけ
     Meteor.subscribe("storyItems");

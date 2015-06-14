@@ -122,7 +122,9 @@ var StoryScenePage = ReactMeteor.createClass({
     var attributes = {
       sceneId: sceneId,
       comment: "This is a sentence.",
-      text: this.state.newText
+      text: this.state.newText,
+      characterId: this.state.selectedCharacterId,
+      characterImageId: this.state.selectedCharacterImageId
     };
 
     var that = this;

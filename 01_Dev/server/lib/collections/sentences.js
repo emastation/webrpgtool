@@ -3,6 +3,8 @@ Meteor.methods({
     check(Meteor.userId(), String);
     check(attributes, {
       text: String,
+      characterId: String,
+      characterImageId: String,
       storyItemId: String
     });
 
@@ -23,13 +25,17 @@ Meteor.methods({
   sentenceAndStoryItemCreate: function(data) {
     check(data, {
       storyItemAttributes: Object,
-      text: String
+      text: String,
+      characterId: String,
+      characterImageId: String
     });
 
     var storyItemId = Meteor.call('storyItemAdd', data.storyItemAttributes);
 
     var sentenceAttributes = {
       text: data.text,
+      characterId: data.characterId,
+      characterImageId: data.characterImageId,
       storyItemId: storyItemId._id
     };
 
@@ -52,7 +58,9 @@ Meteor.methods({
     check(attributes, {
       sceneId: String,
       comment: String,
-      text: String
+      text: String,
+      characterId: String,
+      characterImageId: String
     });
 
     var storyItemAttributes = {
@@ -65,7 +73,10 @@ Meteor.methods({
 
     var data = {
       storyItemAttributes: storyItemAttributes,
-      text: attributes.text
+      text: attributes.text,
+      characterId: attributes.characterId,
+      characterImageId: attributes.characterImageId
+
     };
 
     return Meteor.call('sentenceAndStoryItemCreate', data);
@@ -78,6 +89,8 @@ Meteor.methods({
       sceneId: String,
       comment: String,
       text: String,
+      characterId: String,
+      characterImageId: String,
       order: Number
     });
 
@@ -91,7 +104,9 @@ Meteor.methods({
 
     var data = {
       storyItemAttributes: storyItemAttributes,
-      text: attributes.text
+      text: attributes.text,
+      characterId: attributes.characterId,
+      characterImageId: attributes.characterImageId
     };
 
     return Meteor.call('sentenceAndStoryItemCreate', data);

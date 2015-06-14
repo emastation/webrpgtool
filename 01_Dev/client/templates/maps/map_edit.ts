@@ -30,7 +30,7 @@ Template.mapEdit.rendered = function() {
     }
   }
   // 読み込みシーンを初期セット
-  var loadingScene = tm.ui.LoadingScene({
+  var loadingScene = tm.game.LoadingScene({
     assets: ASSETS,
     nextScene: MapScene
   });

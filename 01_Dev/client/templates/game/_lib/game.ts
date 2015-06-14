@@ -16,6 +16,13 @@ module WrtGame {
     }
 
     public init(data:any) {
+
+      this.initBabylon(data);
+      this.initTmlib();
+      
+    }
+
+    private initBabylon(data:any) {
       // canvasの取得と、それを引数にしたBabylonエンジン作成
       var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("renderCanvas");
       var engine = new BABYLON.Engine(canvas, true);
@@ -62,8 +69,6 @@ module WrtGame {
       engine.runRenderLoop(()=> {
         this.runRenderLoop(mapMovement, flatMap, scene, camera);
       });
-
-      this.initTmlib();
     }
 
     private initTmlib() {

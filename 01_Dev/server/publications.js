@@ -29,3 +29,11 @@ Meteor.publish('storyItems', function() {
 Meteor.publish('sentences', function() {
   return Sentences.find();
 });
+
+Meteor.publish('characters', function() {
+  return Characters.find();
+});
+
+Meteor.publish('characterImages', function() {
+  return CharacterImages.find();
+});

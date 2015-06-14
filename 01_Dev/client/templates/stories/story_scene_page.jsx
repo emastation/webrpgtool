@@ -33,13 +33,17 @@ var StoryScenePage = ReactMeteor.createClass({
   getInitialState: function() {
     return {
       displaySubmitForm: false,
-      newText: ''
+      newText: '',
+      selectedCharacterId: null,
+      selectedCharacterImageId: null
     };
   },
   startMeteorSubscriptions: function() {
     Meteor.subscribe("storyScenes"); // goBackToSceneListのためだけ
     Meteor.subscribe("storyItems");
     Meteor.subscribe("sentences");
+    Meteor.subscribe("characters");
+    Meteor.subscribe("characterImages");
   },
 
   goBackToSceneList: function() {
@@ -65,11 +69,28 @@ var StoryScenePage = ReactMeteor.createClass({
       sentences.push(sentence);
     });
 
-
+    var characters = Characters.find().fetch();
+    var characterImages = CharacterImages.find().fetch();
+    if (characters.length > 0 && characterImages.length > 0) {
+      if (this.state.selectedCharacterId === null) {
+        var characterId = characters[0]._id;
+      } else {
+        var characterId = this.state.selectedCharacterId;
+      }
+      characterImages = CharacterImages.find({characterId: characterId}).fetch();
+      var characterImageId = characterImages[0]._id;
+    } else {
+      var characterId = null;
+      var characterImageId = null;
+    }
     return {
       displaySubmitForm: Meteor.userId() ? true : false,
       storyItems: storyItems,
-      sentences: sentences
+      sentences: sentences,
+      characters: characters,
+      characterImages: characterImages,
+      selectedCharacterId: characterId,
+      selectedCharacterImageId: characterImageId
     };
   },
 
@@ -78,6 +99,17 @@ var StoryScenePage = ReactMeteor.createClass({
     this.setState({
       newText: e.target.value
     });
+  },
+
+  onLoadCharacterId: function(e) {
+  },
+
+  onChangeSelectCharacterId: function(e) {
+    this.setState({selectedCharacterId: e.target.value});
+  },
+
+  onChangeSelectCharacterImageId: function(e) {
+    this.setState({selectedCharacterImageId: e.target.value});
   },
 
   submitNewItem: function(e) {
@@ -104,12 +136,24 @@ var StoryScenePage = ReactMeteor.createClass({
   },
 
   render: function() {
+    var characterOptions = this.state.characters.map(function(character) {
+      return <option value={character._id} key={character._id}>{character.name}</option>;
+    });
+    var characterImageOptions = this.state.characterImages.map(function(characterImage) {
+      return <option value={characterImage._id} key={characterImage._id}>{characterImage.pose}</option>;
+    });
 
     if (this.state.displaySubmitForm) {
       var form = <form className="main form" onSubmit={this.submitNewItem}>
         <div className="form-group">
           <label className="control-label" htmlFor="title">センテンス</label>
           <div className="controls">
+            <select value={this.state.selectedCharacterId} onLoad={this.onLoadCharacterId} onChange={this.onChangeSelectCharacterId}>
+              {characterOptions}
+            </select>
+            <select value={this.state.selectedCharacterImageId} onChange={this.onChangeSelectCharacterImageId}>
+              {characterImageOptions}
+            </select>
             <input name="title" id="title" type="text" value={this.state.newText} placeholder="Name your new sentence." className="form-control" onChange={this.newTextChange}/>
           </div>
         </div>

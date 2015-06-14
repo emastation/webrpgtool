@@ -106,9 +106,6 @@ var StoryScenePage = ReactMeteor.createClass({
     });
   },
 
-  onLoadCharacterId: function(e) {
-  },
-
   onChangeSelectCharacterId: function(e) {
     this.setState({selectedCharacterId: e.target.value});
   },
@@ -153,7 +150,7 @@ var StoryScenePage = ReactMeteor.createClass({
         <div className="form-group">
           <label className="control-label" htmlFor="title">センテンス</label>
           <div className="controls">
-            <select value={this.state.selectedCharacterId} onLoad={this.onLoadCharacterId} onChange={this.onChangeSelectCharacterId}>
+            <select value={this.state.selectedCharacterId} onChange={this.onChangeSelectCharacterId}>
               {characterOptions}
             </select>
             <select value={this.state.selectedCharacterImageId} onChange={this.onChangeSelectCharacterImageId}>

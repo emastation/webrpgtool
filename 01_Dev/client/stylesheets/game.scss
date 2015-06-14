@@ -1,12 +1,19 @@
+div#canvasWrapper {
+  position: absolute;
+}
+
 canvas#renderCanvas {
   width: 1200px;
   height: 800px;
   margin: 0px;
+  position: absolute;
+  top: 0px;
 }
+
 canvas#tmlibCanvas {
   width: 1200px;
   height: 800px;
   margin: 0px;
-  position: relative;
-  top: -800px;
+  position: absolute;
+  top: 0px;
 }

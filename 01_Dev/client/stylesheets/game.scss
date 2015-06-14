@@ -1,4 +1,12 @@
 canvas#renderCanvas {
   width: 1200px;
   height: 800px;
+  margin: 0px;
+}
+canvas#tmlibCanvas {
+  width: 1200px;
+  height: 800px;
+  margin: 0px;
+  position: relative;
+  top: -800px;
 }

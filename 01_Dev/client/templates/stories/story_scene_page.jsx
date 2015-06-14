@@ -78,7 +78,12 @@ var StoryScenePage = ReactMeteor.createClass({
         var characterId = this.state.selectedCharacterId;
       }
       characterImages = CharacterImages.find({characterId: characterId}).fetch();
-      var characterImageId = characterImages[0]._id;
+      if (this.state.selectedCharacterImageId === null) {
+        var characterImageId = characterImages[0]._id;
+      } else {
+        var characterImageId = this.state.selectedCharacterImageId;
+      }
+
     } else {
       var characterId = null;
       var characterImageId = null;

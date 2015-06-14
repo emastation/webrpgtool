@@ -38,7 +38,8 @@ class MapManager {
       superClass: tm.app.Scene,
 
       init: function () {
-        this.superInit();
+        var this_:any = this;
+        this_.superInit();
         var tm_this = this;
         var canvasDom = tm.dom.Element("#world");
         canvasDom.event.pointstart( (e:any) => {

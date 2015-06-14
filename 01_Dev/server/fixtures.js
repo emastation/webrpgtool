@@ -108,3 +108,18 @@ if (Stories.find().count() === 0) {
   );
 }
 
+if (Characters.find().count() === 0) {
+  [
+    {identifier: 'Mika@Rabbit', name: 'ウサギのミカ'},
+    {identifier: 'Ayumi@Tartle', name: 'カメのアユミ'},
+    {identifier: 'Ran@GoldFish', name: 'キンギョのラン'},
+    {identifier: 'Tsubasa@Parakeet', name: 'インコのツバサ'}
+  ].forEach(function (attribute, i) {
+        Characters.insert({
+          identifier: attribute.identifier,
+          name: attribute.name
+        });
+      }
+  );
+}
+

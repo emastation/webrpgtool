@@ -1,3 +1,7 @@
+interface Window {
+  MainScene: any;
+}
+
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
   export class Game {
@@ -58,6 +62,58 @@ module WrtGame {
       engine.runRenderLoop(()=> {
         this.runRenderLoop(mapMovement, flatMap, scene, camera);
       });
+
+      this.initTmlib();
+    }
+
+    private initTmlib() {
+
+      var SCREEN_WIDTH    = 1200;              // スクリーン幅
+      var SCREEN_HEIGHT   = 800;              // スクリーン高さ
+      var ASSETS = {
+        "player": "http://jsrun.it/assets/s/A/3/j/sA3jL.png",
+      };
+
+      // main
+      tm.main(function() {
+        // キャンバスアプリケーションを生成
+        var app = tm.display.CanvasApp("#tmlibCanvas");
+        app.background = 'rgba(0,0,0,0)';
+        // リサイズ
+        app.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        // ウィンドウにフィットさせる
+
+        // ローダーで画像を読み込む
+        var loading = tm.game.LoadingScene({
+          assets: ASSETS,
+          width: SCREEN_WIDTH,
+          height: SCREEN_HEIGHT,
+        });
+
+        // 読み込み完了後に呼ばれるメソッドを登録
+        loading.onload = function() {
+          // メインシーンに入れ替える
+          var scene = window.MainScene();
+          app.replaceScene(scene);
+        };
+        // ローディングシーンに入れ替える
+        app.replaceScene(loading);
+
+        // 実行
+        app.run();
+      });
+
+
+
+      if (document.readyState == "complete") {
+        if (!document.createEvent) {
+          window.fireEvent('onload');
+        } else {
+          var event = document.createEvent('HTMLEvents');
+          event.initEvent ("load", false, true)
+          window.dispatchEvent(event);
+        }
+      }
 
     }
 

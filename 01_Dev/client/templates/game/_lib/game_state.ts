@@ -48,6 +48,12 @@ module WrtGame {
   export var L_FACE_UP = "L_FACE_UP";
   export var L_FACE_LOW = "L_FACE_LOW";
 
+  export var L_UI_NO_MOVE = "L_UI_NO_MOVE";
+  export var L_UI_MOVE_LEFT = "L_UI_MOVE_LEFT";
+  export var L_UI_MOVE_UPEER = "L_UI_MOVE_UPEER";
+  export var L_UI_MOVE_RIGHT = "L_UI_MOVE_RIGHT";
+  export var L_UI_MOVE_LOWER = "L_UI_MOVE_LOWER";
+
   export var L_NORTH = "L_NORTH";
   export var L_WEST = "L_WEST";
   export var L_EAST = "L_EAST";
@@ -62,7 +68,8 @@ module WrtGame {
    */
   export class GameState {
     private static _instance:GameState;
-    private _logicalMovementState:any;
+    private _logicalMovementState:string;
+    private _logicalUiOperationState:string;
     private _allowedStateKeyCodes:Array<Number>;
     private _allowedStateKeyInfo:Array<any> =
         [KEY_INFO_W, KEY_INFO_A, KEY_INFO_S, KEY_INFO_D, KEY_INFO_Q, KEY_INFO_E, KEY_INFO_X, KEY_INFO_T, KEY_INFO_G, KEY_INFO_R, KEY_INFO_F];
@@ -70,6 +77,8 @@ module WrtGame {
         [L_MOVE_FORWARD, L_TURN_LEFT, L_TURN_BACK, L_TURN_RIGHT, L_MOVE_LEFT, L_MOVE_RIGHT, L_MOVE_BACKWARD, L_MOVE_UPPER, L_MOVE_LOWER, L_FACE_UP, L_FACE_LOW];
     private _allowedUiKeyCodes:Array<Number>;
     private _allowedUiKeyInfo:Array<any> = [KEY_INFO_ARROW_LEFT, KEY_INFO_ARROW_UP, KEY_INFO_ARROW_RIGHT, KEY_INFO_ARROW_DOWN];
+    private _logicalUiCommand:Array<any> =
+        [L_UI_MOVE_LEFT, L_UI_MOVE_UPEER, L_UI_MOVE_RIGHT, L_UI_MOVE_LOWER];
 
     constructor() {
       this._allowedStateKeyCodes = this.createKeyCodesFromKeyInfo(this._allowedStateKeyInfo);
@@ -98,6 +107,20 @@ module WrtGame {
     }
 
     /**
+     * 物理イベントのBaconJSプロパティからUI命令を生成するBaconJSプロパティに変換する
+     * @param property
+     */
+    public mapPhysicalEventPropertyToLogicalUiCommandProperty(phisicalEventProperty:any) :any {
+      var logicalUiCommandProperty:any = phisicalEventProperty.flatMap(this.getFunctionLogicalUiCommand());
+      logicalUiCommandProperty.onValue((value)=> {
+        this.registerLogicalUiOperationState(value);
+      });
+
+      return logicalUiCommandProperty;
+    }
+
+
+    /**
      * KEY_INFO_* の配列から KEY_CODE_* の配列を作る
      * @returns {Array}
      */
@@ -111,7 +134,7 @@ module WrtGame {
     }
 
     /**
-     * 連打できない扱いのキー（例：前進キーなど）のリストを返す。
+     * 連打できない扱いの移動操作キー（例：前進キーなど）のリストを返す。
      * @returns {string}
      */
     get allowedStateKeyCodes():Array<Number> {
@@ -119,10 +142,18 @@ module WrtGame {
     }
 
     /**
-     * Bacon.jsのキーイベントプロパティのflatMapに渡す関数を返す
+     * 連打できない扱いのUiキー（例：←など）のリストを返す。
+     * @returns {string}
+     */
+    get allowedUiKeyCodes():Array<Number> {
+      return this._allowedUiKeyCodes;
+    }
+
+    /**
+     * Bacon.jsのキーイベントプロパティのflatMapに渡す関数を返す（移動操作キー用）
      * @returns {any}
      */
-    public getFunctionLogicalMovementCommand() {
+    private getFunctionLogicalMovementCommand() {
       return function(value) {
         var index = this.getIndexOfKeyState(value);
         if (value[1] === KEY_UP) {
@@ -134,17 +165,46 @@ module WrtGame {
     }
 
     /**
-     * キーコード配列のインデックスを返す
+     * Bacon.jsのキーイベントプロパティのflatMapに渡す関数を返す（UI操作キー用）
+     * @returns {any}
+     */
+    private getFunctionLogicalUiCommand() {
+      return function(value) {
+        var index = this.getIndexOfUiKey(value);
+        if (value[1] === KEY_UP) {
+          return L_UI_NO_MOVE;
+        } else {
+          return this._logicalUiCommand[index];
+        }
+      }.bind(this);
+    }
+
+    /**
+     * キーコード配列のインデックスを返す（移動操作キー用）
      * @param value
      * @returns {number}
      */
     public getIndexOfKeyState(value:any) {
-      var allowedStateKeyCodes = this._allowedStateKeyCodes;
       var index = this.allowedStateKeyCodes.indexOf(value[0]);
 
       // Debug output
       var keyName = this._allowedStateKeyInfo[index][1];
       console.debug("KeyStateChanged: " + keyName + " is " + value[1]);
+
+      return index;
+    }
+
+    /**
+     * キーコード配列のインデックスを返す（Ui操作キー用）
+     * @param value
+     * @returns {number}
+     */
+    public getIndexOfUiKey(value:any) {
+      var index = this._allowedUiKeyCodes.indexOf(value[0]);
+
+      // Debug output
+      var keyName = this._allowedUiKeyInfo[index][1];
+      console.debug("UiKeyChanged: " + keyName + " is " + value[1]);
 
       return index;
     }
@@ -160,6 +220,19 @@ module WrtGame {
 
     public get logicalMovementState():string {
       return this._logicalMovementState;
+    }
+
+    /**
+     * 論理移動命令ステートを記憶する
+     * @param value
+     */
+    private registerLogicalUiOperationState(value:string) {
+      this._logicalUiOperationState = value;
+      console.debug("LogicalUiOperationState: " + value);
+    }
+
+    public get logicalUiOperationState():string {
+      return this._logicalUiOperationState;
     }
 
   }

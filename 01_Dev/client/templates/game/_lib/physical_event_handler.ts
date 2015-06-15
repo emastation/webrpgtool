@@ -37,7 +37,7 @@ module WrtGame {
         .skipDuplicates(_.isEqual).toProperty();
   }
 
-  export function initEventHandler(): any {
+  export function initMapMovementEventHandler(): any {
     var gameState = GameState.getInstance();
     var allowedStateKeys:Array<Number> = gameState.allowedStateKeyCodes;
 

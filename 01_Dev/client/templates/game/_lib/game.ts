@@ -28,7 +28,7 @@ module WrtGame {
 
     private initEvents() {
       // 物理イベントのプロパティ初期化
-      var physicalEventProperty:any = WrtGame.initEventHandler();
+      var physicalEventProperty:any = WrtGame.initMapMovementEventHandler();
 
       // 論理移動コマンドプロパティ初期化
       var gameState = WrtGame.GameState.getInstance();

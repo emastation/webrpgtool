@@ -1,19 +1,27 @@
+$canvasWidth: 1200px;
+$canvasHeight: 800px;
+
+@mixin screen-setup {
+  width: $canvasWidth;
+  height: $canvasHeight;
+  margin: 0px;
+  position: absolute;
+  top: 0px;
+}
+
+
 div#canvasWrapper {
   position: absolute;
 }
 
 canvas#renderCanvas {
-  width: 1200px;
-  height: 800px;
-  margin: 0px;
-  position: absolute;
-  top: 0px;
+  @include screen-setup;
 }
 
 canvas#tmlibCanvas {
-  width: 1200px;
-  height: 800px;
-  margin: 0px;
-  position: absolute;
-  top: 0px;
+  @include screen-setup;
+}
+
+div#game-ui-body {
+  @include screen-setup;
 }

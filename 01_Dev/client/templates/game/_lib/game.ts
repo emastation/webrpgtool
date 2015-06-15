@@ -1,3 +1,5 @@
+declare var CharacterImages:any;
+
 interface Window {
   MainScene: any;
 }
@@ -6,7 +8,8 @@ module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
   export class Game {
     private static _instance:Game;
-
+    public static SCREEN_WIDTH = 1200;
+    public static SCREEN_HEIGHT = 800;
     public static getInstance():Game
     {
       if(Game._instance == null) {
@@ -19,7 +22,7 @@ module WrtGame {
 
       this.initBabylon(data);
       this.initTmlib();
-      
+
     }
 
     private initBabylon(data:any) {
@@ -73,11 +76,16 @@ module WrtGame {
 
     private initTmlib() {
 
-      var SCREEN_WIDTH    = 1200;              // スクリーン幅
-      var SCREEN_HEIGHT   = 800;              // スクリーン高さ
       var ASSETS = {
         "player": "http://jsrun.it/assets/s/A/3/j/sA3jL.png",
       };
+
+      var characterImages = CharacterImages.find().fetch();
+      for(var key in characterImages) {
+        if ("" !== characterImages[key].portraitImageUrl) {
+          ASSETS[characterImages[key].portraitImageUrl] = characterImages[key].portraitImageUrl;
+        }
+      }
 
       // main
       tm.main(function() {
@@ -85,14 +93,14 @@ module WrtGame {
         var app = tm.display.CanvasApp("#tmlibCanvas");
         app.background = 'rgba(0,0,0,0)';
         // リサイズ
-        app.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        app.resize(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
         // ウィンドウにフィットさせる
 
         // ローダーで画像を読み込む
         var loading = tm.game.LoadingScene({
           assets: ASSETS,
-          width: SCREEN_WIDTH,
-          height: SCREEN_HEIGHT,
+          width: Game.SCREEN_WIDTH,
+          height: Game.SCREEN_HEIGHT,
         });
 
         // 読み込み完了後に呼ばれるメソッドを登録

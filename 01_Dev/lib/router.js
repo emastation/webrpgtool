@@ -67,7 +67,15 @@ Router.route('/codes/:_id/edit', {
 Router.route('/game/:_id', {
   name: 'gamePage',
   waitOn: function() {
-    return [Meteor.subscribe('map_textures'), Meteor.subscribe('map_tile_types')];
+    return [
+      Meteor.subscribe('map_textures'),
+      Meteor.subscribe('map_tile_types'),
+      Meteor.subscribe('stories'),
+      Meteor.subscribe('storyScenes'),
+      Meteor.subscribe('storyItems'),
+      Meteor.subscribe('sentences'),
+      Meteor.subscribe('characterImages')
+    ];
   },
   data: function() {
     return {

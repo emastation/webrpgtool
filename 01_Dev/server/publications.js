@@ -37,3 +37,7 @@ Meteor.publish('characters', function() {
 Meteor.publish('characterImages', function() {
   return CharacterImages.find();
 });
+
+Meteor.publish('uiTables', function() {
+  return UiTables.find();
+});

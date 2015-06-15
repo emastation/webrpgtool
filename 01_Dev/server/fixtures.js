@@ -136,3 +136,33 @@ if (Characters.find().count() === 0) {
   CharacterImages.insert({characterId:tsubasa, pose:'怒り', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_angry.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/tsubasa/tsubasa_icon_angry.jpg'});
   CharacterImages.insert({characterId:tsubasa, pose:'悲しい', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_sad.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/tsubasa/tsubasa_icon_sad.jpg'});
 }
+
+if (UiTables.find().count() === 0) {
+  UiTables.insert({
+    identifier: 'system-command',
+    title: 'システムコマンド',
+    records: [
+      {
+        columns:[
+          {
+            title: 'ゲームを始める'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'セーブする'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      }
+    ]
+  });
+}

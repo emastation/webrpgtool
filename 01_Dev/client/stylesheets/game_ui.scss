@@ -7,3 +7,7 @@ table.ui-table {
     border: 2px #999999 solid;
   }
 }
+
+td.ui-table-cell.selected {
+  background-color: yellow;
+}

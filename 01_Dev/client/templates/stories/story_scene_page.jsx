@@ -159,7 +159,7 @@ var StoryScenePage = ReactMeteor.createClass({
             <select value={this.state.selectedCharacterImageId} onChange={this.onChangeSelectCharacterImageId}>
               {characterImageOptions}
             </select>
-            <input name="title" id="title" type="text" value={this.state.newText} placeholder="Name your new sentence." className="form-control" onChange={this.newTextChange}/>
+            <textarea name="text" id="text" placeholder="Name your new sentence." className="form-control" onChange={this.newTextChange}>{this.state.newText}</textarea>
           </div>
         </div>
         <input type="submit" value="Submit" className="btn btn-primary"/>

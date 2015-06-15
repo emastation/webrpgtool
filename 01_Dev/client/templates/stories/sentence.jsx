@@ -76,8 +76,9 @@ Sentence = ReactMeteor.createClass({
       return; // 処理を抜ける
     }
 
+    var text = _.isUndefined(evt.target.innerText) ? evt.target.textContent : evt.target.innerText;
     var sentence = {
-      text: evt.target.textContent
+      text: text
     };
 
     Sentences.update(id, {$set: sentence}, function(error) {

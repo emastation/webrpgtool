@@ -31,6 +31,11 @@ module WrtGame {
           this_.superInit();
 
           var story = Stories.find({title: 'Game_1'}).fetch();
+
+          if (_.isUndefined(story[0])) {
+            return;
+          }
+
           var scene = StoryScenes.find({storyId: story[0]._id}).fetch();
           var storyItems = StoryItems.find({sceneId: scene[0]._id}).fetch();
           this.sentences = [];

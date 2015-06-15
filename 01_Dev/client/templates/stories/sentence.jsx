@@ -97,8 +97,10 @@ Sentence = ReactMeteor.createClass({
   onChangeSelectCharacterId: function(id, e) {
     this.setState({selectedCharacterId: e.target.value});
 
+    var characterImage = CharacterImages.find({characterId: e.target.value}).fetch()[0];
     var sentence = {
-      characterId: e.target.value
+      characterId: e.target.value,
+      characterImageId: characterImage._id
     };
 
     Sentences.update(id, {$set: sentence}, function(error) {

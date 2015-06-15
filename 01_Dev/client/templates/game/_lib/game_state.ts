@@ -13,6 +13,10 @@ module WrtGame {
   export var KEY_CODE_G = 71;
   export var KEY_CODE_R = 82;
   export var KEY_CODE_F = 70;
+  export var KEY_CODE_ARROW_LEFT = 37;
+  export var KEY_CODE_ARROW_UP = 38;
+  export var KEY_CODE_ARROW_RIGHT = 39;
+  export var KEY_CODE_ARROW_DOWN = 40;
 
   export var KEY_INFO_W = [KEY_CODE_W, "KEY_W"];
   export var KEY_INFO_A = [KEY_CODE_A, "KEY_A"];
@@ -25,6 +29,11 @@ module WrtGame {
   export var KEY_INFO_G = [KEY_CODE_G, "KEY_G"];
   export var KEY_INFO_R = [KEY_CODE_R, "KEY_R"];
   export var KEY_INFO_F = [KEY_CODE_F, "KEY_F"];
+
+  export var KEY_INFO_ARROW_LEFT = [KEY_CODE_ARROW_LEFT, "KEY_ARROW_LEFT"];
+  export var KEY_INFO_ARROW_UP = [KEY_CODE_ARROW_UP, "KEY_ARROW_UP"];
+  export var KEY_INFO_ARROW_RIGHT = [KEY_CODE_ARROW_RIGHT, "KEY_ARROW_RIGHT"];
+  export var KEY_INFO_ARROW_DOWN = [KEY_CODE_ARROW_DOWN, "KEY_ARROW_DOWN"];
 
   export var L_NO_MOVE = "L_NO_MOVE";
   export var L_MOVE_FORWARD = "L_MOVE_FORWARD";
@@ -54,14 +63,17 @@ module WrtGame {
   export class GameState {
     private static _instance:GameState;
     private _logicalMovementState:any;
-    private _allowedStateKeyCode:Array<Number>;
+    private _allowedStateKeyCodes:Array<Number>;
     private _allowedStateKeyInfo:Array<any> =
         [KEY_INFO_W, KEY_INFO_A, KEY_INFO_S, KEY_INFO_D, KEY_INFO_Q, KEY_INFO_E, KEY_INFO_X, KEY_INFO_T, KEY_INFO_G, KEY_INFO_R, KEY_INFO_F];
     private _logicalMovementCommand:Array<any> =
         [L_MOVE_FORWARD, L_TURN_LEFT, L_TURN_BACK, L_TURN_RIGHT, L_MOVE_LEFT, L_MOVE_RIGHT, L_MOVE_BACKWARD, L_MOVE_UPPER, L_MOVE_LOWER, L_FACE_UP, L_FACE_LOW];
+    private _allowedUiKeyCodes:Array<Number>;
+    private _allowedUiKeyInfo:Array<any> = [KEY_INFO_ARROW_LEFT, KEY_INFO_ARROW_UP, KEY_INFO_ARROW_RIGHT, KEY_INFO_ARROW_DOWN];
 
     constructor() {
-      this._allowedStateKeyCode = this.createAllowedStateKeyCodes();
+      this._allowedStateKeyCodes = this.createKeyCodesFromKeyInfo(this._allowedStateKeyInfo);
+      this._allowedUiKeyCodes = this.createKeyCodesFromKeyInfo(this._allowedUiKeyInfo);
     }
 
     public static getInstance():GameState
@@ -89,9 +101,9 @@ module WrtGame {
      * KEY_INFO_* の配列から KEY_CODE_* の配列を作る
      * @returns {Array}
      */
-    private createAllowedStateKeyCodes():Array<Number> {
+    private createKeyCodesFromKeyInfo(infoArray:Array<any>):Array<Number> {
       var allowedStateKeyCodes = [];
-      this._allowedStateKeyInfo.forEach(function(element, index, array){
+      infoArray.forEach(function(element, index, array){
         allowedStateKeyCodes.push(element[0]);
       });
 
@@ -103,7 +115,7 @@ module WrtGame {
      * @returns {string}
      */
     get allowedStateKeyCodes():Array<Number> {
-      return this._allowedStateKeyCode;
+      return this._allowedStateKeyCodes;
     }
 
     /**
@@ -127,7 +139,7 @@ module WrtGame {
      * @returns {number}
      */
     public getIndexOfKeyState(value:any) {
-      var allowedStateKeyCodes = this._allowedStateKeyCode;
+      var allowedStateKeyCodes = this._allowedStateKeyCodes;
       var index = this.allowedStateKeyCodes.indexOf(value[0]);
 
       // Debug output

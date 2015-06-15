@@ -20,12 +20,27 @@ module WrtGame {
 
     public init(data:any) {
 
-      this.initBabylon(data);
+      var mapMovement = this.initEvents();
+      this.initBabylon(data, mapMovement);
       this.initTmlib();
 
     }
 
-    private initBabylon(data:any) {
+    private initEvents() {
+      // 物理イベントのプロパティ初期化
+      var physicalEventProperty:any = WrtGame.initEventHandler();
+
+      // 論理移動コマンドプロパティ初期化
+      var gameState = WrtGame.GameState.getInstance();
+      var logicalMovementCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalEventProperty);
+
+      // マップ移動クラスの初期化
+      var mapMovement = WrtGame.MapMovement.getInstance();
+      mapMovement.init(logicalMovementCommandProperty);
+      return mapMovement;
+    }
+
+    private initBabylon(data:any, mapMovement:WrtGame.MapMovement) {
       // canvasの取得と、それを引数にしたBabylonエンジン作成
       var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("renderCanvas");
       var engine = new BABYLON.Engine(canvas, true);
@@ -51,17 +66,6 @@ module WrtGame {
       // Babylonのシーンの作成と、そのシーンを引数に、flatMapクラスの生成
       var scene = createScene();
       var flatMap = new WrtGame.FlatMap(scene, data.map, data.mapTextures.fetch());
-
-      // 物理イベントのプロパティ初期化
-      var physicalEventProperty:any = WrtGame.initEventHandler();
-
-      // 論理移動コマンドプロパティ初期化
-      var gameState = WrtGame.GameState.getInstance();
-      var logicalMovementCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalEventProperty);
-
-      // マップ移動クラスの初期化
-      var mapMovement = WrtGame.MapMovement.getInstance();
-      mapMovement.init(logicalMovementCommandProperty);
 
       // Windowのリサイズ対応
       window.addEventListener("resize", function() {

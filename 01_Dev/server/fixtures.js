@@ -162,6 +162,118 @@ if (UiTables.find().count() === 0) {
             title: 'やめる'
           }
         ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'やめる'
+          }
+        ]
       }
     ]
   });

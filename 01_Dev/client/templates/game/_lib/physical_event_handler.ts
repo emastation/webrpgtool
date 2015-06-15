@@ -37,10 +37,24 @@ module WrtGame {
         .skipDuplicates(_.isEqual).toProperty();
   }
 
+  function keyProperty(keyCodes) {
+    return keyDownEvents(keyCodes).flatMapLatest(whichDown())
+        .merge(keyUpEvents(keyCodes).flatMap(whichUp()))
+        .toProperty();
+  }
+
   export function initMapMovementEventHandler(): any {
     var gameState = GameState.getInstance();
     var allowedStateKeys:Array<Number> = gameState.allowedStateKeyCodes;
 
     return keyStateProperty(allowedStateKeys);
   }
+
+  export function initUiEventHandler(): any {
+    var gameState = GameState.getInstance();
+    var allowedUiKeys:Array<Number> = gameState.allowedUiKeyCodes;
+
+    return keyProperty(allowedUiKeys);
+  }
+
 }

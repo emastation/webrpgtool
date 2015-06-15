@@ -28,15 +28,22 @@ module WrtGame {
 
     private initEvents() {
       // 物理イベントのプロパティ初期化
-      var physicalEventProperty:any = WrtGame.initMapMovementEventHandler();
+      var physicalMapMovementEventProperty:any = WrtGame.initMapMovementEventHandler();
+      var physicalUiEventProperty:any = WrtGame.initUiEventHandler();
 
-      // 論理移動コマンドプロパティ初期化
       var gameState = WrtGame.GameState.getInstance();
-      var logicalMovementCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalEventProperty);
+      // 論理移動コマンドプロパティ初期化
+      var logicalMovementCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalMapMovementEventProperty);
+      // 論理UIコマンドプロパティ初期化
+      var logicalUiCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalUiCommandProperty(physicalUiEventProperty);
 
       // マップ移動クラスの初期化
       var mapMovement = WrtGame.MapMovement.getInstance();
       mapMovement.init(logicalMovementCommandProperty);
+
+      var uiOperation = WrtGame.UiOperation.getInstance();
+      uiOperation.init(logicalUiCommandProperty);
+
       return mapMovement;
     }
 
@@ -54,7 +61,7 @@ module WrtGame {
 //    var camera = new BABYLON.ArcRotateCamera("Camera", 1.0, 1.0, 12, BABYLON.Vector3.Zero(), scene);
         camera = new BABYLON.FreeCamera("Camera", new BABYLON.Vector3(0.5, 0.5, 0.5), scene);
 
-        camera.attachControl(canvas);
+//        camera.attachControl(canvas, false);
 
         var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(1,1,1), scene);
 

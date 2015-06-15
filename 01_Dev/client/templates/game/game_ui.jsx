@@ -12,14 +12,16 @@ var GameUi = ReactMeteor.createClass({
 
   getMeteorState: function() {
     var uiTables = UiTables.find().fetch();
+    var uiOperation = UiOperations.findOne();
 
     return {
-      uiTables: uiTables
+      uiTables: uiTables,
+      uiOperation: uiOperation
     };
   },
 
   renderUiTable: function(model) {
-    return <UiTable key={model._id} uiTable={model} />;
+    return <UiTable key={model._id} uiTable={model} uiOperation={this.state.uiOperation} />;
   },
 
   render: function() {

@@ -50,7 +50,7 @@ module WrtGame {
 
   export var L_UI_NO_MOVE = "L_UI_NO_MOVE";
   export var L_UI_MOVE_LEFT = "L_UI_MOVE_LEFT";
-  export var L_UI_MOVE_UPEER = "L_UI_MOVE_UPEER";
+  export var L_UI_MOVE_UPPER = "L_UI_MOVE_UPPER";
   export var L_UI_MOVE_RIGHT = "L_UI_MOVE_RIGHT";
   export var L_UI_MOVE_LOWER = "L_UI_MOVE_LOWER";
 
@@ -78,7 +78,7 @@ module WrtGame {
     private _allowedUiKeyCodes:Array<Number>;
     private _allowedUiKeyInfo:Array<any> = [KEY_INFO_ARROW_LEFT, KEY_INFO_ARROW_UP, KEY_INFO_ARROW_RIGHT, KEY_INFO_ARROW_DOWN];
     private _logicalUiCommand:Array<any> =
-        [L_UI_MOVE_LEFT, L_UI_MOVE_UPEER, L_UI_MOVE_RIGHT, L_UI_MOVE_LOWER];
+        [L_UI_MOVE_LEFT, L_UI_MOVE_UPPER, L_UI_MOVE_RIGHT, L_UI_MOVE_LOWER];
 
     constructor() {
       this._allowedStateKeyCodes = this.createKeyCodesFromKeyInfo(this._allowedStateKeyInfo);

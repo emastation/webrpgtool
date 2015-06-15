@@ -35,12 +35,41 @@ UiTable = React.createClass({
 
   },
 
-  componentWillMount: function() {
-
-    for(var i=0; i<this.props.uiTable.records.length; i++) {
-      for(var j=0; j<this.props.uiTable.records[i].columns.length; j++) {
-        this.props.uiTable.records[i].columns[j]['row'] = i;
+  constructColumnsRowIdx: function(props) {
+    for(var i=0; i<props.uiTable.records.length; i++) {
+      for(var j=0; j<props.uiTable.records[i].columns.length; j++) {
+        props.uiTable.records[i].columns[j]['row'] = i;
       }
+    }
+  },
+
+  componentWillMount: function() {
+    this.constructColumnsRowIdx(this.props);
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    this.constructColumnsRowIdx(newProps);
+
+    if (newProps.uiOperation.operation === WrtGame.L_UI_MOVE_LOWER) {
+      if (this.state.currentCell[0] >= newProps.uiTable.records.length-1) {
+        var newIdx = newProps.uiTable.records.length-1;
+      } else {
+        var newIdx = this.state.currentCell[0] + 1;
+      }
+
+      this.setState({
+        currentCell:[newIdx, this.state.currentCell[1]]
+      });
+    } else if (newProps.uiOperation.operation === WrtGame.L_UI_MOVE_UPPER) {
+      if (this.state.currentCell[0] <= 0) {
+        var newIdx = 0;
+      } else {
+        var newIdx = this.state.currentCell[0] - 1;
+      }
+
+      this.setState({
+        currentCell:[newIdx, this.state.currentCell[1]]
+      });
     }
 
   }

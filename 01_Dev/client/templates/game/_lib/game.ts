@@ -58,20 +58,23 @@ module WrtGame {
         var scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color3(0,0,0.2);
 
-//    var camera = new BABYLON.ArcRotateCamera("Camera", 1.0, 1.0, 12, BABYLON.Vector3.Zero(), scene);
         camera = new BABYLON.FreeCamera("Camera", new BABYLON.Vector3(0.5, 0.5, 0.5), scene);
-
-//        camera.attachControl(canvas, false);
+        camera.attachControl(canvas, false);
 
         var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(1,1,1), scene);
-
-        light.groundColor = new BABYLON.Color3(1.0, 1.0, 1.0);
+        light.groundColor = new BABYLON.Color3(0.3, 0.3, 0.3);
 
         return scene;
       };
 
       // Babylonのシーンの作成と、そのシーンを引数に、flatMapクラスの生成
       var scene = createScene();
+      var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(0.5, 0.5, 0.5), scene);
+      light.diffuse = new BABYLON.Color3(0.5, 0.5, 0.5);
+      light.specular = new BABYLON.Color3(0.5, 0.5, 0.5);
+      scene.registerBeforeRender(function () {
+        light.position = camera.position;
+      });
 //      var map = new WrtGame.FlatMap(scene, data.map, data.mapTextures.fetch());
       var map = new WrtGame.PolygonMap(scene, data.map, data.mapTextures.fetch());
 

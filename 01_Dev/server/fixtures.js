@@ -109,28 +109,28 @@ if (Stories.find().count() === 0) {
 }
 
 if (Characters.find().count() === 0) {
-  var narration = Characters.insert({identifier: 'narration', name: 'ナレーション'});
+  var narration = Characters.insert({identifier: 'narration', name: 'ナレーション', position:'friend', useForNovel:true});
   CharacterImages.insert({characterId:narration, pose:'通常', portraitImageUrl: '', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/narration.gif'});
 
-  var mika = Characters.insert({identifier: 'Mika@Rabbit', name: 'ウサギのミカ'});
+  var mika = Characters.insert({identifier: 'Mika@Rabbit', name: 'ウサギのミカ', position:'friend', useForNovel:true});
   CharacterImages.insert({characterId:mika, pose:'通常', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/mika/mika_550_portrait_normal.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/mika/mika_icon_normal.jpg'});
   CharacterImages.insert({characterId:mika, pose:'笑顔', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/mika/mika_550_portrait_smile.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/mika/mika_icon_smile.jpg'});
   CharacterImages.insert({characterId:mika, pose:'怒り', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/mika/mika_550_portrait_angry.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/mika/mika_icon_angry.jpg'});
   CharacterImages.insert({characterId:mika, pose:'悲しい', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/mika/mika_550_portrait_sad.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/mika/mika_icon_sad.jpg'});
 
-  var ayumi = Characters.insert({identifier: 'Ayumi@Tartle', name: 'カメのアユミ'});
+  var ayumi = Characters.insert({identifier: 'Ayumi@Tartle', name: 'カメのアユミ', position:'friend', useForNovel:true});
   CharacterImages.insert({characterId:ayumi, pose:'通常', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/ayumi/ayumi_550_portrait_normal.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/ayumi/ayumi_icon_normal.jpg'});
   CharacterImages.insert({characterId:ayumi, pose:'笑顔', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/ayumi/ayumi_550_portrait_smile.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/ayumi/ayumi_icon_smile.jpg'});
   CharacterImages.insert({characterId:ayumi, pose:'怒り', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/ayumi/ayumi_550_portrait_angry.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/ayumi/ayumi_icon_angry.jpg'});
   CharacterImages.insert({characterId:ayumi, pose:'悲しい', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/ayumi/ayumi_550_portrait_sad.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/ayumi/ayumi_icon_sad.jpg'});
 
-  var ran = Characters.insert({identifier: 'Ran@GoldFish', name: 'キンギョのラン'});
+  var ran = Characters.insert({identifier: 'Ran@GoldFish', name: 'キンギョのラン', position:'friend', useForNovel:true});
   CharacterImages.insert({characterId:ran, pose:'通常', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/ran/ran_550_portrait_normal.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/ran/ran_icon_normal.jpg'});
   CharacterImages.insert({characterId:ran, pose:'笑顔', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/ran/ran_550_portrait_smile.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/ran/ran_icon_smile.jpg'});
   CharacterImages.insert({characterId:ran, pose:'怒り', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/ran/ran_550_portrait_angry.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/ran/ran_icon_angry.jpg'});
   CharacterImages.insert({characterId:ran, pose:'悲しい', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/ran/ran_550_portrait_sad.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/ran/ran_icon_sad.jpg'});
 
-  var tsubasa = Characters.insert({identifier: 'Tsubasa@Parakeet', name: 'インコのツバサ'});
+  var tsubasa = Characters.insert({identifier: 'Tsubasa@Parakeet', name: 'インコのツバサ', position:'friend', useForNovel:true});
   CharacterImages.insert({characterId:tsubasa, pose:'通常', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_normal.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/tsubasa/tsubasa_icon_normal.jpg'});
   CharacterImages.insert({characterId:tsubasa, pose:'笑顔', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_smile.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/tsubasa/tsubasa_icon_smile.jpg'});
   CharacterImages.insert({characterId:tsubasa, pose:'怒り', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_angry.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/tsubasa/tsubasa_icon_angry.jpg'});

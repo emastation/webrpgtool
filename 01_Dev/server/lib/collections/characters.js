@@ -3,7 +3,9 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
     check(Meteor.userId(), String);
     check(attributes, {
       identifier: String,
-      name: Number
+      name: Number,
+      position: String,
+      useForNovel: Boolean
     });
 
     var characterWithSameIdentifier = Maps.findOne({title: attributes.identifier});

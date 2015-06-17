@@ -15,7 +15,7 @@ Sentence = ReactMeteor.createClass({
 
   getMeteorState: function() {
 
-    var characters = Characters.find().fetch();
+    var characters = Characters.find({useForNovel: true}).fetch();
     var characterImages = CharacterImages.find().fetch();
     if (characters.length > 0 && characterImages.length > 0) {
       if (this.state.selectedCharacterId === null) {

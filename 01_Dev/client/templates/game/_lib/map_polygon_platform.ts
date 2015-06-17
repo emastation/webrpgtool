@@ -14,35 +14,6 @@ module WrtGame {
       var x = this.x_onMap;
       var y = this.y_onMap;
 
-      /*
-       // 床側
-       this._floorSprite3D.mesh = new BABYLON.Mesh(mapPlatformTitle + "_" + "floor", scene);
-       this._floorSprite3D.mesh.position = new BABYLON.Vector3(this._floorSprite3D.mesh.position.x, floorHeight, this._floorSprite3D.mesh.position.z);
-       var updatable = true;
-       this._floorSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.PositionKind, this._floorSprite3D.buffer.positions, updatable);
-       this._floorSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.NormalKind, this._floorSprite3D.buffer.normals, updatable);
-       this._floorSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.UVKind, this._floorSprite3D.buffer.texcoords, updatable);
-       this._floorSprite3D.mesh.setIndices(this._floorSprite3D.buffer.indices);
-
-       this._floorSprite3D.mesh.material = material;
-       this._floorSprite3D.mesh.material.diffuseColor = color;
-       this._floorSprite3D.mesh.material.diffuseTexture = texture;
-
-       // 天井側
-       this._ceilingSprite3D.mesh = new BABYLON.Mesh(mapPlatformTitle + "_" + "ceiling", scene);
-       this._ceilingSprite3D.mesh.position = new BABYLON.Vector3(this._floorSprite3D.mesh.position.x, ceilingHeight, this._floorSprite3D.mesh.position.z);
-       var updatable = true;
-       this._ceilingSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.PositionKind, this._ceilingSprite3D.buffer.positions, updatable);
-       this._ceilingSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.NormalKind, this._ceilingSprite3D.buffer.normals, updatable);
-       this._ceilingSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.UVKind, this._ceilingSprite3D.buffer.texcoords, updatable);
-       this._ceilingSprite3D.mesh.setIndices(this._ceilingSprite3D.buffer.indices);
-
-       this._ceilingSprite3D.mesh.material = material;
-       this._ceilingSprite3D.mesh.material.diffuseColor = color;
-       this._ceilingSprite3D.mesh.material.diffuseTexture = texture;
-       */
-
-
       /// 床側
       var floorRootMesh = new BABYLON.Mesh("MapFlatPlatform_Floor_RootMesh[" + x + "][" + y +"]", scene);
 

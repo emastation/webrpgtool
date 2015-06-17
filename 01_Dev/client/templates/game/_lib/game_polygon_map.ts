@@ -55,7 +55,7 @@ module WrtGame {
                 wallMeshEast.parent = cellMesh;
                 for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
                   if (!doesThisTypeExist(typeMapData[y][x + 1], 'W')) {
-                    if (heightMapData[y][x + 1][0] <= j && j < (heightMapData[y][x + 1][1])) {
+                    if (doesThisTypeExist(typeMapData[y][x + 1], 'P') || heightMapData[y][x + 1][0] <= j && j < (heightMapData[y][x + 1][1])) {
                       continue;
                     }
                   }
@@ -72,7 +72,7 @@ module WrtGame {
                 wallMeshSouth.position = new BABYLON.Vector3(1, 0, 0);
                 for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
                   if (!doesThisTypeExist(typeMapData[y + 1][x], 'W')) {
-                    if (heightMapData[y + 1][x][0] <= j && j < (heightMapData[y + 1][x][1])) {
+                    if (doesThisTypeExist(typeMapData[y + 1][x], 'P') || heightMapData[y + 1][x][0] <= j && j < (heightMapData[y + 1][x][1])) {
                       continue;
                     }
                   }
@@ -89,7 +89,7 @@ module WrtGame {
                 wallMeshWEST.position = new BABYLON.Vector3(1, 0, -1);
                 for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
                   if (!doesThisTypeExist(typeMapData[y][x - 1], 'W')) {
-                    if (heightMapData[y][x - 1][0] <= j && j < (heightMapData[y][x - 1][1])) {
+                    if (doesThisTypeExist(typeMapData[y][x - 1], 'P') || heightMapData[y][x - 1][0] <= j && j < (heightMapData[y][x - 1][1])) {
                       continue;
                     }
                   }
@@ -106,7 +106,7 @@ module WrtGame {
                 wallMeshNORTH.position = new BABYLON.Vector3(0, 0, -1);
                 for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
                   if (!doesThisTypeExist(typeMapData[y - 1][x], 'W')) {
-                    if (heightMapData[y - 1][x][0] <= j && j < (heightMapData[y - 1][x][1])) {
+                    if (doesThisTypeExist(typeMapData[y - 1][x], 'P') || heightMapData[y - 1][x][0] <= j && j < (heightMapData[y - 1][x][1])) {
                       continue;
                     }
                   }

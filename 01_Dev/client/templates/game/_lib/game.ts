@@ -72,7 +72,8 @@ module WrtGame {
 
       // Babylonのシーンの作成と、そのシーンを引数に、flatMapクラスの生成
       var scene = createScene();
-      var flatMap = new WrtGame.FlatMap(scene, data.map, data.mapTextures.fetch());
+//      var map = new WrtGame.FlatMap(scene, data.map, data.mapTextures.fetch());
+      var map = new WrtGame.PolygonMap(scene, data.map, data.mapTextures.fetch());
 
       // Windowのリサイズ対応
       window.addEventListener("resize", function() {
@@ -81,7 +82,7 @@ module WrtGame {
 
       // 描画ループ定義
       engine.runRenderLoop(()=> {
-        this.runRenderLoop(mapMovement, flatMap, scene, camera);
+        this.runRenderLoop(mapMovement, map, scene, camera);
       });
     }
 
@@ -164,11 +165,11 @@ module WrtGame {
       return viewPos.add(viewPosOffset);
     }
 
-    private runRenderLoop(mapMovement:MapMovement, flatMap:FlatMap, scene:BABYLON.Scene, camera:BABYLON.FreeCamera) {
+    private runRenderLoop(mapMovement:MapMovement, map:Map, scene:BABYLON.Scene, camera:BABYLON.FreeCamera) {
 
       // 平行移動する
       var moveDelta = 1.0/60*3;
-      mapMovement.move(flatMap, moveDelta);
+      mapMovement.move(map, moveDelta);
 
       // 水平方向の向きを変える
       mapMovement.rotate(60*0.8);
@@ -176,7 +177,7 @@ module WrtGame {
       // 垂直方向の向きを変える
       mapMovement.faceUpOrLow(1/60*0.5);
 
-      flatMap.movePlatforms();
+      map.movePlatforms();
 
       // カメラの位置・回転をセット
       camera.position = this.convertBabylonPlayerPosition(mapMovement.playerX, mapMovement.playerH, mapMovement.playerY, mapMovement.playerAngle);
@@ -185,6 +186,8 @@ module WrtGame {
       // シーンをレンダリングする
       scene.render();
     }
+
+
   }
 
 }

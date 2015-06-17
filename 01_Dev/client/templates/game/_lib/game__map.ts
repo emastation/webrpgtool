@@ -259,6 +259,11 @@ module WrtGame {
       }
     }
 
+    // オーバーライドされること前提
+    public movePlatforms() {
+
+    }
+
     protected set map(map:any) {
       this._map = map;
       this.makeTexMapData(map.type_array);

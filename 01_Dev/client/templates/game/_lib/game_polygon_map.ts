@@ -21,7 +21,7 @@ module WrtGame {
       sprite.buffer = {positions:[], normals:[], texcoords:[], indices:[]};
       sprite.FaceN = 0;
 
-      var rootMesh = new BABYLON.Mesh("rootMesh", this._scene);
+      var rootMesh = new BABYLON.Mesh("PolygonMap_RootMesh", this._scene);
 
       var that = this;
       BABYLON.SceneLoader.ImportMesh("", "http://www.emastation.net/uploadspace/WebRPGTool/material/tile3d/", "Cristal.babylon", this._scene, function (newMeshes) {
@@ -124,7 +124,7 @@ module WrtGame {
       for (var y = 0; y < mapHeight + 2; y++) {
         for (var x = 0; x < mapWidth + 2; x++) {
           if(doesThisTypeExist(typeMapData[y][x], 'P')) {
-            var platform = new MapFlatPlatform(x, y, heightMapData, getTypeParameter(typeMapData[y][x], 'P'));
+            var platform = new MapPolygonPlatform(x, y, heightMapData, getTypeParameter(typeMapData[y][x], 'P'));
             platform.setupMesh(this._scene, this._map.title + "_platform["+x+"]["+y+"]", heightMapData[y][x][0], heightMapData[y][x][1], this.textureImageUrls[texMapData[y][x]-1].gametex_url);
             this._platforms.push(platform);
           }

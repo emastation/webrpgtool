@@ -70,8 +70,9 @@ module WrtGame {
       // Babylonのシーンの作成と、そのシーンを引数に、flatMapクラスの生成
       var scene = createScene();
       var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(0.5, 0.5, 0.5), scene);
-      light.diffuse = new BABYLON.Color3(0.5, 0.5, 0.5);
-      light.specular = new BABYLON.Color3(0.5, 0.5, 0.5);
+      light.diffuse = new BABYLON.Color3(0.7, 0.7, 0.7);
+      light.specular = new BABYLON.Color3(0.3, 0.3, 0.3);
+      light.range = 6;
       scene.registerBeforeRender(function () {
         light.position = camera.position;
       });

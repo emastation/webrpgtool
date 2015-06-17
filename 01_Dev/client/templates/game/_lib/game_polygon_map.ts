@@ -34,51 +34,88 @@ module WrtGame {
               var cellMesh = new BABYLON.Mesh("Cell_mesh_[" + i + "]:" + x + ":" + y, that._scene);
               cellMesh.position = new BABYLON.Vector3(y, 0, x);
               cellMesh.parent = rootMesh;
-              if (i !== 1) {
+              if (i == 0) { // 床
                 if (!doesThisTypeExist(typeMapData[y][x], 'P') && !doesThisTypeExist(typeMapData[y][x], 'W')) {
                   var newInstance = mesh.createInstance("Cristal_mesh_[" + i + "]:" + x + ":" + y);
+                  newInstance.position = new BABYLON.Vector3(0, heightMapData[y][x][0], 0);
                   newInstance.isVisible = true;
                   newInstance.parent = cellMesh;
                 }
-              } else {
-                if (doesThisTypeExist(typeMapData[y][x + 1], 'W')) {
-                  var wallMeshEast = new BABYLON.Mesh("wall_wrapper_mesh[" + i + "]:" + x + ":" + y, that._scene);
-                  wallMeshEast.parent = cellMesh;
+              } else if (i == 2) { // 天井
+                if (!doesThisTypeExist(typeMapData[y][x], 'P') && !doesThisTypeExist(typeMapData[y][x], 'W')) {
+                  var newInstance = mesh.createInstance("Cristal_mesh_[" + i + "]:" + x + ":" + y);
+                  newInstance.position = new BABYLON.Vector3(0, heightMapData[y][x][1]-1, 0); // ポリゴンモデルの時点で床より１ユニット高いため、-1している
+                  newInstance.isVisible = true;
+                  newInstance.parent = cellMesh;
+                }
+              } else { // 壁
+
+                // 東の壁
+                var wallMeshEast = new BABYLON.Mesh("wall_wrapper_mesh[" + i + "]:" + x + ":" + y, that._scene);
+                wallMeshEast.parent = cellMesh;
+                for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
+                  if (!doesThisTypeExist(typeMapData[y][x + 1], 'W')) {
+                    if (heightMapData[y][x + 1][0] <= j && j < (heightMapData[y][x + 1][1])) {
+                      continue;
+                    }
+                  }
                   var newInstanceEast = mesh.createInstance("wall_mesh_[" + i + "][E]:" + x + ":" + y);
+                  newInstanceEast.position = new BABYLON.Vector3(0, j, 0);
                   newInstanceEast.isVisible = true;
                   newInstanceEast.parent = wallMeshEast;
                 }
 
-                if (doesThisTypeExist(typeMapData[y + 1][x], 'W')) {
-                  var wallMeshSouth = new BABYLON.Mesh("wall_wrapper_mesh[" + i + "]:" + x + ":" + y, that._scene);
-                  wallMeshSouth.parent = cellMesh;
-                  wallMeshSouth.rotation = new BABYLON.Vector3(0, Math.PI / 2, 0);
-                  wallMeshSouth.position = new BABYLON.Vector3(1, 0, 0);
+                // 南の壁
+                var wallMeshSouth = new BABYLON.Mesh("wall_wrapper_mesh[" + i + "]:" + x + ":" + y, that._scene);
+                wallMeshSouth.parent = cellMesh;
+                wallMeshSouth.rotation = new BABYLON.Vector3(0, Math.PI / 2, 0);
+                wallMeshSouth.position = new BABYLON.Vector3(1, 0, 0);
+                for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
+                  if (!doesThisTypeExist(typeMapData[y + 1][x], 'W')) {
+                    if (heightMapData[y + 1][x][0] <= j && j < (heightMapData[y + 1][x][1])) {
+                      continue;
+                    }
+                  }
                   var newInstanceSouth = mesh.createInstance("wall_mesh_[" + i + "][S]:" + x + ":" + y);
+                  newInstanceSouth.position = new BABYLON.Vector3(0, j, 0);
                   newInstanceSouth.isVisible = true;
                   newInstanceSouth.parent = wallMeshSouth;
                 }
 
-                if (doesThisTypeExist(typeMapData[y][x - 1], 'W')) {
-                  var wallMeshWEST = new BABYLON.Mesh("wall_wrapper_mesh[" + i + "]:" + x + ":" + y, that._scene);
-                  wallMeshWEST.parent = cellMesh;
-                  wallMeshWEST.rotation = new BABYLON.Vector3(0, Math.PI, 0);
-                  wallMeshWEST.position = new BABYLON.Vector3(1, 0, -1);
+                // 西の壁
+                var wallMeshWEST = new BABYLON.Mesh("wall_wrapper_mesh[" + i + "]:" + x + ":" + y, that._scene);
+                wallMeshWEST.parent = cellMesh;
+                wallMeshWEST.rotation = new BABYLON.Vector3(0, Math.PI, 0);
+                wallMeshWEST.position = new BABYLON.Vector3(1, 0, -1);
+                for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
+                  if (!doesThisTypeExist(typeMapData[y][x - 1], 'W')) {
+                    if (heightMapData[y][x - 1][0] <= j && j < (heightMapData[y][x - 1][1])) {
+                      continue;
+                    }
+                  }
                   var newInstanceWEST = mesh.createInstance("wall_mesh_[" + i + "][W]:" + x + ":" + y);
+                  newInstanceWEST.position = new BABYLON.Vector3(0, j, 0);
                   newInstanceWEST.isVisible = true;
                   newInstanceWEST.parent = wallMeshWEST;
                 }
 
-                if (doesThisTypeExist(typeMapData[y-1][x], 'W')) {
-                  var wallMeshNORTH = new BABYLON.Mesh("wall_wrapper_mesh[" + i + "]:" + x + ":" + y, that._scene);
-                  wallMeshNORTH.parent = cellMesh;
-                  wallMeshNORTH.rotation = new BABYLON.Vector3(0, -Math.PI/2, 0);
-                  wallMeshNORTH.position = new BABYLON.Vector3(0, 0, -1);
+                // 北の壁
+                var wallMeshNORTH = new BABYLON.Mesh("wall_wrapper_mesh[" + i + "]:" + x + ":" + y, that._scene);
+                wallMeshNORTH.parent = cellMesh;
+                wallMeshNORTH.rotation = new BABYLON.Vector3(0, -Math.PI/2, 0);
+                wallMeshNORTH.position = new BABYLON.Vector3(0, 0, -1);
+                for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
+                  if (!doesThisTypeExist(typeMapData[y - 1][x], 'W')) {
+                    if (heightMapData[y - 1][x][0] <= j && j < (heightMapData[y - 1][x][1])) {
+                      continue;
+                    }
+                  }
                   var newInstanceNORTH = mesh.createInstance("wall_mesh_[" + i + "][N]:" + x + ":" + y);
+                  newInstanceNORTH.position = new BABYLON.Vector3(0, j, 0);
                   newInstanceNORTH.isVisible = true;
                   newInstanceNORTH.parent = wallMeshNORTH;
-
                 }
+
               }
             }
           }

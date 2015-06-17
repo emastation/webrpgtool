@@ -135,6 +135,45 @@ if (Characters.find().count() === 0) {
   CharacterImages.insert({characterId:tsubasa, pose:'笑顔', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_smile.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/tsubasa/tsubasa_icon_smile.jpg'});
   CharacterImages.insert({characterId:tsubasa, pose:'怒り', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_angry.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/tsubasa/tsubasa_icon_angry.jpg'});
   CharacterImages.insert({characterId:tsubasa, pose:'悲しい', portraitImageUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_sad.png', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/official/tsubasa/tsubasa_icon_sad.jpg'});
+
+
+  // ここから敵キャラ
+  var ork = Characters.insert({identifier: 'Ork', name: 'オーク', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:ork, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler00/dh09_po2.png",
+      "naturalWidth": 177,
+      "naturalHeight": 225,
+      "textureWidth": 256,
+      "textureHeight": 256
+    },
+    "movement": "verticalShaking"
+  });
+
+  var greenDragon = Characters.insert({identifier: 'GreenDragon', name: 'グリーンドラゴン', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:greenDragon, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler00/dh12_po2.png",
+      "naturalWidth": 229,
+      "naturalHeight": 185,
+      "textureWidth": 256,
+      "textureHeight": 256
+    },
+    "movement": "sincos"
+  });
+
+  var heavyDragon = Characters.insert({identifier: 'HeavyDragon', name: 'ヘビードラゴン', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:heavyDragon, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler00/monster04_po2.png",
+      "naturalWidth": 380,
+      "naturalHeight": 275,
+      "textureWidth": 512,
+      "textureHeight": 512
+    },
+    "movement": "verticalShaking"
+  });
+
 }
 
 if (UiTables.find().count() === 0) {

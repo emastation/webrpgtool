@@ -1,140 +1,138 @@
-/// <reference path="game__map.ts"/>
-
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
-  export class FlatMap extends Map {
-    private textureImageUrls:any;
-    private chipMeshExArray:Array<any> = [];
-    private minFloorHeight:number = -10; // 床の最低の低さ
-    private maxCeilingHeight:number = 10; // 天井の最高の高さ
-    private texcoordOne:number = 1; // Y方向の壁テクスチャの高さ
+  export class MapFlatPlatform extends MapPlatform {
+    private texcoordOne:number = 1;  // Y方向の壁の高さ
+    private minFloorHeight:number = -20; // 床の最低の低さ
+    private maxCeilingHeight:number = 20; // 天井の最高の高さ
 
-    private _platforms:Array<MapPlatform> = new Array();
-
-    constructor(private _scene:BABYLON.Scene, map:any, textures:any) {
-      super(true);
-      this.map = map;
-      this.setupMesh(this.heightMapData, this.width, this.height, textures);
+    // コンストラクタの宣言
+    constructor(x:number, y:number, heightMap:any, parameter:string) {
+      super(x, y, heightMap, parameter);
     }
 
-    public setupMesh(heightMapData:any, mapWidth:number, mapHeight:number, imageUrls:any):void {
-//      this.mapObject3D = tm.three.Element();
-      this.textureImageUrls = imageUrls;
-//      this.chipMeshExArray.push(null); // 0番目はnullをいれておく。
-      var texMapData = this._texMapData;
-      var typeMapData = this._typeMapData;
-      var heightMapData = this._heightMapData;
+    public setupMesh(scene:BABYLON.Scene, mapPlatformTitle:string, floorHeight:number, ceilingHeight:number, imageUrl:string) :void {
 
-      for (var i = 0; i < this.textureImageUrls.length; i++) { //マテリアルごとに処理
-        var ii = i+1; // texMapData配列の中のテキスチャIDは1起算なので、それに合わせる
-        var sprite:any = {};
-        sprite.textureName = this.textureImageUrls[i].gametex_url;
-        sprite.buffer = {positions:[], normals:[], texcoords:[], indices:[]};
-        sprite.FaceN = 0;
+      var x = this.x_onMap;
+      var y = this.y_onMap;
 
-        this.chipMeshExArray.push(sprite);
-//        this.setTextureToSprite3D(sprite, sprite.textureName);
+      this._floorSprite3D.buffer = {positions:[], normals:[], texcoords:[], indices:[]};
+      this._floorSprite3D.FaceN = 0;
 
-        for (var y = 0; y < mapHeight + 2; y++) {
-          for (var x = 0; x < mapWidth + 2; x++) {
-            if (!doesThisTypeExist(typeMapData[y][x], 'P') && texMapData[y][x] === ii) { //
+      this._ceilingSprite3D.buffer = {positions:[], normals:[], texcoords:[], indices:[]};
+      this._ceilingSprite3D.FaceN = 0;
 
-              /// 床
-              // 床の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupFloorVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
+      /// 床
+      // 床の頂点データ作成
+      var verticesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      var indicesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupFloorVertices(this._floorSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._floorSprite3D.FaceN++;
 
-              // 床の北向きの壁の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupFloorNorthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
+      // 床の北向きの壁の頂点データ作成
+      verticesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      indicesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupFloorNorthWallVertices(this._floorSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._floorSprite3D.FaceN++;
 
-              // 床の東向きの壁の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupFloorEastWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-
-              // 床の南向きの壁の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupFloorSouthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
-
-              // 床の西向きの壁の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupFloorWestWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][0]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
+      // 床の東向きの壁の頂点データ作成
+      verticesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      indicesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupFloorEastWallVertices(this._floorSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._floorSprite3D.FaceN++;
 
 
-              /// 天井
-              // 天井の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupCeilingVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
+      // 床の南向きの壁の頂点データ作成
+      verticesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      indicesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupFloorSouthWallVertices(this._floorSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._floorSprite3D.FaceN++;
 
-              // 天井の北向きの壁の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupCeilingNorthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
+      // 床の西向きの壁の頂点データ作成
+      verticesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      indicesStride = this._floorSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupFloorWestWallVertices(this._floorSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._floorSprite3D.FaceN++;
 
-              // 天井の東向きの壁の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupCeilingEastWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
 
-              // 天井の南向きの壁の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupCeilingSouthWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
+      /// 天井
+      // 天井の頂点データ作成
+      verticesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      indicesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupCeilingVertices(this._ceilingSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._ceilingSprite3D.FaceN++;
 
-              // 天井の西向きの壁の頂点データ作成
-              var verticesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4頂点
-              var indicesStride = this.chipMeshExArray[i].FaceN * 4; // 現在の総四角形数 * 4ポリゴン
-              this.setupCeilingWestWallVertices(this.chipMeshExArray[i].buffer, verticesStride, indicesStride, y, x, heightMapData[y][x][1]);
-              this.chipMeshExArray[i].FaceN++; //このマテリアルの面数をカウントする
 
-            }
+      // 天井の北向きの壁の頂点データ作成
+      verticesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      indicesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupCeilingNorthWallVertices(this._ceilingSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._ceilingSprite3D.FaceN++;
 
-            if(doesThisTypeExist(typeMapData[y][x], 'P')) {
-              var platform = new MapFlatPlatform(x, y, heightMapData, getTypeParameter(typeMapData[y][x], 'P'));
-              platform.setupMesh(this._scene, this._map.title + "_platform["+x+"]["+y+"]", heightMapData[y][x][0], heightMapData[y][x][1], this.textureImageUrls[texMapData[y][x]-1].gametex_url);
-              this._platforms.push(platform);
-            }
-          }
-        }
+      // 天井の東向きの壁の頂点データ作成
+      verticesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      indicesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupCeilingEastWallVertices(this._ceilingSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._ceilingSprite3D.FaceN++;
 
-        // Babylon.jsは左手系なので、z軸を反転する
-        for (var j=0; j<sprite.buffer.positions.length; j++) {
-          if (j%3 === 2) {
-            sprite.buffer.positions[j] *= -1;
-            sprite.buffer.normals[j] *= -1;
-          }
-        }
+      // 天井の南向きの壁の頂点データ作成
+      verticesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      indicesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupCeilingSouthWallVertices(this._ceilingSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._ceilingSprite3D.FaceN++;
 
-        if (this.chipMeshExArray[i].FaceN > 0) {
-          sprite.mesh = new BABYLON.Mesh(this._map.title + "_" + i, this._scene);
-          var updatable = true;
-          sprite.mesh.setVerticesData(BABYLON.VertexBuffer.PositionKind, sprite.buffer.positions, updatable);
-          sprite.mesh.setVerticesData(BABYLON.VertexBuffer.NormalKind, sprite.buffer.normals, updatable);
-          sprite.mesh.setVerticesData(BABYLON.VertexBuffer.UVKind, sprite.buffer.texcoords, updatable);
-          sprite.mesh.setIndices(sprite.buffer.indices);
+      // 天井の西向きの壁の頂点データ作成
+      verticesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4頂点
+      indicesStride = this._ceilingSprite3D.FaceN * 4; // 現在の総四角形数 * 4ポリゴン
+      this.setupCeilingWestWallVertices(this._ceilingSprite3D.buffer, verticesStride, indicesStride, y, x, 0);
+      this._ceilingSprite3D.FaceN++;
 
-          sprite.mesh.material = new BABYLON.StandardMaterial("map_texture_" + i, this._scene);
-          sprite.mesh.material.diffuseColor = new BABYLON.Color3(1.0, 1.0, 1.0);
-          sprite.mesh.material.diffuseTexture = new BABYLON.Texture(sprite.textureName, this._scene);
-        } else {
-          sprite.mesh = null;
+
+      // Babylon.jsは左手系なので、z軸を反転する
+      for (var j=0; j<this._floorSprite3D.buffer.positions.length; j++) {
+        if (j%3 === 2) {
+          this._floorSprite3D.buffer.positions[j] *= -1;
+          this._floorSprite3D.buffer.normals[j] *= -1;
         }
       }
+      for (var j=0; j<this._ceilingSprite3D.buffer.positions.length; j++) {
+        if (j%3 === 2) {
+          this._ceilingSprite3D.buffer.positions[j] *= -1;
+          this._ceilingSprite3D.buffer.normals[j] *= -1;
+        }
+      }
+
+      // Babylonメッシュの作成
+      // マテリアル
+      var material:BABYLON.StandardMaterial = new BABYLON.StandardMaterial(mapPlatformTitle + "_map_texture_", scene);
+      var color:BABYLON.Color3 = new BABYLON.Color3(1.0, 1.0, 1.0);
+      var texture:BABYLON.Texture = new BABYLON.Texture(imageUrl, scene);
+
+      // 床側
+      this._floorSprite3D.mesh = new BABYLON.Mesh(mapPlatformTitle + "_" + "floor", scene);
+      this._floorSprite3D.mesh.position = new BABYLON.Vector3(this._floorSprite3D.mesh.position.x, floorHeight, this._floorSprite3D.mesh.position.z);
+      var updatable = true;
+      this._floorSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.PositionKind, this._floorSprite3D.buffer.positions, updatable);
+      this._floorSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.NormalKind, this._floorSprite3D.buffer.normals, updatable);
+      this._floorSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.UVKind, this._floorSprite3D.buffer.texcoords, updatable);
+      this._floorSprite3D.mesh.setIndices(this._floorSprite3D.buffer.indices);
+
+      this._floorSprite3D.mesh.material = material;
+      this._floorSprite3D.mesh.material.diffuseColor = color;
+      this._floorSprite3D.mesh.material.diffuseTexture = texture;
+
+      // 天井側
+      this._ceilingSprite3D.mesh = new BABYLON.Mesh(mapPlatformTitle + "_" + "ceiling", scene);
+      this._ceilingSprite3D.mesh.position = new BABYLON.Vector3(this._floorSprite3D.mesh.position.x, ceilingHeight, this._floorSprite3D.mesh.position.z);
+      var updatable = true;
+      this._ceilingSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.PositionKind, this._ceilingSprite3D.buffer.positions, updatable);
+      this._ceilingSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.NormalKind, this._ceilingSprite3D.buffer.normals, updatable);
+      this._ceilingSprite3D.mesh.setVerticesData(BABYLON.VertexBuffer.UVKind, this._ceilingSprite3D.buffer.texcoords, updatable);
+      this._ceilingSprite3D.mesh.setIndices(this._ceilingSprite3D.buffer.indices);
+
+      this._ceilingSprite3D.mesh.material = material;
+      this._ceilingSprite3D.mesh.material.diffuseColor = color;
+      this._ceilingSprite3D.mesh.material.diffuseTexture = texture;
+
     }
 
     // １つ分の床の面の頂点を作成
@@ -487,22 +485,5 @@ module WrtGame {
 
     }
 
-    public movePlatforms() {
-      var isPlayerOnAnyPlatform = false;
-      for (var i=0; i<this._platforms.length; i++) {
-        this._platforms[i].move();
-        isPlayerOnAnyPlatform = isPlayerOnAnyPlatform || this._platforms[i].isPlayerOnThisPlatform();
-      }
-
-      var mapMovement = MapMovement.getInstance();
-      if (isPlayerOnAnyPlatform) {
-        mapMovement.onPlatformNow = true;
-      } else {
-        mapMovement.onPlatformNow = false;
-      }
-    }
   }
 }
-
-//window.WrtGame = WrtGame;
-

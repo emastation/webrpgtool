@@ -1,4 +1,3 @@
-/// <reference path="game__map.ts"/>
 
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
@@ -125,7 +124,7 @@ module WrtGame {
       for (var y = 0; y < mapHeight + 2; y++) {
         for (var x = 0; x < mapWidth + 2; x++) {
           if(doesThisTypeExist(typeMapData[y][x], 'P')) {
-            var platform = new MapPlatform(x, y, heightMapData, getTypeParameter(typeMapData[y][x], 'P'));
+            var platform = new MapFlatPlatform(x, y, heightMapData, getTypeParameter(typeMapData[y][x], 'P'));
             platform.setupMesh(this._scene, this._map.title + "_platform["+x+"]["+y+"]", heightMapData[y][x][0], heightMapData[y][x][1], this.textureImageUrls[texMapData[y][x]-1].gametex_url);
             this._platforms.push(platform);
           }

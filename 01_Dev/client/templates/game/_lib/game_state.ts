@@ -61,7 +61,7 @@ module WrtGame {
   export var L_UPPER = "L_UPPER";
   export var L_LOWER = "L_LOWER";
 
-  export var flyMode_f = false;
+  export var flyMode_f = true;
 
   /**
    *  ゲームの状態を保持するクラス

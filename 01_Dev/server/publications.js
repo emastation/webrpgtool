@@ -38,6 +38,10 @@ Meteor.publish('characterImages', function() {
   return MongoCollections.CharacterImages.find();
 });
 
+Meteor.publish('uiScreens', function() {
+  return MongoCollections.UiScreens.find();
+});
+
 Meteor.publish('uiTables', function() {
   return MongoCollections.UiTables.find();
 });

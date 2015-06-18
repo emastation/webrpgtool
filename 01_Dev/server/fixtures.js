@@ -275,6 +275,16 @@ if (Characters.find().count() === 0) {
 
 }
 
+var UiScreens = MongoCollections.UiScreens;
+if (UiScreens.find().count() === 0) {
+  UiScreens.insert({
+    identifier: 'system',
+    uiTables: ['system-command'],
+    firstUiTable: 'system-command',
+    visibleAtFirstList: ['system-command']
+  });
+}
+
 var UiTables = MongoCollections.UiTables;
 if (UiTables.find().count() === 0) {
   UiTables.insert({
@@ -293,111 +303,6 @@ if (UiTables.find().count() === 0) {
         columns:[
           {
             title: 'セーブする'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: 'やめる'
           }
         ]
       },

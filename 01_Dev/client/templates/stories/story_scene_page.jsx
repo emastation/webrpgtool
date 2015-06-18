@@ -71,14 +71,14 @@ var StoryScenePage = ReactMeteor.createClass({
     });
 
     var characters = Characters.find({useForNovel: true}).fetch();
-    var characterImages = CharacterImages.find().fetch();
+    var characterImages = MongoCollections.CharacterImages.find().fetch();
     if (characters.length > 0 && characterImages.length > 0) {
       if (this.state.selectedCharacterId === null) {
         var characterId = characters[0]._id;
       } else {
         var characterId = this.state.selectedCharacterId;
       }
-      characterImages = CharacterImages.find({characterId: characterId}).fetch();
+      characterImages = MongoCollections.CharacterImages.find({characterId: characterId}).fetch();
       if (this.state.selectedCharacterImageId === null) {
         var characterImageId = characterImages[0]._id;
       } else {

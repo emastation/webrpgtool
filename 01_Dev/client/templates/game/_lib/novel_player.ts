@@ -3,7 +3,6 @@ declare var tm:any;
 declare var _:any;
 declare var $:any;
 declare var MongoCollections:any;
-declare var CharacterImages:any;
 
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
@@ -78,7 +77,7 @@ module WrtGame {
               return;
             }
 
-            var characterImage = CharacterImages.find({_id: that.sentences[sentenceIndex].characterImageId}).fetch()[0];
+            var characterImage = MongoCollections.CharacterImages.find({_id: that.sentences[sentenceIndex].characterImageId}).fetch()[0];
 
             if(!_.isUndefined(this.character)) {
               this.character.remove();

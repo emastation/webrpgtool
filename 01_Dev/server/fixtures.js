@@ -108,6 +108,8 @@ if (Stories.find().count() === 0) {
 }
 
 if (Characters.find().count() === 0) {
+  var CharacterImages = MongoCollections.CharacterImages;
+
   var narration = Characters.insert({identifier: 'narration', name: 'ナレーション', position:'friend', useForNovel:true});
   CharacterImages.insert({characterId:narration, pose:'通常', portraitImageUrl: '', iconUrl: 'http://www.emastation.net/uploadspace/WebNovelTool/material/chara_image/icon/narration.gif'});
 

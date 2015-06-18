@@ -1,4 +1,4 @@
-declare var CharacterImages:any;
+declare var MongoCollections:any;
 
 interface Window {
   MainScene: any;
@@ -96,7 +96,7 @@ module WrtGame {
       var ASSETS = {
       };
 
-      var characterImages = CharacterImages.find({useForNovel:true}).fetch();
+      var characterImages = MongoCollections.CharacterImages.find({useForNovel:true}).fetch();
       for(var key in characterImages) {
         if ("" !== characterImages[key].portraitImageUrl) {
           ASSETS[characterImages[key].portraitImageUrl] = characterImages[key].portraitImageUrl;

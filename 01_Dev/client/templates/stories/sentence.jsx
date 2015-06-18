@@ -16,14 +16,14 @@ Sentence = ReactMeteor.createClass({
   getMeteorState: function() {
 
     var characters = Characters.find({useForNovel: true}).fetch();
-    var characterImages = CharacterImages.find().fetch();
+    var characterImages = MongoCollections.CharacterImages.find().fetch();
     if (characters.length > 0 && characterImages.length > 0) {
       if (this.state.selectedCharacterId === null) {
         var characterId = _.isUndefined(this.props.sentence) ? null : this.props.sentence.characterId;
       } else {
         var characterId = this.state.selectedCharacterId;
       }
-      characterImages = CharacterImages.find({characterId: characterId}).fetch();
+      characterImages = MongoCollections.CharacterImages.find({characterId: characterId}).fetch();
       if (this.state.selectedCharacterImageId === null) {
         var characterImageId = _.isUndefined(this.props.sentence) ? null : this.props.sentence.characterImageId;
       } else {
@@ -98,7 +98,7 @@ Sentence = ReactMeteor.createClass({
   onChangeSelectCharacterId: function(id, e) {
     this.setState({selectedCharacterId: e.target.value});
 
-    var characterImage = CharacterImages.find({characterId: e.target.value}).fetch()[0];
+    var characterImage = MongoCollections.CharacterImages.find({characterId: e.target.value}).fetch()[0];
     var sentence = {
       characterId: e.target.value,
       characterImageId: characterImage._id

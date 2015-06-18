@@ -17,6 +17,7 @@ module WrtGame {
   export var KEY_CODE_ARROW_UP = 38;
   export var KEY_CODE_ARROW_RIGHT = 39;
   export var KEY_CODE_ARROW_DOWN = 40;
+  export var KEY_CODE_ENTER = 13;
 
   export var KEY_INFO_W = [KEY_CODE_W, "KEY_W"];
   export var KEY_INFO_A = [KEY_CODE_A, "KEY_A"];
@@ -34,6 +35,7 @@ module WrtGame {
   export var KEY_INFO_ARROW_UP = [KEY_CODE_ARROW_UP, "KEY_ARROW_UP"];
   export var KEY_INFO_ARROW_RIGHT = [KEY_CODE_ARROW_RIGHT, "KEY_ARROW_RIGHT"];
   export var KEY_INFO_ARROW_DOWN = [KEY_CODE_ARROW_DOWN, "KEY_ARROW_DOWN"];
+  export var KEY_INFO_ENTER = [KEY_CODE_ENTER, "KEY_ENTER"];;
 
   export var L_NO_MOVE = "L_NO_MOVE";
   export var L_MOVE_FORWARD = "L_MOVE_FORWARD";
@@ -53,6 +55,7 @@ module WrtGame {
   export var L_UI_MOVE_UPPER = "L_UI_MOVE_UPPER";
   export var L_UI_MOVE_RIGHT = "L_UI_MOVE_RIGHT";
   export var L_UI_MOVE_LOWER = "L_UI_MOVE_LOWER";
+  export var L_UI_PUSH_OK = "L_UI_PUSH_OK";
 
   export var L_NORTH = "L_NORTH";
   export var L_WEST = "L_WEST";
@@ -76,9 +79,9 @@ module WrtGame {
     private _logicalMovementCommand:Array<any> =
         [L_MOVE_FORWARD, L_TURN_LEFT, L_TURN_BACK, L_TURN_RIGHT, L_MOVE_LEFT, L_MOVE_RIGHT, L_MOVE_BACKWARD, L_MOVE_UPPER, L_MOVE_LOWER, L_FACE_UP, L_FACE_LOW];
     private _allowedUiKeyCodes:Array<Number>;
-    private _allowedUiKeyInfo:Array<any> = [KEY_INFO_ARROW_LEFT, KEY_INFO_ARROW_UP, KEY_INFO_ARROW_RIGHT, KEY_INFO_ARROW_DOWN];
+    private _allowedUiKeyInfo:Array<any> = [KEY_INFO_ARROW_LEFT, KEY_INFO_ARROW_UP, KEY_INFO_ARROW_RIGHT, KEY_INFO_ARROW_DOWN, KEY_INFO_ENTER];
     private _logicalUiCommand:Array<any> =
-        [L_UI_MOVE_LEFT, L_UI_MOVE_UPPER, L_UI_MOVE_RIGHT, L_UI_MOVE_LOWER];
+        [L_UI_MOVE_LEFT, L_UI_MOVE_UPPER, L_UI_MOVE_RIGHT, L_UI_MOVE_LOWER, L_UI_PUSH_OK];
 
     constructor() {
       this._allowedStateKeyCodes = this.createKeyCodesFromKeyInfo(this._allowedStateKeyInfo);

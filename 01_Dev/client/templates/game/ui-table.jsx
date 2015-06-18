@@ -70,6 +70,8 @@ UiTable = React.createClass({
       this.setState({
         currentCell:[newIdx, this.state.currentCell[1]]
       });
+    } else if (newProps.uiOperation.operation === WrtGame.L_UI_PUSH_OK) {
+      console.log("選択された！");
     }
 
   }

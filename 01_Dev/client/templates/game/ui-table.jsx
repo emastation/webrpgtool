@@ -13,20 +13,20 @@ UiTable = React.createClass({
       var selectedCss = '';
     }
 
-    return <td id={'ui-table_' + this.props.uiTable.identifier + '_column-' + columnIdx}
+    return <td key={this.props.uiTable._id + '_column-' + columnIdx} id={'ui-table_' + this.props.uiTable.identifier + '_column-' + columnIdx}
         className={'ui-table-cell ' + selectedCss}>
       {column.title}
     </td>;
   },
 
   renderRecord: function(record, rowIdx) {
-    return <tr id={'ui-table_' + this.props.uiTable.identifier + '_row-' + rowIdx}>
+    return <tr key={this.props.uiTable._id + '_row-' + rowIdx} id={'ui-table_' + this.props.uiTable.identifier + '_row-' + rowIdx}>
       { record.columns.map(this.renderColumn) }
       </tr>;
   },
 
   render: function() {
-    return <table className="ui-table" id={ 'ui-table_' + this.props.uiTable.identifier}>
+    return <table className="ui-table" key={this.props.uiTable._id} id={ 'ui-table_' + this.props.uiTable.identifier}>
       <tr>
         <th>{this.props.uiTable.title}</th>
       </tr>

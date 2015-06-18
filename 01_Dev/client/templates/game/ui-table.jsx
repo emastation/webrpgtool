@@ -2,7 +2,7 @@ UiTable = React.createClass({
 
   getInitialState: function() {
     return {
-      currentCell: [0,0]
+      currentCell: [0,0] // 0要素目がレコード、1要素目がカラムのインデックス
     };
   },
 
@@ -71,7 +71,13 @@ UiTable = React.createClass({
         currentCell:[newIdx, this.state.currentCell[1]]
       });
     } else if (newProps.uiOperation.operation === WrtGame.L_UI_PUSH_OK) {
-      console.log("選択された！");
+      var functionName = newProps.uiTable.records[this.state.currentCell[0]].columns[this.state.currentCell[1]].functionName;
+
+      if (_.isUndefined(functionName)) {
+        console.debug("このメニュー項目にはJavaScript関数がバインドされていません。");
+        return;
+      }
+      window.WrtGame.UserFunctions[functionName]();
     }
 
   }

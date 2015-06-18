@@ -74,7 +74,8 @@ Router.route('/game/:_id', {
       Meteor.subscribe('storyScenes'),
       Meteor.subscribe('storyItems'),
       Meteor.subscribe('sentences'),
-      Meteor.subscribe('characterImages')
+      Meteor.subscribe('characterImages'),
+      Meteor.subscribe('codes')
     ];
   },
   data: function() {

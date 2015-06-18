@@ -23,6 +23,7 @@ module WrtGame {
       var mapMovement = this.initEvents();
       this.initBabylon(data, mapMovement);
       this.initTmlib();
+      this.initUserFunctions();
 
     }
 
@@ -143,6 +144,11 @@ module WrtGame {
         }
       }
 
+    }
+
+    private initUserFunctions() {
+      var userFunctionManager = WrtGame.UserFunctionsManager.getInstance();
+      userFunctionManager.init();
     }
 
     /**

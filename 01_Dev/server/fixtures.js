@@ -80,16 +80,14 @@ if (MapTileTypes.find().count() === 0) {
 
 if (Codes.find().count() === 0) {
   Codes.insert({
-    codeId: 0,
     name: 'コード１',
+    identifier: 'enterBattle',
     typescript: 'Hello World!',
-    javascript: 'Hello World!'
-  });
-  Codes.insert({
-    codeId: 1,
-    name: 'コード２',
-    typescript: 'Hello Meteor!',
-    javascript: 'Hello Meteor !'
+    javascript: (function () {/*
+function foo() {
+  console.log("User Function!");
+}
+     */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1]
   });
 }
 
@@ -292,7 +290,8 @@ if (UiTables.find().count() === 0) {
       {
         columns:[
           {
-            title: 'ゲームを始める'
+            title: '戦闘に突入する',
+            functionName: 'enterBattle'
           }
         ]
       },

@@ -5,7 +5,7 @@ StoryScene = React.createClass({
   },
 
   insertStoryScene: function(id) {
-    var storySceneModelClicked = StoryScenes.findOne(id);
+    var storySceneModelClicked = MongoCollections.StoryScenes.findOne(id);
     var attributes = {
       storyId: Router.current().params._id,
       name: "新規Scene",

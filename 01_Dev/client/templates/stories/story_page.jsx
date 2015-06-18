@@ -46,7 +46,7 @@ var StoryPage = ReactMeteor.createClass({
   getMeteorState: function() {
     var storyId = Router.current().params._id;
 
-    var storyScenes = StoryScenes.find({storyId:storyId}, {sort: { order: 1 }}).fetch();
+    var storyScenes = MongoCollections.StoryScenes.find({storyId:storyId}, {sort: { order: 1 }}).fetch();
 
     return {
       displaySubmitForm: Meteor.userId() ? true : false,

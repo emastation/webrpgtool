@@ -8,6 +8,7 @@ Meteor.methods({
       order: Number
     });
 
+    var StoryScenes = MongoCollections.StoryScenes;
     var storySceneWithSameName = StoryScenes.findOne({storyId: attributes.storyId, name: attributes.name});
     if (storySceneWithSameName) {
       return {
@@ -45,6 +46,7 @@ Meteor.methods({
       order: Number
     });
 
+    var StoryScenes = MongoCollections.StoryScenes;
     var countStoryScenes = StoryScenes.find({storyId:attributes.storyId}).count();
 
     var selector = {};
@@ -92,6 +94,7 @@ Meteor.methods({
     check(Meteor.userId(), String);
     check(idToDelete, String);
 
+    var StoryScenes = MongoCollections.StoryScenes;
     var storySceneToDelete = StoryScenes.findOne(idToDelete);
 
     var countStoryScenes = StoryScenes.find({storyId: storySceneToDelete.storyId}).count();

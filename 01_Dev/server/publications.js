@@ -19,7 +19,7 @@ Meteor.publish('stories', function() {
 });
 
 Meteor.publish('storyScenes', function() {
-  return StoryScenes.find();
+  return MongoCollections.StoryScenes.find();
 });
 
 Meteor.publish('storyItems', function() {

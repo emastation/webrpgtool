@@ -4,7 +4,7 @@ Template.codeEdit.events({
 
     var currentCodeId = this.code._id;
 
-    var code = Codes.findOne(currentCodeId);
+    var code = MongoCollections.Codes.findOne(currentCodeId);
     if (!ownsDocument(Meteor.userId(), code)) {
       alert("今編集しようとしているコードは、あなたのコードではありません。送信をキャンセルします。");
       Router.go('codesList');

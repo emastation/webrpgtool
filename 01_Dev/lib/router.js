@@ -45,7 +45,7 @@ Router.route('/codes', {
   },
   data: function() {
     return {
-      codes: Codes.find()
+      codes: MongoCollections.Codes.find()
     };
   }
 });
@@ -59,7 +59,7 @@ Router.route('/codes/:_id/edit', {
   },
   data: function() {
     return {
-      code: Codes.findOne(this.params._id)
+      code: MongoCollections.Codes.findOne(this.params._id)
     };
   }
 });

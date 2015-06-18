@@ -11,6 +11,7 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
     codeAttributes.javascript = typescriptSimpleAPI(codeAttributes.typescript);
     console.log(codeAttributes.javascript);
 
+    var Codes = MongoCollections.Codes;
     var codeWithSameTitle = Codes.findOne({name: codeAttributes.name});
     if (codeWithSameTitle) {
       return {
@@ -47,7 +48,7 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
     var typescriptSimpleAPI = Meteor.npmRequire('typescript-simple');
     obj.codeAttributes.javascript = typescriptSimpleAPI(obj.codeAttributes.typescript);
 
-    Codes.update(obj.codeId, {$set: obj.codeAttributes}, function (error) {
+    MongoCollections.Codes.update(obj.codeId, {$set: obj.codeAttributes}, function (error) {
       return error;
     });
 

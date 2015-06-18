@@ -78,6 +78,7 @@ if (MapTileTypes.find().count() === 0) {
   });
 }
 
+var Codes = MongoCollections.Codes;
 if (Codes.find().count() === 0) {
   Codes.insert({
     name: 'コード１',

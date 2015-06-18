@@ -1,11 +1,13 @@
-Codes = new Mongo.Collection('codes');
+var _global = (this || 0).self || global;
+_global.MongoCollections = _global.MongoCollections || {};
+_global.MongoCollections.Codes = new Mongo.Collection('codes');
 
-Codes.allow({
+_global.MongoCollections.Codes.allow({
   update: function(userId, post) { return ownsDocument(userId, post); },
   remove: function(userId, post) { return ownsDocument(userId, post); }
 });
 
-Codes.deny({
+_global.MongoCollections.Codes.deny({
   update: function(userId, post, fieldNames) {
     // may only edit the following two fields:
     return (_.without(fieldNames, 'title', 'typescript', 'javascript').length > 0);

@@ -1,4 +1,4 @@
-declare var Codes:any;
+declare var MongoCollections:any;
 
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
@@ -25,7 +25,7 @@ module WrtGame {
     }
 
     public init() {
-      var code:any = Codes.findOne();
+      var code:any = MongoCollections.Codes.findOne();
 
       if (_.isUndefined(code)) {
         return;

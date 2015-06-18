@@ -95,7 +95,7 @@ module WrtGame {
       var ASSETS = {
       };
 
-      var characterImages = CharacterImages.find().fetch();
+      var characterImages = CharacterImages.find({useForNovel:true}).fetch();
       for(var key in characterImages) {
         if ("" !== characterImages[key].portraitImageUrl) {
           ASSETS[characterImages[key].portraitImageUrl] = characterImages[key].portraitImageUrl;

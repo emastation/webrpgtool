@@ -174,6 +174,114 @@ if (Characters.find().count() === 0) {
     "movement": "verticalShaking"
   });
 
+  var cerberus = Characters.insert({identifier: 'Cerberus', name: 'ケルベロス', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:cerberus, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler00/monster24_po2.png",
+      "naturalWidth": 119,
+      "naturalHeight": 170,
+      "textureWidth": 128,
+      "textureHeight": 256
+    },
+    "movement": "verticalShaking"
+  });
+
+  var mushroom = Characters.insert({identifier: 'Mushroom', name: '人食いキノコ', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:mushroom, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler00/plant01_po2.png",
+      "naturalWidth": 146,
+      "naturalHeight": 220,
+      "textureWidth": 256,
+      "textureHeight": 256
+    },
+    "movement": "pulsing"
+  });
+
+  var darkNinja = Characters.insert({identifier: 'DarkNinja', name: '暗黒忍者', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:darkNinja, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler00/human14_po2.png",
+      "naturalWidth": 111,
+      "naturalHeight": 170,
+      "textureWidth": 128,
+      "textureHeight": 256
+    },
+    "movement": "sidefly"
+  });
+
+  var mimic = Characters.insert({identifier: 'Mimic', name: 'ミミック', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:mimic, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler00/solid02_po2.png",
+      "naturalWidth": 98,
+      "naturalHeight": 120,
+      "textureWidth": 128,
+      "textureHeight": 128
+    },
+    "movement": "jump"
+  });
+
+  var unmannedWeapon = Characters.insert({identifier: 'UnmannedWeapon', name: '翼型無人兵器', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:unmannedWeapon, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler00/m03_po2.png",
+      "naturalWidth": 496,
+      "naturalHeight": 260,
+      "textureWidth": 512,
+      "textureHeight": 512
+    },
+    "movement": "updown"
+  });
+
+  var movingVine = Characters.insert({identifier: 'MovingVine', name: '動くつた', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:movingVine, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler00/plant06_p02.png",
+      "naturalWidth": 180,
+      "naturalHeight": 220,
+      "textureWidth": 256,
+      "textureHeight": 256
+    },
+    "movement": "pulsing"
+  });
+
+  var bigWaterCreature = Characters.insert({identifier: 'BigWaterCreature', name: '巨大水生生物', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:bigWaterCreature, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler01/aquatic17_po2.png",
+      "naturalWidth": 421,
+      "naturalHeight": 288,
+      "textureWidth": 512,
+      "textureHeight": 512
+    },
+    "movement": "verticalShaking"
+  });
+
+  var evilPriest = Characters.insert({identifier: 'EvilPriest', name: 'エビルプリースト', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:evilPriest, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler01/human38_po2.png",
+      "naturalWidth": 134,
+      "naturalHeight": 220,
+      "textureWidth": 256,
+      "textureHeight": 256
+    },
+    "movement": "updown"
+  });
+
+  var deadAngel = Characters.insert({identifier: 'DeadAngel', name: 'デッドエンジェル', position:'enemy', useForNovel:false});
+  CharacterImages.insert({characterId:deadAngel, pose:'通常',
+    battleImage: {
+      "url": "http://www.emastation.net/uploadspace/WebRPGTool/material/enemyImage/lud.sakura.ne.jp/battler01/undead22_po2.png",
+      "naturalWidth": 489,
+      "naturalHeight": 280,
+      "textureWidth": 512,
+      "textureHeight": 512
+    },
+    "movement": "none"
+  });
+
 }
 
 if (UiTables.find().count() === 0) {

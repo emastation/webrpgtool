@@ -93,7 +93,6 @@ module WrtGame {
     private initTmlib() {
 
       var ASSETS = {
-        "player": "http://jsrun.it/assets/s/A/3/j/sA3jL.png",
       };
 
       var characterImages = CharacterImages.find().fetch();

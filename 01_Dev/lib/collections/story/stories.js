@@ -1,14 +1,8 @@
-Stories = new Mongo.Collection('stories');
+var _global = (this || 0).self || global;
+_global.MongoCollections = _global.MongoCollections || {};
+_global.MongoCollections.Stories = new Mongo.Collection('stories');
 
-Stories.allow({
+_global.MongoCollections.Stories.allow({
   update: function(userId, post) { return true; },
   remove: function(userId, post) { return true; } //ownsDocument(userId, post); }
 });
-/*
-Stories.deny({
-  update: function(userId, post, fieldNames) {
-    // may only edit the following two fields:
-    return (_.without(fieldNames, 'title').length > 0);
-  }
-});
-*/

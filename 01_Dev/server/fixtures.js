@@ -91,6 +91,7 @@ function foo() {
   });
 }
 
+var Stories = MongoCollections.Stories;
 if (Stories.find().count() === 0) {
   [
     {title: 'Story_1'},

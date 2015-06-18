@@ -10,6 +10,7 @@ Meteor.methods({
       order: Number
     });
 
+    var Stories = MongoCollections.Stories;
     var storyWithSameTitle = Stories.findOne({title: storyAttributes.title});
     if (storyWithSameTitle) {
       return {
@@ -46,6 +47,7 @@ Meteor.methods({
       order: Number
     });
 
+    var Stories = MongoCollections.Stories;
     var countStories = Stories.find().count();
 
     var selector = {};
@@ -77,6 +79,7 @@ Meteor.methods({
     check(Meteor.userId(), String);
     check(idToDelete, String);
 
+    var Stories = MongoCollections.Stories;
     var storyToDelete = Stories.findOne(idToDelete);
 
     var countStories = Stories.find().count();

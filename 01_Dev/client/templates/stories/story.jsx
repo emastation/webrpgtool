@@ -13,7 +13,7 @@ Story = React.createClass({
   },
 
   insertStory: function(id, evt) {
-    var storyModelClicked = Stories.findOne(id);
+    var storyModelClicked = MongoCollections.Stories.findOne(id);
 
     var story = {
       title: 'Untitled',
@@ -58,7 +58,7 @@ Story = React.createClass({
       title: evt.target.textContent
     };
 
-    Stories.update(id, {$set: story}, function(error) {
+    MongoCollections.Stories.update(id, {$set: story}, function(error) {
       if (error) {
         // display the error to the user
         alert(error.reason);

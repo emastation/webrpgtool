@@ -43,8 +43,7 @@ var StoryList = ReactMeteor.createClass({
   },
 
   getMeteorState: function() {
-    var stories = Stories.find({}, {sort: { order: 1 }}).fetch();
-//    var stories = Stories.find({}, {sort: { order: 1 }});
+    var stories = MongoCollections.Stories.find({}, {sort: { order: 1 }}).fetch();
     return {
       displaySubmitForm: Meteor.userId() ? true : false,
       stories: stories

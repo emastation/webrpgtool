@@ -2,7 +2,6 @@ declare var WRT:any;
 declare var tm:any;
 declare var _:any;
 declare var $:any;
-declare var Stories:any;
 declare var StoryScenes:any;
 declare var StoryItems:any;
 declare var MongoCollections:any;
@@ -30,7 +29,7 @@ module WrtGame {
           var this_:any = this;
           this_.superInit();
 
-          var story = Stories.find({title: 'Game_1'}).fetch();
+          var story = MongoCollections.Stories.find({title: 'Game_1'}).fetch();
 
           if (_.isUndefined(story[0])) {
             return;

@@ -56,7 +56,7 @@ var StoryScenePage = ReactMeteor.createClass({
   getMeteorState: function() {
     var sceneId = Router.current().params._id2;
 
-    var storyItems = StoryItems.find({sceneId:sceneId}, {sort: { order: 1 }}).fetch();
+    var storyItems = MongoCollections.StoryItems.find({sceneId:sceneId}, {sort: { order: 1 }}).fetch();
     var sentenceIds = [];
     storyItems.map(function(storyItem){
       sentenceIds.push(storyItem.contentId);

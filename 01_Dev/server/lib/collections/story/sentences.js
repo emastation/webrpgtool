@@ -45,7 +45,7 @@ Meteor.methods({
       contentId: sentenceId._id
     };
 
-    StoryItems.update(storyItemId._id, {$set: storyItemAttributes});
+    MongoCollections.StoryItems.update(storyItemId._id, {$set: storyItemAttributes});
 
     return {
       storyItemId: storyItemId._id,

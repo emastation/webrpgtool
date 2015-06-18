@@ -10,6 +10,7 @@ Meteor.methods({
       order: Number
     });
 
+    var StoryItems = MongoCollections.StoryItems;
     if (attributes.order < 0) {
       var order = StoryItems.find({sceneId:attributes.sceneId}).count();
     } else {
@@ -41,6 +42,7 @@ Meteor.methods({
       order: Number
     });
 
+    var StoryItems = MongoCollections.StoryItems;
     var countStoryItems = StoryItems.find({sceneId:attributes.sceneId}).count();
 
     var selector = {};
@@ -79,6 +81,7 @@ Meteor.methods({
     check(Meteor.userId(), String);
     check(id, String);
 
+    var StoryItems = MongoCollections.StoryItems;
     var storyItemToDelete = StoryItems.findOne(id);
 
     var countStoryItems = StoryItems.find({sceneId:storyItemToDelete.sceneId}).count();

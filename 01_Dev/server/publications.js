@@ -23,7 +23,7 @@ Meteor.publish('storyScenes', function() {
 });
 
 Meteor.publish('storyItems', function() {
-  return StoryItems.find();
+  return MongoCollections.StoryItems.find();
 });
 
 Meteor.publish('sentences', function() {

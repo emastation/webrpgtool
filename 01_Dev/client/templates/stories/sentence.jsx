@@ -50,7 +50,7 @@ Sentence = ReactMeteor.createClass({
   },
 
   insertSentence: function(id) {
-    var storyItemModelClicked = StoryItems.findOne(id);
+    var storyItemModelClicked = MongoCollections.StoryItems.findOne(id);
     var attributes = {
       sceneId: Router.current().params._id2,
       comment: "This is a sentence.",

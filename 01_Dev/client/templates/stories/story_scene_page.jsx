@@ -63,7 +63,7 @@ var StoryScenePage = ReactMeteor.createClass({
     });
 
     var selector = {_id: {$in: sentenceIds}};
-    var sentencesTmp = Sentences.find(selector).fetch();
+    var sentencesTmp = MongoCollections.Sentences.find(selector).fetch();
     var sentences = [];
     storyItems.map(function(storyItem){
       var sentence = _.where(sentencesTmp, { '_id': storyItem.contentId })[0];

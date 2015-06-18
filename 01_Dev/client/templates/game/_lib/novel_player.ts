@@ -5,7 +5,7 @@ declare var $:any;
 declare var Stories:any;
 declare var StoryScenes:any;
 declare var StoryItems:any;
-declare var Sentences:any;
+declare var MongoCollections:any;
 declare var CharacterImages:any;
 
 module WrtGame {
@@ -40,7 +40,7 @@ module WrtGame {
           var storyItems = StoryItems.find({sceneId: scene[0]._id}).fetch();
           this.sentences = [];
           for (var i=0; i<storyItems.length; i++) {
-            this.sentences.push(Sentences.find({_id: storyItems[i].contentId}).fetch()[0]);
+            this.sentences.push(MongoCollections.Sentences.find({_id: storyItems[i].contentId}).fetch()[0]);
           }
 
 

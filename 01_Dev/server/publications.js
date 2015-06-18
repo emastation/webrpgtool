@@ -27,7 +27,7 @@ Meteor.publish('storyItems', function() {
 });
 
 Meteor.publish('sentences', function() {
-  return Sentences.find();
+  return MongoCollections.Sentences.find();
 });
 
 Meteor.publish('characters', function() {

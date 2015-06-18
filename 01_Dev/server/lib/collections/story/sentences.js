@@ -15,7 +15,7 @@ Meteor.methods({
       submitted: new Date()
     });
 
-    var id = Sentences.insert(recordObj);
+    var id = MongoCollections.Sentences.insert(recordObj);
 
     return {
       _id: id
@@ -117,6 +117,6 @@ Meteor.methods({
     check(Meteor.userId(), String);
     check(id, String);
 
-    Sentences.remove(id);
+    MongoCollections.Sentences.remove(id);
   }
 });

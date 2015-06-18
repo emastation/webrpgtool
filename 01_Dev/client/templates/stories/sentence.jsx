@@ -81,7 +81,7 @@ Sentence = ReactMeteor.createClass({
       text: text
     };
 
-    Sentences.update(id, {$set: sentence}, function(error) {
+    MongoCollections.Sentences.update(id, {$set: sentence}, function(error) {
       if (error) {
         // display the error to the user
         alert(error.reason);
@@ -104,7 +104,7 @@ Sentence = ReactMeteor.createClass({
       characterImageId: characterImage._id
     };
 
-    Sentences.update(id, {$set: sentence}, function(error) {
+    MongoCollections.Sentences.update(id, {$set: sentence}, function(error) {
       if (error) {
         // display the error to the user
         alert(error.reason);
@@ -119,7 +119,7 @@ Sentence = ReactMeteor.createClass({
       characterImageId: e.target.value
     };
 
-    Sentences.update(id, {$set: sentence}, function(error) {
+    MongoCollections.Sentences.update(id, {$set: sentence}, function(error) {
       if (error) {
         // display the error to the user
         alert(error.reason);

@@ -8,6 +8,7 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
       useForNovel: Boolean
     });
 
+    var Maps = MongoCollections.Maps;
     var characterWithSameIdentifier = Maps.findOne({title: attributes.identifier});
     if (characterWithSameIdentifier) {
       return {

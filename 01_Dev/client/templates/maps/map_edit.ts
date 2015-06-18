@@ -7,7 +7,7 @@ WRT = {};
 WRT.map = {};
 
 declare var MapScene:any;
-declare var Maps:any;
+declare var MongoCollections:any;
 declare var Router:any;
 
 Template.mapEdit.helpers({
@@ -87,7 +87,7 @@ var updateMap = function(currentMapId, map) {
     height_array: map.height_array
   };
 
-  Maps.update(currentMapId, {$set: mapProperties}, function(error) { 
+  MongoCollections.Maps.update(currentMapId, {$set: mapProperties}, function(error) { 
     if (error) {
       // display the error to the user
       alert(error.reason);
@@ -118,7 +118,7 @@ Template.mapEdit.events({
       height_array: $(e.target).find('[name=height_array]').val()
     };
 
-    Maps.update(currentMapId, {$set: mapProperties}, function(error) {
+    MongoCollections.Maps.update(currentMapId, {$set: mapProperties}, function(error) {
       if (error) {
         // display the error to the user
         alert(error.reason);
@@ -133,7 +133,7 @@ Template.mapEdit.events({
 
     if (confirm("Delete this map?")) {
       var currentMapId = this.map._id;
-      Maps.remove(currentMapId);
+      MongoCollections.Maps.remove(currentMapId);
       Router.go('mapsList');
     }
   },

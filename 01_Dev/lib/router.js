@@ -12,7 +12,7 @@ Router.route('/', {
   name: 'mapsList',
   data: function () {
     return {
-      maps:Maps.find()
+      maps: MongoCollections.Maps.find()
     };
   }
 });
@@ -21,7 +21,7 @@ Router.route('/maps/submit', {name: 'mapSubmit'});
 
 Router.route('/maps/:_id', {
   name: 'mapPage',
-  data: function() { return Maps.findOne(this.params._id); }
+  data: function() { return MongoCollections.Maps.findOne(this.params._id); }
 });
 
 Router.route('/maps/:_id/edit', {
@@ -31,7 +31,7 @@ Router.route('/maps/:_id/edit', {
   },
   data: function() {
     return {
-      map: Maps.findOne(this.params._id),
+      map: MongoCollections.Maps.findOne(this.params._id),
       mapTextures: MongoCollections.MapTextures.find(),
       mapTileTypes: MongoCollections.MapTileTypes.find()
     };
@@ -80,7 +80,7 @@ Router.route('/game/:_id', {
   },
   data: function() {
     return {
-      map: Maps.findOne(this.params._id),
+      map: MongoCollections.Maps.findOne(this.params._id),
       mapTextures: MongoCollections.MapTextures.find(),
       mapTileTypes: MongoCollections.MapTileTypes.find()
     };

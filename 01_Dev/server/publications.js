@@ -1,5 +1,5 @@
 Meteor.publish('maps', function() {
-  return Maps.find();
+  return MongoCollections.Maps.find();
 });
 
 Meteor.publish('map_textures', function() {

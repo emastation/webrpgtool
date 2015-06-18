@@ -51,6 +51,7 @@ if (MapTextures.find().count() === 0) {
 }
 
 
+var MapTileTypes = MongoCollections.MapTileTypes;
 if (MapTileTypes.find().count() === 0) {
   MapTileTypes.insert({
     mttId: 0,

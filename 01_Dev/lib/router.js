@@ -33,7 +33,7 @@ Router.route('/maps/:_id/edit', {
     return {
       map: Maps.findOne(this.params._id),
       mapTextures: MongoCollections.MapTextures.find(),
-      mapTileTypes: MapTileTypes.find()
+      mapTileTypes: MongoCollections.MapTileTypes.find()
     };
   }
 });
@@ -82,7 +82,7 @@ Router.route('/game/:_id', {
     return {
       map: Maps.findOne(this.params._id),
       mapTextures: MongoCollections.MapTextures.find(),
-      mapTileTypes: MapTileTypes.find()
+      mapTileTypes: MongoCollections.MapTileTypes.find()
     };
   }
 });

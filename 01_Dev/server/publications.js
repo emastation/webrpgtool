@@ -31,7 +31,7 @@ Meteor.publish('sentences', function() {
 });
 
 Meteor.publish('characters', function() {
-  return Characters.find();
+  return MongoCollections.Characters.find();
 });
 
 Meteor.publish('characterImages', function() {

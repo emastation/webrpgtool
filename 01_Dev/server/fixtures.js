@@ -107,6 +107,7 @@ if (Stories.find().count() === 0) {
   );
 }
 
+var Characters = MongoCollections.Characters;
 if (Characters.find().count() === 0) {
   var CharacterImages = MongoCollections.CharacterImages;
 

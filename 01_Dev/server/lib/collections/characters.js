@@ -23,7 +23,7 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
       submitted: new Date()
     });
 
-    var id = Characters.insert(obj);
+    var id = MongoCollections.Characters.insert(obj);
 
     return {
       _id: id

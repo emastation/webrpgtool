@@ -70,7 +70,7 @@ var StoryScenePage = ReactMeteor.createClass({
       sentences.push(sentence);
     });
 
-    var characters = Characters.find({useForNovel: true}).fetch();
+    var characters = MongoCollections.Characters.find({useForNovel: true}).fetch();
     var characterImages = MongoCollections.CharacterImages.find().fetch();
     if (characters.length > 0 && characterImages.length > 0) {
       if (this.state.selectedCharacterId === null) {

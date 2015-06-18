@@ -282,6 +282,7 @@ if (Characters.find().count() === 0) {
 
 }
 
+var UiTables = MongoCollections.UiTables;
 if (UiTables.find().count() === 0) {
   UiTables.insert({
     identifier: 'system-command',

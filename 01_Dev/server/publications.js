@@ -39,5 +39,5 @@ Meteor.publish('characterImages', function() {
 });
 
 Meteor.publish('uiTables', function() {
-  return UiTables.find();
+  return MongoCollections.UiTables.find();
 });

@@ -16,7 +16,7 @@ if (Maps.find().count() === 0) {
   });
 }
 
-
+var MapTextures = MongoCollections.MapTextures;
 if (MapTextures.find().count() === 0) {
   MapTextures.insert({
     mtId: 0,

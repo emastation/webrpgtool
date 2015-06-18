@@ -32,7 +32,7 @@ Router.route('/maps/:_id/edit', {
   data: function() {
     return {
       map: Maps.findOne(this.params._id),
-      mapTextures: MapTextures.find(),
+      mapTextures: MongoCollections.MapTextures.find(),
       mapTileTypes: MapTileTypes.find()
     };
   }
@@ -81,7 +81,7 @@ Router.route('/game/:_id', {
   data: function() {
     return {
       map: Maps.findOne(this.params._id),
-      mapTextures: MapTextures.find(),
+      mapTextures: MongoCollections.MapTextures.find(),
       mapTileTypes: MapTileTypes.find()
     };
   }

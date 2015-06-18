@@ -1,4 +1,4 @@
-declare var UiOperations:any;
+declare var MongoCollections:any;
 
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
@@ -18,7 +18,7 @@ module WrtGame {
 
     public init(logicalUiCommandProperty:any) {
       logicalUiCommandProperty.onValue((value)=> {
-        var uiOperation:any = UiOperations.findOne();
+        var uiOperation:any = MongoCollections.UiOperations.findOne();
 
         if (value === L_UI_NO_MOVE || value === L_UI_PUSH_OK) {
           var times = 0;
@@ -31,7 +31,7 @@ module WrtGame {
           times: times
         };
 
-        UiOperations.update(uiOperation._id, {$set: attributes}, function(error) {
+        MongoCollections.UiOperations.update(uiOperation._id, {$set: attributes}, function(error) {
           if (error) {
             // display the error to the user
             alert(error.reason);

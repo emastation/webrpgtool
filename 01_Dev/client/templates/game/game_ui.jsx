@@ -12,7 +12,7 @@ var GameUi = ReactMeteor.createClass({
 
   getMeteorState: function() {
     var uiTables = MongoCollections.UiTables.find().fetch();
-    var uiOperation = UiOperations.findOne();
+    var uiOperation = MongoCollections.UiOperations.findOne();
 
     return {
       uiTables: uiTables,

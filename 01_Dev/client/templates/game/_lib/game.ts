@@ -59,7 +59,7 @@ module WrtGame {
         scene.clearColor = new BABYLON.Color3(0,0,0.2);
 
         camera = new BABYLON.FreeCamera("Camera", new BABYLON.Vector3(0.5, 0.5, 0.5), scene);
-        camera.attachControl(canvas, false);
+//        camera.attachControl(canvas, false);
 
         var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(1,1,1), scene);
         light.groundColor = new BABYLON.Color3(0.3, 0.3, 0.3);

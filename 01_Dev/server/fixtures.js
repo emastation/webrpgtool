@@ -351,7 +351,8 @@ if (UiTables.find().count() === 0) {
       {
         columns:[
           {
-            title: '30'
+            title: '30（戻る）',
+            backUiTable: true
           },
           {
             title: '40'

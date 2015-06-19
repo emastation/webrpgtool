@@ -51,7 +51,10 @@ UiTable = React.createClass({
       this.setState({
         selectable: false // 選択が見えないようにする
       });
-      return;
+    } else {
+      this.setState({
+        selectable: true // 選択が見えるようにする
+      });
     }
 
   },
@@ -92,6 +95,20 @@ UiTable = React.createClass({
       });
     } else if (newProps.uiOperation.operation === WrtGame.L_UI_PUSH_OK) { // OK を押した時
 
+      // まずは、UiOperationを「何も操作しない」に変更。
+      var attributes = {
+        operation: WrtGame.L_UI_NO_MOVE,
+        times: 0
+      };
+
+      MongoCollections.UiOperations.update(newProps.uiOperation._id, {$set: attributes}, function(error) {
+        if (error) {
+          // display the error to the user
+          alert(error.reason);
+        }
+      });
+
+
       var rowIdx = this.state.currentCell[0];
       var clmIdx = this.state.currentCell[1];
 
@@ -104,12 +121,12 @@ UiTable = React.createClass({
       }
 
       // UiScreenの切り替え
-      var goToUiScreenStr = newProps.uiTable.records[rowIdx].columns[clmIdx].goToUiScreen;
-      if (!_.isUndefined(goToUiScreenStr)) {
+      var goToUiScreenIdentifier = newProps.uiTable.records[rowIdx].columns[clmIdx].goToUiScreen;
+      if (!_.isUndefined(goToUiScreenIdentifier)) {
         var currentUiScreen = MongoCollections.UiStatuses.findOne({type: 'CurrentUiScreen'});
 
         var attributes = {
-          value: goToUiScreenStr
+          value: goToUiScreenIdentifier
         };
         MongoCollections.UiStatuses.update(currentUiScreen._id, {$set: attributes}, function(error) {
           if (error) {
@@ -119,7 +136,35 @@ UiTable = React.createClass({
         return;
       }
 
-      // UiTableの切り替え
+      // UiTableの移動（次のUiTableへ）
+      var nextUiTableIdentifier = newProps.uiTable.records[rowIdx].columns[clmIdx].nextUiTable;
+      if (!_.isUndefined(nextUiTableIdentifier)) {
+        var uiTableOperation = MongoCollections.UiTableOperations.findOne();
+        var attributes = {
+          type: 'next',
+          value: nextUiTableIdentifier
+        };
+        MongoCollections.UiTableOperations.update(uiTableOperation._id, {$set: attributes}, function (error) {
+          if (error) {
+            alert(error.reason);
+          }
+        });
+        return;
+      }
+
+      // UiTableの移動（前のUiTableへ戻る）
+      var backUiTable_flg = newProps.uiTable.records[rowIdx].columns[clmIdx].backUiTable;
+      if (!_.isUndefined(backUiTable_flg) && backUiTable_flg) {
+        var uiTableOperation = MongoCollections.UiTableOperations.findOne();
+        var attributes = {
+          type: 'back'
+        };
+        MongoCollections.UiTableOperations.update(uiTableOperation._id, {$set: attributes}, function (error) {
+          if (error) {
+            alert(error.reason);
+          }
+        });
+      }
     }
 
   }

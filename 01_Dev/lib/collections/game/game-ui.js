@@ -6,12 +6,13 @@ _global.MongoCollections.UiOperations.insert({
   times: 0
 });
 
+_global.MongoCollections.UiTableOperations = new Mongo.Collection(null); // Client side only collection
+_global.MongoCollections.UiTableOperations.insert({
+  type: void (0),
+  value: void (0)
+});
 _global.MongoCollections.UiStatuses = new Mongo.Collection(null); // Client side only collection
 _global.MongoCollections.UiStatuses.insert({
   type: 'CurrentUiScreen',
   value: 'system'
-});
-_global.MongoCollections.UiStatuses.insert({
-  type: 'CurrentUiTable',
-  value: void(0)
 });

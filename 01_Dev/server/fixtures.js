@@ -279,9 +279,9 @@ var UiScreens = MongoCollections.UiScreens;
 if (UiScreens.find().count() === 0) {
   UiScreens.insert({
     identifier: 'system',
-    uiTables: ['command', 'status'],
-    firstUiTable: 'command',
-    visibleAtFirstList: ['command']
+    uiTables: ['system-command', 'system-status', 'system-magic'],
+    firstUiTable: 'system-command',
+    visibleAtFirstList: ['system-command']
   });
   UiScreens.insert({
     identifier: 'help',
@@ -294,7 +294,7 @@ if (UiScreens.find().count() === 0) {
 var UiTables = MongoCollections.UiTables;
 if (UiTables.find().count() === 0) {
   UiTables.insert({
-    identifier: 'command',
+    identifier: 'system-command',
     title: 'システムコマンド',
     records: [
       {
@@ -316,7 +316,7 @@ if (UiTables.find().count() === 0) {
         columns:[
           {
             title: 'ステータスをみる',
-            nextUiTable: 'status'
+            nextUiTable: 'system-status'
           }
         ]
       },
@@ -332,13 +332,14 @@ if (UiTables.find().count() === 0) {
   });
 
   UiTables.insert({
-    identifier: 'status',
+    identifier: 'system-status',
     title: 'ステータス',
     records: [
       {
         columns:[
           {
-            title: '主人公'
+            title: '主人公(進む)',
+            nextUiTable: 'system-magic'
           },
           {
             title: 'ヒーラー'
@@ -359,6 +360,28 @@ if (UiTables.find().count() === 0) {
           },
           {
             title: '50'
+          }
+        ]
+      }
+    ]
+  });
+
+  UiTables.insert({
+    identifier: 'system-magic',
+    title: 'ヘルプ',
+    records: [
+      {
+        columns:[
+          {
+            title: '魔法を見る'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: '戻る',
+            backUiTable: true
           }
         ]
       }

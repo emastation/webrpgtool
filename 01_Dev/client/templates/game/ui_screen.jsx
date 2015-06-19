@@ -35,6 +35,7 @@ UiScreen = React.createClass({
   componentWillReceiveProps: function(newProps) {
 
     if (newProps.uiTableOperation.type === 'next') {
+      this.resetUiTableOperation();
       if (_.contains(this.state.uiTableStack, newProps.uiTableOperation.value)) {
         return;
       }
@@ -42,18 +43,18 @@ UiScreen = React.createClass({
       this.setState({
         uiTableStack: this.state.uiTableStack
       });
-//      this.resetUiTableOperation();
     } else if (newProps.uiTableOperation.type === 'back') {
+      this.resetUiTableOperation();
       this.state.uiTableStack.pop();
       this.setState({
         uiTableStack: this.state.uiTableStack
       });
-      this.resetUiTableOperation();
     } else {
-      console.log("this.state.uiTableStack: "+this.state.uiTableStack);
-      this.setState({
-        uiTableStack: [newProps.uiScreen.firstUiTable]
-      });
+      if (this.state.uiTableStack.length === 1) {
+        this.setState({
+          uiTableStack: [newProps.uiScreen.firstUiTable]
+        });
+      }
     }
 
   },

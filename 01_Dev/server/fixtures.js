@@ -279,16 +279,16 @@ var UiScreens = MongoCollections.UiScreens;
 if (UiScreens.find().count() === 0) {
   UiScreens.insert({
     identifier: 'system',
-    uiTables: ['system-command'],
-    firstUiTable: 'system-command',
-    visibleAtFirstList: ['system-command']
+    uiTables: ['command', 'status'],
+    firstUiTable: 'command',
+    visibleAtFirstList: ['command']
   });
 }
 
 var UiTables = MongoCollections.UiTables;
 if (UiTables.find().count() === 0) {
   UiTables.insert({
-    identifier: 'system-command',
+    identifier: 'command',
     title: 'システムコマンド',
     records: [
       {
@@ -317,6 +317,60 @@ if (UiTables.find().count() === 0) {
         columns:[
           {
             title: 'やめる'
+          }
+        ]
+      }
+    ]
+  });
+
+  UiTables.insert({
+    identifier: 'status',
+    title: 'ステータス',
+    records: [
+      {
+        columns:[
+          {
+            title: '主人公'
+          },
+          {
+            title: 'ヒーラー'
+          },
+          {
+            title: 'アタッカー'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: '30'
+          },
+          {
+            title: '40'
+          },
+          {
+            title: '50'
+          }
+        ]
+      }
+    ]
+  });
+
+  UiTables.insert({
+    identifier: 'help',
+    title: 'ヘルプ',
+    records: [
+      {
+        columns:[
+          {
+            title: '初めての方へ'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'チュートリアル'
           }
         ]
       }

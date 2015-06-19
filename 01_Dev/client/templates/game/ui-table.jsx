@@ -2,12 +2,13 @@ UiTable = React.createClass({
 
   getInitialState: function() {
     return {
-      currentCell: [0,0] // 0要素目がレコード、1要素目がカラムのインデックス
+      currentCell: [0,0], // 0要素目がレコード、1要素目がカラムのインデックス
+      selectable: false // 選択が見えるかどうか
     };
   },
 
   renderColumn: function(column, columnIdx) {
-    if (column.row === this.state.currentCell[0] && columnIdx === this.state.currentCell[1]) {
+    if (this.state.selectable && column.row === this.state.currentCell[0] && columnIdx === this.state.currentCell[1]) {
       var selectedCss = 'selected';
     } else {
       var selectedCss = '';
@@ -47,7 +48,9 @@ UiTable = React.createClass({
     this.constructColumnsRowIdx(this.props);
 
     if (_.isUndefined(this.props.uiOperation)) {
-      this.state.currentCell[0] = -1; // 見えないようにする
+      this.setState({
+        selectable: false // 選択が見えないようにする
+      });
       return;
     }
 
@@ -57,7 +60,14 @@ UiTable = React.createClass({
     this.constructColumnsRowIdx(newProps);
 
     if (_.isUndefined(newProps.uiOperation)) {
+      this.setState({
+        selectable: false // 選択が見えないようにする
+      });
       return;
+    } else {
+      this.setState({
+        selectable: true // 選択が見えるようにする
+      });
     }
 
     if (newProps.uiOperation.operation === WrtGame.L_UI_MOVE_LOWER) {
@@ -84,6 +94,7 @@ UiTable = React.createClass({
 
       var rowIdx = this.state.currentCell[0];
       var clmIdx = this.state.currentCell[1];
+
       // バインドされた関数の実行
       var functionName = newProps.uiTable.records[rowIdx].columns[clmIdx].functionName;
       if (_.isUndefined(functionName)) {
@@ -91,6 +102,7 @@ UiTable = React.createClass({
       } else {
         window.WrtGame.UserFunctions[functionName]();
       }
+
       // UiScreenの切り替え
       var goToUiScreenStr = newProps.uiTable.records[rowIdx].columns[clmIdx].goToUiScreen;
       if (!_.isUndefined(goToUiScreenStr)) {
@@ -104,7 +116,10 @@ UiTable = React.createClass({
             alert(error.reason);
           }
         });
+        return;
       }
+
+      // UiTableの切り替え
     }
 
   }

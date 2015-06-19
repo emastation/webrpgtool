@@ -11,3 +11,7 @@ _global.MongoCollections.UiStatuses.insert({
   type: 'CurrentUiScreen',
   value: 'system'
 });
+_global.MongoCollections.UiStatuses.insert({
+  type: 'CurrentUiTable',
+  value: void(0)
+});

@@ -23,10 +23,12 @@ var GameUi = ReactMeteor.createClass({
     }
     var uiOperation = MongoCollections.UiOperations.findOne();
 
+    var currentUiTable = MongoCollections.UiStatuses.findOne({type: 'CurrentUiTable'});
     return {
       uiScreen: uiScreen,
       uiTables: uiTables,
-      uiOperation: uiOperation
+      uiOperation: uiOperation,
+      currentUiTableIdentifier: currentUiTable.value
     };
   },
 
@@ -35,7 +37,10 @@ var GameUi = ReactMeteor.createClass({
     if (_.isUndefined(this.state.uiScreen)) {
       var uiScreen = {};
     } else {
-      var uiScreen = <UiScreen uiScreen={this.state.uiScreen} uiTables={this.state.uiTables} uiOperation={this.state.uiOperation} />;
+      var uiScreen = <UiScreen uiScreen={this.state.uiScreen}
+                               uiTables={this.state.uiTables}
+                               uiOperation={this.state.uiOperation}
+                               currentUiTableIdentifier={this.state.currentUiTableIdentifier} />;
     }
 
     return <div id="game-ui-body">

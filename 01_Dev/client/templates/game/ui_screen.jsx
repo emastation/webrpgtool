@@ -1,7 +1,12 @@
 UiScreen = React.createClass({
 
   renderUiTables: function(uiTable) {
-    return <UiTable key={uiTable._id} uiTable={uiTable} uiOperation={this.props.uiOperation} />;
+    if (uiTable.identifier === this.props.uiScreen.firstUiTable) {
+      var uiOperation = this.props.uiOperation;
+    } else {
+      var uiOperation = void(0);
+    }
+    return <UiTable key={uiTable._id} uiTable={uiTable} uiOperation={uiOperation} />;
   },
 
   render: function() {

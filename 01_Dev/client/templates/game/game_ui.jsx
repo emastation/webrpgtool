@@ -8,12 +8,14 @@ var GameUi = ReactMeteor.createClass({
 
   getInitialState: function() {
     return {
+      firstUiScreen: ''
     };
   },
 
   getMeteorState: function() {
     var uiTables = [];
-    var uiScreen = MongoCollections.UiScreens.findOne();
+    var currentUiScreen = MongoCollections.UiStatuses.findOne({type: 'CurrentUiScreen'});
+    var uiScreen = MongoCollections.UiScreens.findOne({identifier: currentUiScreen.value});
     if (!_.isUndefined(uiScreen)) {
       for (var i=0; i<uiScreen.uiTables.length; i++) {
         uiTables.push(MongoCollections.UiTables.findOne({identifier: uiScreen.uiTables[i]}));

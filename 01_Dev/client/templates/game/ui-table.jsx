@@ -45,10 +45,20 @@ UiTable = React.createClass({
 
   componentWillMount: function() {
     this.constructColumnsRowIdx(this.props);
+
+    if (_.isUndefined(this.props.uiOperation)) {
+      this.state.currentCell[0] = -1; // 見えないようにする
+      return;
+    }
+
   },
 
   componentWillReceiveProps: function(newProps) {
     this.constructColumnsRowIdx(newProps);
+
+    if (_.isUndefined(newProps.uiOperation)) {
+      return;
+    }
 
     if (newProps.uiOperation.operation === WrtGame.L_UI_MOVE_LOWER) {
       if (this.state.currentCell[0] >= newProps.uiTable.records.length-1) {
@@ -70,14 +80,31 @@ UiTable = React.createClass({
       this.setState({
         currentCell:[newIdx, this.state.currentCell[1]]
       });
-    } else if (newProps.uiOperation.operation === WrtGame.L_UI_PUSH_OK) {
-      var functionName = newProps.uiTable.records[this.state.currentCell[0]].columns[this.state.currentCell[1]].functionName;
+    } else if (newProps.uiOperation.operation === WrtGame.L_UI_PUSH_OK) { // OK を押した時
 
+      var rowIdx = this.state.currentCell[0];
+      var clmIdx = this.state.currentCell[1];
+      // バインドされた関数の実行
+      var functionName = newProps.uiTable.records[rowIdx].columns[clmIdx].functionName;
       if (_.isUndefined(functionName)) {
         console.debug("このメニュー項目にはJavaScript関数がバインドされていません。");
-        return;
+      } else {
+        window.WrtGame.UserFunctions[functionName]();
       }
-      window.WrtGame.UserFunctions[functionName]();
+      // UiScreenの切り替え
+      var goToUiScreenStr = newProps.uiTable.records[rowIdx].columns[clmIdx].goToUiScreen;
+      if (!_.isUndefined(goToUiScreenStr)) {
+        var currentUiScreen = MongoCollections.UiStatuses.findOne({type: 'CurrentUiScreen'});
+
+        var attributes = {
+          value: goToUiScreenStr
+        };
+        MongoCollections.UiStatuses.update(currentUiScreen._id, {$set: attributes}, function(error) {
+          if (error) {
+            alert(error.reason);
+          }
+        });
+      }
     }
 
   }

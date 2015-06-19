@@ -283,6 +283,12 @@ if (UiScreens.find().count() === 0) {
     firstUiTable: 'command',
     visibleAtFirstList: ['command']
   });
+  UiScreens.insert({
+    identifier: 'help',
+    uiTables: ['help-main'],
+    firstUiTable: 'help-main',
+    visibleAtFirstList: ['help-main']
+  });
 }
 
 var UiTables = MongoCollections.UiTables;
@@ -309,14 +315,16 @@ if (UiTables.find().count() === 0) {
       {
         columns:[
           {
-            title: 'やめる'
+            title: 'ステータスをみる',
+            nextUiTable: 'status'
           }
         ]
       },
       {
         columns:[
           {
-            title: 'やめる'
+            title: 'ヘルプへ',
+            goToUiScreen: 'help'
           }
         ]
       }
@@ -357,7 +365,7 @@ if (UiTables.find().count() === 0) {
   });
 
   UiTables.insert({
-    identifier: 'help',
+    identifier: 'help-main',
     title: 'ヘルプ',
     records: [
       {
@@ -370,7 +378,8 @@ if (UiTables.find().count() === 0) {
       {
         columns:[
           {
-            title: 'チュートリアル'
+            title: 'システムへ',
+            goToUiScreen: 'system'
           }
         ]
       }

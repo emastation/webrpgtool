@@ -11,13 +11,10 @@ UiScreen = React.createClass({
     } else {
       var uiOperation = this.props.uiOperation;
     }
-    return <UiTable key={uiTable._id} uiTable={uiTable} uiOperation={uiOperation} />;
+    return <UiTable key={uiTable._id} uiTable={uiTable} uiTables={this.props.uiTables} uiOperation={uiOperation} posterityUiTables={this.state.uiTableStack.slice(1)} />;
   },
-  componentWillMount: function() {
-    this.setState({
-      uiTableStack: [this.props.uiScreen.firstUiTable]
-    });
 
+  componentWillMount: function() {
   },
 
   resetUiTableOperation: function () {
@@ -34,11 +31,26 @@ UiScreen = React.createClass({
   },
   componentWillReceiveProps: function(newProps) {
 
+    /// UiScreenを切り替えた時に、this.state.uiTableStackが、切り替える前のUiScreenのもののままである場合があるので、それを検出して、正しく初期化する
+    var uiTableIdentifiers = [];
+    for (var i=0; i<newProps.uiTables.length; i++) {
+      uiTableIdentifiers.push(newProps.uiTables[i].identifier);
+    }
+    // UiScreenを切り替えた際に、this.state.uiTableStackが、ちゃんと切り替わった後のものであるならば、
+    // this.state.uiTableStack の中は uiTableIdentifiersの中にある項目しか含んでいないはず（=条件A）
+    if (_.difference(this.state.uiTableStack, uiTableIdentifiers).length !== 0) { // もし、差異があれば、条件Aを満たさない、つまりUiScreenが切り替わる前の古いuiTableStackなので
+      this.setState({
+        uiTableStack: [newProps.uiScreen.firstUiTable] // 初期化しなおす
+      });
+    }
+
     if (newProps.uiTableOperation.type === 'next') {
       this.resetUiTableOperation();
+      /*
       if (_.contains(this.state.uiTableStack, newProps.uiTableOperation.value)) {
         return;
       }
+      */
       this.state.uiTableStack.push(newProps.uiTableOperation.value);
       this.setState({
         uiTableStack: this.state.uiTableStack
@@ -59,9 +71,19 @@ UiScreen = React.createClass({
 
   },
 
+  getUiTableFromIdentifier: function(props, identifier) {
+    var results = _.filter(props.uiTables, function (uiTable) {
+      return uiTable.identifier === identifier;
+    });
+    return results[0]; // uiTableのidentifierはユニークという仕様なので、１つしか見つからないはず
+  },
+
   render: function() {
+    var uiOperation = this.props.uiOperation;
+    var uiTable = this.getUiTableFromIdentifier(this.props, this.props.uiScreen.firstUiTable);
+
     return <div className="ui-screen" key={this.props.uiScreen._id} id={ 'ui-screen_' + this.props.uiScreen.identifier}>
-      { this.props.uiTables.map(this.renderUiTables) }
-    </div>
+      <UiTable key={uiTable._id} uiTable={uiTable} uiTables={this.props.uiTables} uiOperation={uiOperation} posterityUiTables={this.state.uiTableStack.slice(1)} />
+      </div>;
   }
 });

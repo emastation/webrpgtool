@@ -308,15 +308,16 @@ if (UiTables.find().count() === 0) {
       {
         columns:[
           {
-            title: 'セーブする'
+            title: 'ステータスをみる',
+            nextUiTable: 'system-status'
           }
         ]
       },
       {
         columns:[
           {
-            title: 'ステータスをみる',
-            nextUiTable: 'system-status'
+            title: '魔法をみる',
+            nextUiTable: 'system-magic'
           }
         ]
       },
@@ -368,7 +369,7 @@ if (UiTables.find().count() === 0) {
 
   UiTables.insert({
     identifier: 'system-magic',
-    title: 'ヘルプ',
+    title: '魔法',
     records: [
       {
         columns:[
@@ -380,8 +381,24 @@ if (UiTables.find().count() === 0) {
       {
         columns:[
           {
+            title: 'システムコマンドへ',
+            nextUiTable: 'system-command'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
             title: '戻る',
             backUiTable: true
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: 'ヘルプへ',
+            goToUiScreen: 'help'
           }
         ]
       }

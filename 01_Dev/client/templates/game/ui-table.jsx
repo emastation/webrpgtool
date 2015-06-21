@@ -27,13 +27,34 @@ UiTable = React.createClass({
   },
 
   render: function() {
-    return <table className="ui-table" key={this.props.uiTable._id} id={ 'ui-table_' + this.props.uiTable.identifier}>
+    if (_.isUndefined(this.props.posterityUiTables[0])) { // 自分が末端であれば
+      var uiTableJsx = {}
+    } else {
+      var uiTable = this.getUiTableFromIdentifier(this.props, this.props.posterityUiTables[0]);
+      if (_.isUndefined(uiTable)) {
+        var uiTableJsx = {}
+      } else {
+        var uiTableJsx = <UiTable key={uiTable._id} uiTable={uiTable} uiTables={this.props.uiTables} uiOperation={this.props.uiOperation} posterityUiTables={this.props.posterityUiTables.slice(1)} />;
+      }
+    }
+
+    return <div>
+    <table className="ui-table" key={this.props.uiTable._id} id={ 'ui-table_' + this.props.uiTable.identifier}>
       <tr>
         <th>{this.props.uiTable.title}</th>
       </tr>
       { this.props.uiTable.records.map(this.renderRecord) }
     </table>
+      { uiTableJsx }
+    </div>;
 
+  },
+
+  getUiTableFromIdentifier: function(props, identifier) {
+    var results = _.filter(props.uiTables, function (uiTable) {
+      return uiTable.identifier === identifier;
+    });
+    return results[0]; // uiTableのidentifierはユニークという仕様なので、１つしか見つからないはず
   },
 
   constructColumnsRowIdx: function(props) {
@@ -71,6 +92,10 @@ UiTable = React.createClass({
       this.setState({
         selectable: true // 選択が見えるようにする
       });
+    }
+
+    if (!_.isUndefined(this.props.posterityUiTables[0])) { // 自分が末端でなければ
+      return;
     }
 
     if (newProps.uiOperation.operation === WrtGame.L_UI_MOVE_LOWER) {

@@ -5,7 +5,6 @@
 
 meteor-platform
 mizzao:bootstrap-3
-underscore
 fourseven:scss
 iron:router
 sacha:spin
@@ -23,3 +22,4 @@ npm-container
 reactjs:react
 rubaxa:sortable
 particle4dev:rsvpjs
+stevezhu:lodash

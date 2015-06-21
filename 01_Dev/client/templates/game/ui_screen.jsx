@@ -5,13 +5,8 @@ UiScreen = React.createClass({
     };
   },
 
-  renderUiTables: function(uiTable) {
-    if (_.isUndefined(this.state.uiTableStack.last) || this.state.uiTableStack.last !== uiTable.identifier) {
-      var uiOperation = void(0);
-    } else {
-      var uiOperation = this.props.uiOperation;
-    }
-    return <UiTable key={uiTable._id} uiTable={uiTable} uiTables={this.props.uiTables} uiOperation={uiOperation} posterityUiTables={this.state.uiTableStack.slice(1)} />;
+  renderOtherVisibleUiTables: function(uiTable) {
+    return <UiTable key={uiTable._id} uiTable={uiTable} uiTables={this.props.uiTables} uiOperation={void(0)} posterityUiTables={[]} />;
   },
 
   componentWillMount: function() {
@@ -71,19 +66,23 @@ UiScreen = React.createClass({
 
   },
 
-  getUiTableFromIdentifier: function(props, identifier) {
-    var results = _.filter(props.uiTables, function (uiTable) {
+  getUiTableFromIdentifier: function(identifier) {
+    var results = _.filter(this.props.uiTables, function (uiTable) {
       return uiTable.identifier === identifier;
     });
     return results[0]; // uiTableのidentifierはユニークという仕様なので、１つしか見つからないはず
   },
 
+
   render: function() {
     var uiOperation = this.props.uiOperation;
-    var uiTable = this.getUiTableFromIdentifier(this.props, this.props.uiScreen.firstUiTable);
+    var uiTable = this.getUiTableFromIdentifier(this.props.uiScreen.firstUiTable);
+    var otherVisibleUiTableIdentifiers = this.props.uiScreen.otherVisibleUiTables;
+    var otherVisibleUiTables = otherVisibleUiTableIdentifiers.map(this.getUiTableFromIdentifier);
 
     return <div className="ui-screen" key={this.props.uiScreen._id} id={ 'ui-screen_' + this.props.uiScreen.identifier}>
+      { otherVisibleUiTables.map(this.renderOtherVisibleUiTables) }
       <UiTable key={uiTable._id} uiTable={uiTable} uiTables={this.props.uiTables} uiOperation={uiOperation} posterityUiTables={this.state.uiTableStack.slice(1)} />
-      </div>;
+    </div>;
   }
 });

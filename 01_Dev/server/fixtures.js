@@ -279,15 +279,15 @@ var UiScreens = MongoCollections.UiScreens;
 if (UiScreens.find().count() === 0) {
   UiScreens.insert({
     identifier: 'system',
-    uiTables: ['system-command', 'system-status', 'system-magic'],
+    uiTables: ['system-command', 'system-status', 'system-characters', 'system-magic'],
     firstUiTable: 'system-command',
-    visibleAtFirstList: ['system-command']
+    otherVisibleUiTables: ['system-status']
   });
   UiScreens.insert({
     identifier: 'help',
     uiTables: ['help-main'],
     firstUiTable: 'help-main',
-    visibleAtFirstList: ['help-main']
+    otherVisibleUiTables: []
   });
 }
 
@@ -309,7 +309,7 @@ if (UiTables.find().count() === 0) {
         columns:[
           {
             title: 'ステータスをみる',
-            nextUiTable: 'system-status'
+            nextUiTable: 'system-characters'
           }
         ]
       },
@@ -333,14 +333,48 @@ if (UiTables.find().count() === 0) {
   });
 
   UiTables.insert({
+    identifier: 'system-characters',
+    title: 'ステータス',
+    records: [
+      {
+        columns:[
+          {
+            title: '魔法へ',
+            nextUiTable: 'system-magic'
+          },
+          {
+            title: 'その他'
+          },
+          {
+            title: 'その他'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: '戻る',
+            backUiTable: true
+          },
+          {
+            title: 'その他'
+          },
+          {
+            title: 'その他'
+          }
+        ]
+      }
+    ]
+  });
+
+  UiTables.insert({
     identifier: 'system-status',
     title: 'ステータス',
     records: [
       {
         columns:[
           {
-            title: '主人公(進む)',
-            nextUiTable: 'system-magic'
+            title: '主人公'
           },
           {
             title: 'ヒーラー'

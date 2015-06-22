@@ -15,3 +15,9 @@ table.ui-table {
 td.ui-table-cell.selected {
   background-color: yellow;
 }
+
+#ui-table_system-status.ui-table {
+  position: absolute;
+  right: 500px;
+  top:0px;
+}

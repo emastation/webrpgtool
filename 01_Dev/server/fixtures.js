@@ -294,6 +294,40 @@ if (UiScreens.find().count() === 0) {
 var UiTables = MongoCollections.UiTables;
 if (UiTables.find().count() === 0) {
   UiTables.insert({
+    identifier: 'system-status',
+    title: 'ステータス',
+    records: [
+      {
+        columns:[
+          {
+            title: '主人公'
+          },
+          {
+            title: 'ヒーラー'
+          },
+          {
+            title: 'アタッカー'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
+            title: '30',
+            backUiTable: true
+          },
+          {
+            title: '40'
+          },
+          {
+            title: '50'
+          }
+        ]
+      }
+    ]
+  });
+
+  UiTables.insert({
     identifier: 'system-command',
     title: 'システムコマンド',
     records: [
@@ -334,7 +368,7 @@ if (UiTables.find().count() === 0) {
 
   UiTables.insert({
     identifier: 'system-characters',
-    title: 'ステータス',
+    title: 'キャラクター',
     records: [
       {
         columns:[
@@ -368,47 +402,14 @@ if (UiTables.find().count() === 0) {
   });
 
   UiTables.insert({
-    identifier: 'system-status',
-    title: 'ステータス',
-    records: [
-      {
-        columns:[
-          {
-            title: '主人公'
-          },
-          {
-            title: 'ヒーラー'
-          },
-          {
-            title: 'アタッカー'
-          }
-        ]
-      },
-      {
-        columns:[
-          {
-            title: '30（戻る）',
-            backUiTable: true
-          },
-          {
-            title: '40'
-          },
-          {
-            title: '50'
-          }
-        ]
-      }
-    ]
-  });
-
-  UiTables.insert({
     identifier: 'system-magic',
     title: '魔法',
     records: [
       {
         columns:[
           {
-            title: '魔法を見る'
+            title: '本当のステータスをみる',
+            nextUiTable: 'system-status'
           }
         ]
       },

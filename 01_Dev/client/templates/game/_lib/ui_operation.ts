@@ -20,7 +20,7 @@ module WrtGame {
       logicalUiCommandProperty.onValue((value)=> {
         var uiOperation:any = MongoCollections.UiOperations.findOne();
 
-        if (value === L_UI_NO_MOVE || value === L_UI_PUSH_OK) {
+        if (value === L_UI_NO_MOVE || value === L_UI_PUSH_OK || value === L_UI_PUSH_CANCEL) {
           var times = 0;
         } else {
           var times = <number>uiOperation.times + 1;

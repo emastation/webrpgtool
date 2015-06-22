@@ -65,6 +65,37 @@ UiTable = React.createClass({
     }
   },
 
+  // UiTableの移動（前のUiTableへ戻る）
+  goBackUiTable: function(props) {
+    var rowIdx = this.state.currentCell[0];
+    var clmIdx = this.state.currentCell[1];
+
+    var uiTableOperation = MongoCollections.UiTableOperations.findOne();
+    var attributes = {
+      type: 'back'
+    };
+    MongoCollections.UiTableOperations.update(uiTableOperation._id, {$set: attributes}, function (error) {
+      if (error) {
+        alert(error.reason);
+      }
+    });
+  },
+
+  // UiOperationを「何も操作しない」に変更。
+  resetUiOperations: function(props) {
+    var attributes = {
+      operation: WrtGame.L_UI_NO_MOVE,
+      times: 0
+    };
+
+    MongoCollections.UiOperations.update(props.uiOperation._id, {$set: attributes}, function(error) {
+      if (error) {
+        // display the error to the user
+        alert(error.reason);
+      }
+    });
+  },
+
   componentWillMount: function() {
     this.constructColumnsRowIdx(this.props);
 
@@ -121,18 +152,7 @@ UiTable = React.createClass({
     } else if (newProps.uiOperation.operation === WrtGame.L_UI_PUSH_OK) { // OK を押した時
 
       // まずは、UiOperationを「何も操作しない」に変更。
-      var attributes = {
-        operation: WrtGame.L_UI_NO_MOVE,
-        times: 0
-      };
-
-      MongoCollections.UiOperations.update(newProps.uiOperation._id, {$set: attributes}, function(error) {
-        if (error) {
-          // display the error to the user
-          alert(error.reason);
-        }
-      });
-
+      this.resetUiOperations(newProps);
 
       var rowIdx = this.state.currentCell[0];
       var clmIdx = this.state.currentCell[1];
@@ -180,16 +200,15 @@ UiTable = React.createClass({
       // UiTableの移動（前のUiTableへ戻る）
       var backUiTable_flg = newProps.uiTable.records[rowIdx].columns[clmIdx].backUiTable;
       if (!_.isUndefined(backUiTable_flg) && backUiTable_flg) {
-        var uiTableOperation = MongoCollections.UiTableOperations.findOne();
-        var attributes = {
-          type: 'back'
-        };
-        MongoCollections.UiTableOperations.update(uiTableOperation._id, {$set: attributes}, function (error) {
-          if (error) {
-            alert(error.reason);
-          }
-        });
+        this.goBackUiTable(newProps);
       }
+
+    } else if (newProps.uiOperation.operation === WrtGame.L_UI_PUSH_CANCEL) {
+      // まずは、UiOperationを「何も操作しない」に変更。
+      this.resetUiOperations(newProps);
+
+      // UiTableの移動（前のUiTableへ戻る）
+      this.goBackUiTable(newProps);
     }
 
   }

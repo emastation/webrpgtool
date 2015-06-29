@@ -9,30 +9,35 @@ if (MapTextures.find().count() === 0) {
     mtId: 0,
     name: 'メタル',
     gametex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/gameTile/Metal_lightgray.png',
+    game_model_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tile3d/Metal.babylon',
     tooltex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/toolTile/Metal_lightgray.jpg'
   });
   MapTextures.insert({
     mtId: 1,
     name: '水晶',
     gametex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/gameTile/suisyou1.png',
+    game_model_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tile3d/Cristal.babylon',
     tooltex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/toolTile/suisyou1.jpg'
   });
   MapTextures.insert({
     mtId: 2,
-    name: '青いタイル',
+    name: '氷',
     gametex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/gameTile/bluetile.png',
+    game_model_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tile3d/Ice.babylon',
     tooltex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/toolTile/bluetile.jpg'
   });
   MapTextures.insert({
     mtId: 3,
-    name: '虎の毛皮',
+    name: '植物',
     gametex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/gameTile/FauxFur.png',
-    tooltex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/toolTile/FauxFur.jpg'
+    game_model_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tile3d/Plant.babylon',
+    tooltex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/toolTile/lichen.jpg'
   });
   MapTextures.insert({
     mtId: 4,
     name: '木目',
     gametex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/gameTile/wood.png',
+    game_model_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tile3d/Wood.babylon',
     tooltex_url: 'http://www.emastation.net/uploadspace/WebRPGTool/material/tileImage/toolTile/wood.jpg'
   });
 }

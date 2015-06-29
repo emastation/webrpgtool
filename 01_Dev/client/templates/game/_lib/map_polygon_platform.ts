@@ -18,7 +18,9 @@ module WrtGame {
       var floorRootMesh = new BABYLON.Mesh("MapFlatPlatform_Floor_RootMesh[" + x + "][" + y +"]", scene);
 
       var that = this;
-      BABYLON.SceneLoader.ImportMesh("", "http://www.emastation.net/uploadspace/WebRPGTool/material/tile3d/", "Cristal.babylon", scene, function (newMeshes) {
+      var splitPath = imageUrl.split('/');
+      var texModelFileName = splitPath[splitPath.length-1];
+      BABYLON.SceneLoader.ImportMesh("", "http://www.emastation.net/uploadspace/WebRPGTool/material/tile3d/", texModelFileName, scene, function (newMeshes) {
         for (var i = 0; i < newMeshes.length; i++) {
           var mesh:any = newMeshes[i];
           mesh.isVisible = false;

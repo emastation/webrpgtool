@@ -66,6 +66,7 @@ Router.route('/codes/:_id/edit', {
 
 Router.route('/game/:_id', {
   name: 'gamePage',
+  layoutTemplate: null,
   waitOn: function() {
     return [
       Meteor.subscribe('map_textures'),

@@ -222,7 +222,7 @@ Template.mapEdit.events({
     var currentMapId = this.map._id;
     var urlStr = "//" + window.location.hostname + "/game/" + currentMapId;
 
-    var storeSiteGetUrl = "http://channelz.meteor.com/post/new?url=" + urlStr;
+    var storeSiteGetUrl = "http://channelz.meteor.com/post/new?url=" + urlStr + "&world=webrpgtool";
 
     console.log(storeSiteGetUrl);
 

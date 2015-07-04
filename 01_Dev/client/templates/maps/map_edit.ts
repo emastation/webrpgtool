@@ -214,5 +214,18 @@ Template.mapEdit.events({
 
     var currentMapId = this.map._id;
     updateMap(currentMapId, map);
-  }
+  },
+
+  'click .publish': function(e) {
+    e.preventDefault();
+
+    var currentMapId = this.map._id;
+    var urlStr = "//" + window.location.hostname + "/game/" + currentMapId;
+
+    var storeSiteGetUrl = "http://channelz.meteor.com/post/new?url=" + urlStr;
+
+    console.log(storeSiteGetUrl);
+
+    window.location.href = storeSiteGetUrl;
+  },
 });

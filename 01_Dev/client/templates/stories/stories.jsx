@@ -28,12 +28,8 @@ SortableStories = React.createClass({
 });
 
 
-var StoryList = ReactMeteor.createClass({
-  templateName: "storiesList",
-
-  startMeteorSubscriptions: function() {
-    Meteor.subscribe("stories");
-  },
+var StoryList = React.createClass({
+  mixins: [ReactMeteorData],
 
   getInitialState: function() {
     return {
@@ -42,7 +38,7 @@ var StoryList = ReactMeteor.createClass({
     };
   },
 
-  getMeteorState: function() {
+  getMeteorData: function() {
     var stories = MongoCollections.Stories.find({}, {sort: { order: 1 }}).fetch();
     return {
       displaySubmitForm: Meteor.userId() ? true : false,
@@ -82,7 +78,7 @@ var StoryList = ReactMeteor.createClass({
 
   render: function() {
 
-    if (this.state.displaySubmitForm) {
+    if (this.data.displaySubmitForm) {
       var form = <form className="main form" onSubmit={this.submitNewStory}>
         <div className="form-group">
           <label className="control-label" htmlFor="title">タイトル</label>
@@ -99,9 +95,15 @@ var StoryList = ReactMeteor.createClass({
     // JSXテンプレートでSortableする方法（実装途中）
     return <div className="StoryList">
           { form }
-          <SortableStories items={ this.state.stories } meteorUserExist={this.state.displaySubmitForm} />
+          <SortableStories items={ this.data.stories } meteorUserExist={this.data.displaySubmitForm} />
         </div>
 
   }
 
+});
+
+Template.storiesList.helpers({
+  StoryList() {
+    return StoryList;
+  }
 });

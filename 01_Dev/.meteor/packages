@@ -19,7 +19,11 @@ meteorhacks:npm
 
 
 npm-container
-reactjs:react
 rubaxa:sortable
 particle4dev:rsvpjs
 stevezhu:lodash
+react
+react-template-helper
+react-runtime
+jsx
+react-meteor-data

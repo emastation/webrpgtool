@@ -11,7 +11,8 @@ declare var MongoCollections:any;
 declare var Router:any;
 
 Template.mapEdit.helpers({
-  heightTileDivStyleStrArray: _.isUndefined(window.MapManager) ? null : window.MapManager.getHeightCssOffsetStrArray()
+  heightTileDivStyleStrArray: _.isUndefined(window.MapManager) ? null : window.MapManager.getHeightCssOffsetStrArray(),
+
 });
 
 Template.mapEdit.rendered = function() {

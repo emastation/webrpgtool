@@ -26,7 +26,8 @@ var SortableStoryScenes = React.createClass({
   }
 });
 
-var StoryPage = ReactMeteor.createClass({
+var StoryPage = React.createClass({
+  mixins: [ReactMeteorData],
   templateName: "storyPage",
 
   getInitialState: function() {
@@ -35,15 +36,12 @@ var StoryPage = ReactMeteor.createClass({
       newSceneName: ''
     };
   },
-  startMeteorSubscriptions: function() {
-    Meteor.subscribe("storyScenes");
-  },
 
   goBackToStoryList: function() {
     Router.go('storiesList');
   },
 
-  getMeteorState: function() {
+  getMeteorData: function() {
     var storyId = Router.current().params._id;
 
     var storyScenes = MongoCollections.StoryScenes.find({storyId:storyId}, {sort: { order: 1 }}).fetch();
@@ -86,7 +84,7 @@ var StoryPage = ReactMeteor.createClass({
 
   render: function() {
 
-    if (this.state.displaySubmitForm) {
+    if (this.data.displaySubmitForm) {
       var form = <form className="main form" onSubmit={this.submitNewItem}>
         <div className="form-group">
           <label className="control-label" htmlFor="title">シーンの新規作成</label>
@@ -103,9 +101,15 @@ var StoryPage = ReactMeteor.createClass({
     return <div className="StoryPage">
       { form }
       <p><a href="#" onClick={this.goBackToStoryList}>ストーリーリストに戻る</a></p>
-      <SortableStoryScenes storyScenes={ this.state.storyScenes } meteorUserExist={this.state.displaySubmitForm} />
+      <SortableStoryScenes storyScenes={ this.data.storyScenes } meteorUserExist={this.data.displaySubmitForm} />
     </div>;
 
   }
 
+});
+
+Template.storyPage.helpers({
+  StoryPage() {
+    return StoryPage;
+  }
 });

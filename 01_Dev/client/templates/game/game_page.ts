@@ -71,3 +71,5 @@ Template.gamePage.rendered = function() {
 //  $('#tmlibCanvas').contextMenu(menu);
   $('body').contextMenu(menu,{triggerOn:'contextmenu'});
 };
+
+

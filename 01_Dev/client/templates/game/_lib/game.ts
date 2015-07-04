@@ -2,6 +2,13 @@ declare var MongoCollections:any;
 
 interface Window {
   MainScene: any;
+  height: any;
+  createEvent:any;
+}
+
+interface Document {
+  width: number;
+  height: number;
 }
 
 module WrtGame {
@@ -25,6 +32,10 @@ module WrtGame {
       this.initTmlib();
       this.initUserFunctions();
 
+      var e = document.createEvent('UIEvents')
+      // type, canBubble, cancelable, view, detail
+      e.initUIEvent('resize', true, true, window, 0)
+      window.dispatchEvent(e);
     }
 
     private initEvents() {
@@ -80,15 +91,28 @@ module WrtGame {
 //      var map = new WrtGame.FlatMap(scene, data.map, data.mapTextures.fetch());
       var map = new WrtGame.PolygonMap(scene, data.map, data.mapTextures.fetch());
 
+      var aspect = canvas.width / canvas.height;
+
       // Windowのリサイズ対応
-      window.addEventListener("resize", function() {
+      window.addEventListener("resize", function(e) {
+        var windowAspect = $(e.target).width() / $(e.target).height();
+
+        if (windowAspect > aspect) {
+          $(canvas).css('width', $(e.target).height() * aspect);
+          $(canvas).css('height', $(e.target).height());
+        } else {
+          $(canvas).css('width', $(e.target).width());
+          $(canvas).css('height', $(e.target).width() * 1/aspect);
+        }
         engine.resize();
+
       });
 
       // 描画ループ定義
       engine.runRenderLoop(()=> {
         this.runRenderLoop(mapMovement, map, scene, camera);
       });
+
     }
 
     private initTmlib() {
@@ -111,6 +135,7 @@ module WrtGame {
         // リサイズ
         app.resize(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
         // ウィンドウにフィットさせる
+//        app.fitWindow();
 
         // ローダーで画像を読み込む
         var loading = tm.game.LoadingScene({
@@ -130,6 +155,34 @@ module WrtGame {
 
         // 実行
         app.run();
+
+        var aspect = Game.SCREEN_WIDTH / Game.SCREEN_HEIGHT;
+
+        window.addEventListener("resize", function(e) {
+          var windowAspect = $(e.target).width() / $(e.target).height();
+
+          if (windowAspect > aspect) {
+            var newWidth:number = $(e.target).height() * aspect;
+            var newHeight:number = <number>$(e.target).height();
+          } else {
+            var newWidth:number = <number>$(e.target).width();
+            var newHeight:number = $(e.target).width() * 1/aspect;
+          }
+
+          var scale = newWidth / Game.SCREEN_WIDTH;
+
+          var translateX = Game.SCREEN_WIDTH * (1-scale) / 2;
+
+          var translateY = Game.SCREEN_HEIGHT * (1-scale) / 2;
+
+          var value =
+              'translateX(' + -translateX + 'px) ' +
+              'translateY(' + -translateY + 'px)' +
+              'scale(' + scale + ', ' + scale + ') ';
+          $('#tmlibCanvas').css('transform', value);
+          $('#game-ui-body').css('transform', value);
+          
+        });
       });
 
 

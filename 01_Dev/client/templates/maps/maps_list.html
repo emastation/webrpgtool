@@ -1,12 +1,19 @@
 <template name="mapsList">
-  <div class="mapSubmit">
-    {{#if currentUser}}
-      {{> mapSubmit}}
-    {{/if}}
-  </div>
-  <div class="maps">
-    {{#each maps}}
-      {{> mapItem}}
-    {{/each}}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="mapSubmit">
+        {{#if currentUser}}
+          {{> mapSubmit}}
+        {{/if}}
+      </div>
+      <div class="maps">
+        {{#each maps}}
+          {{> mapItem}}
+        {{/each}}
+      </div>
+    </div>
+    <div class="timeline col-md-4">
+      <iframe src="http://channelz.meteor.com/embed/timeline?world=webrpgtool" frameborder="0"></iframe>
+    </div>
   </div>
 </template>

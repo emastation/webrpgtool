@@ -7,7 +7,6 @@ meteor-platform
 fourseven:scss
 iron:router
 sacha:spin
-accounts-password
 audit-argument-checks
 meteortypescript:typescript-libs@1.0.15
 meteortypescript:compiler@2.0.8
@@ -28,3 +27,5 @@ react-meteor-data
 semantic:ui
 flemay:less-autoprefixer
 useraccounts:semantic-ui
+accounts-password
+accounts-ui

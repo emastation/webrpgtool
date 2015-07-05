@@ -1,10 +1,5 @@
-var GameUi = ReactMeteor.createClass({
-  templateName: "gameUi",
-
-  startMeteorSubscriptions: function() {
-    Meteor.subscribe("uiScreens");
-    Meteor.subscribe("uiTables");
-  },
+var GameUi = React.createClass({
+  mixins: [ReactMeteorData],
 
   getInitialState: function() {
     return {
@@ -12,7 +7,7 @@ var GameUi = ReactMeteor.createClass({
     };
   },
 
-  getMeteorState: function() {
+  getMeteorData: function() {
     var uiTables = [];
     var currentUiScreen = MongoCollections.UiStatuses.findOne({type: 'CurrentUiScreen'});
     var uiScreen = MongoCollections.UiScreens.findOne({identifier: currentUiScreen.value});
@@ -34,13 +29,13 @@ var GameUi = ReactMeteor.createClass({
 
   render: function() {
 
-    if (_.isUndefined(this.state.uiScreen)) {
+    if (_.isUndefined(this.data.uiScreen)) {
       var uiScreen = {};
     } else {
-      var uiScreen = <UiScreen uiScreen={this.state.uiScreen}
-                               uiTables={this.state.uiTables}
-                               uiOperation={this.state.uiOperation}
-                               uiTableOperation={this.state.uiTableOperation} />;
+      var uiScreen = <UiScreen uiScreen={this.data.uiScreen}
+                               uiTables={this.data.uiTables}
+                               uiOperation={this.data.uiOperation}
+                               uiTableOperation={this.data.uiTableOperation} />;
     }
 
     return <div id="game-ui-body">
@@ -49,4 +44,10 @@ var GameUi = ReactMeteor.createClass({
 
   }
 
+});
+
+Template.gamePage.helpers({
+  GameUi() {
+    return GameUi;
+  }
 });

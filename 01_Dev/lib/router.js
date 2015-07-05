@@ -55,7 +55,11 @@ Router.route('/codes/submit', {name: 'codeSubmit'});
 Router.route('/codes/:_id/edit', {
   name: 'codeEdit',
   waitOn: function() {
-    return Meteor.subscribe('codes');
+    return [
+      Meteor.subscribe('codes'),
+      Meteor.subscribe("uiScreens"),
+      Meteor.subscribe("uiTables")
+    ];
   },
   data: function() {
     return {
@@ -75,8 +79,11 @@ Router.route('/game/:_id', {
       Meteor.subscribe('storyScenes'),
       Meteor.subscribe('storyItems'),
       Meteor.subscribe('sentences'),
+      Meteor.subscribe("characters"),
       Meteor.subscribe('characterImages'),
-      Meteor.subscribe('codes')
+      Meteor.subscribe('codes'),
+      Meteor.subscribe("uiScreens"),
+      Meteor.subscribe("uiTables")
     ];
   },
   data: function() {
@@ -89,15 +96,34 @@ Router.route('/game/:_id', {
 });
 
 Router.route('/stories', {
-  name: 'storiesList'
+  name: 'storiesList',
+  waitOn: function() {
+    return [
+      Meteor.subscribe("stories")
+    ];
+  }
 });
 
 Router.route('/story/:_id', {
-  name: 'storyPage'
+  name: 'storyPage',
+  waitOn: function() {
+    return [
+      Meteor.subscribe("storyScenes")
+    ];
+  }
 });
 
 Router.route('/story/:_id/scene/:_id2', {
-  name: 'storyScenePage'
+  name: 'storyScenePage',
+  waitOn: function() {
+    return [
+      Meteor.subscribe("storyScenes"), // goBackToSceneListのためだけ
+      Meteor.subscribe("storyItems"),
+      Meteor.subscribe("sentences"),
+      Meteor.subscribe("characters"),
+      Meteor.subscribe("characterImages")
+    ];
+  }
 });
 
 var requireLogin = function() {

@@ -27,7 +27,8 @@ var SortableStoryItems = React.createClass({
 });
 
 
-var StoryScenePage = ReactMeteor.createClass({
+var StoryScenePage = React.createClass({
+  mixins: [ReactMeteorData],
   templateName: "storyScenePage",
 
   getInitialState: function() {
@@ -39,21 +40,13 @@ var StoryScenePage = ReactMeteor.createClass({
     };
   },
 
-  startMeteorSubscriptions: function() {
-    Meteor.subscribe("storyScenes"); // goBackToSceneListのためだけ
-    Meteor.subscribe("storyItems");
-    Meteor.subscribe("sentences");
-    Meteor.subscribe("characters");
-    Meteor.subscribe("characterImages");
-  },
-
   goBackToSceneList: function() {
     var storyId = Router.current().params._id;
 
     Router.go('storyPage', {_id: storyId});
   },
 
-  getMeteorState: function() {
+  getMeteorData: function() {
     var sceneId = Router.current().params._id2;
 
     var storyItems = MongoCollections.StoryItems.find({sceneId:sceneId}, {sort: { order: 1 }}).fetch();
@@ -73,22 +66,27 @@ var StoryScenePage = ReactMeteor.createClass({
     var characters = MongoCollections.Characters.find({useForNovel: true}).fetch();
     var characterImages = MongoCollections.CharacterImages.find().fetch();
     if (characters.length > 0 && characterImages.length > 0) {
-      if (this.state.selectedCharacterId === null) {
+      if (_.isUndefined(this.data.selectedCharacterId)) {
         var characterId = characters[0]._id;
-      } else {
+      } else if (this.state.selectedCharacterId !== null) {
         var characterId = this.state.selectedCharacterId;
+      } else {
+        var characterId = this.data.selectedCharacterId;
       }
       characterImages = MongoCollections.CharacterImages.find({characterId: characterId}).fetch();
-      if (this.state.selectedCharacterImageId === null) {
+      if (_.isUndefined(this.data.selectedCharacterImageId)) {
         var characterImageId = characterImages[0]._id;
-      } else {
+      } else if (this.state.selectedCharacterImageId !== null) {
         var characterImageId = this.state.selectedCharacterImageId;
+      } else {
+        var characterImageId = this.data.selectedCharacterImageId;
       }
 
     } else {
       var characterId = null;
       var characterImageId = null;
     }
+
     return {
       displaySubmitForm: Meteor.userId() ? true : false,
       storyItems: storyItems,
@@ -124,8 +122,8 @@ var StoryScenePage = ReactMeteor.createClass({
       sceneId: sceneId,
       comment: "This is a sentence.",
       text: this.state.newText,
-      characterId: this.state.selectedCharacterId,
-      characterImageId: this.state.selectedCharacterImageId
+      characterId: (this.state.selectedCharacterId !== null) ? this.state.selectedCharacterId : this.data.selectedCharacterId,
+      characterImageId: (this.state.selectedCharacterImageId !== null) ? this.state.selectedCharacterImageId : this.data.selectedCharacterImageId,
     };
 
     var that = this;
@@ -141,22 +139,22 @@ var StoryScenePage = ReactMeteor.createClass({
   },
 
   render: function() {
-    var characterOptions = this.state.characters.map(function(character) {
+    var characterOptions = this.data.characters.map(function(character) {
       return <option value={character._id} key={character._id}>{character.name}</option>;
     });
-    var characterImageOptions = this.state.characterImages.map(function(characterImage) {
+    var characterImageOptions = this.data.characterImages.map(function(characterImage) {
       return <option value={characterImage._id} key={characterImage._id}>{characterImage.pose}</option>;
     });
 
-    if (this.state.displaySubmitForm) {
+    if (this.data.displaySubmitForm) {
       var form = <form className="main form" onSubmit={this.submitNewItem}>
         <div className="form-group">
           <label className="control-label" htmlFor="title">センテンス</label>
           <div className="controls">
-            <select value={this.state.selectedCharacterId} onChange={this.onChangeSelectCharacterId}>
+            <select value={this.data.selectedCharacterId} onChange={this.onChangeSelectCharacterId}>
               {characterOptions}
             </select>
-            <select value={this.state.selectedCharacterImageId} onChange={this.onChangeSelectCharacterImageId}>
+            <select value={this.data.selectedCharacterImageId} onChange={this.onChangeSelectCharacterImageId}>
               {characterImageOptions}
             </select>
             <textarea name="text" id="text" placeholder="Name your new sentence." className="form-control" onChange={this.newTextChange}>{this.state.newText}</textarea>
@@ -171,9 +169,15 @@ var StoryScenePage = ReactMeteor.createClass({
     return <div className="StoryPage">
       { form }
       <p><a href="#" onClick={this.goBackToSceneList}>シーンリストに戻る</a></p>
-      <SortableStoryItems sentences={ this.state.sentences } storyItems={ this.state.storyItems } meteorUserExist={this.state.displaySubmitForm} />
+      <SortableStoryItems sentences={ this.data.sentences } storyItems={ this.data.storyItems } meteorUserExist={this.data.displaySubmitForm} />
     </div>;
 
   }
 
+});
+
+Template.storyScenePage.helpers({
+  StoryScenePage() {
+    return StoryScenePage;
+  }
 });

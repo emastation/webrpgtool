@@ -1,4 +1,5 @@
-Sentence = ReactMeteor.createClass({
+Sentence = React.createClass({
+  mixins: [ReactMeteorData],
 
   getInitialState: function() {
     return {
@@ -8,26 +9,25 @@ Sentence = ReactMeteor.createClass({
     };
   },
 
-  startMeteorSubscriptions: function() {
-    Meteor.subscribe("characters");
-    Meteor.subscribe("characterImages");
-  },
-
-  getMeteorState: function() {
+  getMeteorData: function() {
 
     var characters = MongoCollections.Characters.find({useForNovel: true}).fetch();
     var characterImages = MongoCollections.CharacterImages.find().fetch();
     if (characters.length > 0 && characterImages.length > 0) {
-      if (this.state.selectedCharacterId === null) {
+      if (_.isUndefined(this.data.selectedCharacterId) || _.isNull(this.data.selectedCharacterId)) {
         var characterId = _.isUndefined(this.props.sentence) ? null : this.props.sentence.characterId;
+      } else if (this.state.selectedCharacterId !== null) {
+        var characterImageId = this.state.selectedCharacterId;
       } else {
-        var characterId = this.state.selectedCharacterId;
+        var characterId = this.data.selectedCharacterId;
       }
       characterImages = MongoCollections.CharacterImages.find({characterId: characterId}).fetch();
-      if (this.state.selectedCharacterImageId === null) {
+      if (_.isUndefined(this.data.selectedCharacterImageId) || _.isNull(this.data.selectedCharacterImageId)) {
         var characterImageId = _.isUndefined(this.props.sentence) ? null : this.props.sentence.characterImageId;
-      } else {
+      } else if (this.state.selectedCharacterImageId !== null) {
         var characterImageId = this.state.selectedCharacterImageId;
+      } else {
+        var characterImageId = this.data.selectedCharacterImageId;
       }
 
     } else {
@@ -136,10 +136,10 @@ Sentence = ReactMeteor.createClass({
   },
 
   render: function() {
-    var characterOptions = this.state.characters.map(function(character) {
+    var characterOptions = this.data.characters.map(function(character) {
       return <option value={character._id} key={character._id}>{character.name}</option>;
     });
-    var characterImageOptions = this.state.characterImages.map(function(characterImage) {
+    var characterImageOptions = this.data.characterImages.map(function(characterImage) {
       return <option value={characterImage._id} key={characterImage._id}>{characterImage.pose}</option>;
     });
 
@@ -161,13 +161,16 @@ Sentence = ReactMeteor.createClass({
     var sentenceId = _.isUndefined(this.props.sentence) ? '' : this.props.sentence._id;
     var contentEditable = this.state.editable && this.props.meteorUserExist;
 
+    var selectedCharacterId = (this.state.selectedCharacterId !== null) ? this.state.selectedCharacterId : this.data.selectedCharacterId;
+    var selectedCharacterImageId = (this.state.selectedCharacterImageId !== null) ? this.state.selectedCharacterImageId : this.data.selectedCharacterImageId;
+
     return <li data-id={this.props.storyItem._id} data-order={this.props.storyItem.order} className="sortable-item removable well well-sm">
       { sortableHandle }
       { plusButton }
-      <select value={this.state.selectedCharacterId} onChange={this.onChangeSelectCharacterId.bind(this, sentenceId)}>
+      <select value={selectedCharacterId} onChange={this.onChangeSelectCharacterId.bind(this, sentenceId)}>
         {characterOptions}
       </select>
-      <select value={this.state.selectedCharacterImageId} onChange={this.onChangeSelectCharacterImageId.bind(this, sentenceId)}>
+      <select value={selectedCharacterImageId} onChange={this.onChangeSelectCharacterImageId.bind(this, sentenceId)}>
         {characterImageOptions}
       </select>
       <span className="name" contentEditable={contentEditable}

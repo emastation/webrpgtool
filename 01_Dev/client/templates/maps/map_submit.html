@@ -1,12 +1,12 @@
 <template name="mapSubmit">
-  <form class="main form">
-    <div class="form-group">
-      <label class="control-label" for="title">タイトル</label>
-      <div class="controls">
-          <input name="title" id="title" type="text" value="" placeholder="Name your post" class="form-control"/>
+  <div class="ui segment">
+    <form id="map-form" class="ui form">
+      <div class="field">
+        <label>タイトル</label>
+        <input name="title" id="title" type="text" value="" placeholder="Name your post" kl_vkbd_parsed="true"/>
       </div>
-    </div>
-    <input type="submit" value="Submit" class="btn btn-primary"/>
-  </form>
+      <div id="map-submit" class="ui button" tabindex="0">追加</div>
+    </form>
+  </div>
 </template>
 

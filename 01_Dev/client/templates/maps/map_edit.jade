@@ -1,56 +1,56 @@
 template(name="mapEdit")
-  form(class="main form")
-    div(class="form-group row")
-      div(class="col-xs-4")
-        label(class="control-label" for="title") Title
-        div(class="controls")
-          input(name="title" id="title" type="text" value="#{map.title}" placeholder="Name your map" class="form-control")
-      div(class="col-xs-4")
-        label(class="control-label" for="width") 横幅
-        div(class="controls")
-          input(name="width" id="width" type="number" min="1" max="100" value="#{map.width}" placeholder="マップの横幅を入力してください" class="form-control")
-      div(class="col-xs-4")
-        label(class="control-label" for="height") 高さ
-        div(class="controls")
-          input(name="height" id="height" type="number" min="1" max="100" value="#{map.height}" placeholder="マップの高さを入力してください" class="form-control")
-    div(class="form-group")
-      label(class="control-label" for="type_array") タイルタイプ文字列
-      div(class="controls")
-        textarea(name="type_array" id="type_array" placeholder="Tile type text" class="form-control") #{map.type_array}
-    div(class="form-group")
-      label(class="control-label" for="height_array") タイル高さ文字列
-      div(class="controls")
-        textarea(name="height_array" id="height_array" placeholder="Tile height text" class="form-control") #{map.height_array}
-    input(type="submit" value="Submit" class="btn btn-primary submit")
-    hr
-    a(class="btn btn-info rollback" href="#") Rollback map
-    input(id="reloadData" type="hidden")
-    a(class="btn btn-danger delete" href="#") Delete map
-    a(class="btn btn-info publish" href="#") Publish map
-    div
-      label テクスチャ
-      div(class="clearfix")
-        +each mapTextures
-          a(id="texture_#{name}" href="#")
-            div(data-mtid="#{mtId}" class="control-tile" style="background-image:url(#{tooltex_url});")
-    div
-      label タイルタイプ
-      div(class="clearfix")
-        +each mapTileTypes
-          a(id="tiletype_#{name}" href="#")
-            div(data-mttid="#{mttId}" class="control-tile" style="background-image:url(#{image_url});")
-    div
-      label 床の高さ
-      div(class="clearfix")
-        +each heightTileDivStyleStrArray
-          a(id="floorheight_#{hid}" href="#")
-            div(data-hid="#{hid}" class="control-tile-half" style="#{offset}")
-    div
-      label 天井の高さ
-      div(class="clearfix")
-        +each heightTileDivStyleStrArray
-          a(id="ceilingheight_#{hid}" href="#")
-            div(data-hid="#{hid}" class="control-tile-half" style="#{offset}")
+  form(id="map-data-form" class="ui form")
+    div(class="ui grid")
+      div(class="eight wide column")
+        div(class="fields")
+          div(class="field")
+            label Title
+            input(name="title" id="title" type="text" value="#{map.title}" placeholder="Name your map" kl_vkbd_parsed="true")
+          div(class="field")
+            label 横幅
+            input(name="width" id="width" type="number" min="1" max="100" value="#{map.width}" placeholder="マップの横幅を入力してください" kl_vkbd_parsed="true")
+          div(class="field")
+            label 高さ
+            input(name="height" id="height" type="number" min="1" max="100" value="#{map.height}" placeholder="マップの高さを入力してください" kl_vkbd_parsed="true")
+        div(class="fields")
+          div(class="field")
+            label(class="control-label" for="type_array") タイルタイプ文字列
+            textarea(name="type_array" id="type_array" placeholder="Tile type text") #{map.type_array}
+          div(class="field")
+            label(class="control-label" for="height_array") タイル高さ文字列
+            textarea(name="height_array" id="height_array" placeholder="Tile height text") #{map.height_array}
+        div(id="map-data-submit" class="ui blue button") 登録
+        button(id="map-data-rollback" class="ui green button") 元に戻す
+        input(id="reloadData" type="hidden")
+        button(id="map-data-delete" class="ui red button") 削除する
+        button(id="map-data-publish" class="ui orange button") パブリッシュする
+      div(class="eight wide column")
+        div(class="fields")
+          div(class="field")
+            label テクスチャ
+            div(class="clearfix")
+              +each mapTextures
+                a(id="texture_#{name}" href="#")
+                  div(data-mtid="#{mtId}" class="control-tile" style="background-image:url(#{tooltex_url});")
+          div(class="field")
+            label タイルタイプ
+            div(class="clearfix")
+              +each mapTileTypes
+                a(id="tiletype_#{name}" href="#")
+                  div(data-mttid="#{mttId}" class="control-tile" style="background-image:url(#{image_url});")
+        div(class="fields")
+          div(class="field")
+            label 床の高さ
+            div(class="clearfix")
+              +each heightTileDivStyleStrArray
+                a(id="floorheight_#{hid}" href="#")
+                  div(data-hid="#{hid}" class="control-tile-half" style="#{offset}")
+          div(class="field")
+            label 天井の高さ
+            div(class="clearfix")
+              +each heightTileDivStyleStrArray
+                a(id="ceilingheight_#{hid}" href="#")
+                  div(data-hid="#{hid}" class="control-tile-half" style="#{offset}")
 
   //form end
   div(id="map-container")

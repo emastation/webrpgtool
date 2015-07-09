@@ -1,9 +1,8 @@
 Template.mapSubmit.events({
-  'submit form': function(e) {
-    e.preventDefault();
+  'click #map-submit': function() {
 
     var map = {
-      title: $(e.target).find('[name=title]').val(),
+      title: $('#map-form').find('[name=title]').val(),
       width: 5,
       height: 5,
       type_array:"1 N,1 W,1 N,1 W,1 W\n" +

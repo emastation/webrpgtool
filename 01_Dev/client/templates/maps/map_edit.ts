@@ -106,17 +106,17 @@ var updateSelectedClass = function(target) {
 };
 
 Template.mapEdit.events({
-  'submit form': function(e) {
+  'click #map-data-submit': function(e) {
     e.preventDefault();
 
     var currentMapId = this.map._id;
-
+    var target = $('#map-data-form');
     var mapProperties = {
-      title: $(e.target).find('[name=title]').val(),
-      width: parseInt($(e.target).find('[name=width]').val(), 10),
-      height: parseInt($(e.target).find('[name=height]').val(), 10),
-      type_array: $(e.target).find('[name=type_array]').val(),
-      height_array: $(e.target).find('[name=height_array]').val()
+      title: target.find('[name=title]').val(),
+      width: parseInt(target.find('[name=width]').val(), 10),
+      height: parseInt(target.find('[name=height]').val(), 10),
+      type_array: target.find('[name=type_array]').val(),
+      height_array: target.find('[name=height_array]').val()
     };
 
     MongoCollections.Maps.update(currentMapId, {$set: mapProperties}, function(error) {
@@ -129,7 +129,7 @@ Template.mapEdit.events({
     });
   },
 
-  'click .delete': function(e) {
+  'click #map-data-delete': function(e) {
     e.preventDefault();
 
     if (confirm("Delete this map?")) {
@@ -139,7 +139,7 @@ Template.mapEdit.events({
     }
   },
   
-  'click .rollback': function(e) {
+  'click #map-data-rollback': function(e) {
     e.preventDefault();
 
     var currentMapId = this.map._id;
@@ -217,7 +217,7 @@ Template.mapEdit.events({
     updateMap(currentMapId, map);
   },
 
-  'click .publish': function(e) {
+  'click #map-data-publish': function(e) {
     e.preventDefault();
 
     var currentMapId = this.map._id;

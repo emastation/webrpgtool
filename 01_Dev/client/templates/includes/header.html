@@ -1,26 +1,9 @@
 <template name="header">
-  <nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="{{pathFor 'mapsList'}}">WebRPGTool</a>
-      </div>
-      <div class="collapse navbar-collapse" id="navigation">
-        <ul class="nav navbar-nav">
-          <li><a href="{{pathFor 'codesList'}}">Codes</a></li>
-        </ul>
-        <ul class="nav navbar-nav">
-          <li><a href="{{pathFor 'storiesList'}}">Stories</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          {{> loginButtons}}
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <div class="ui four item menu">
+    <a class="active item" href="{{pathFor 'mapsList'}}">WebRPGTool</a>
+    <a class="item" href="{{pathFor 'codesList'}}">Codes</a>
+    <a class="item" href="{{pathFor 'storiesList'}}">Stories</a>
+    <a class="item">{{> loginButtons}}</a>
+  </div>
 </template>
+

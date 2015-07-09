@@ -79,15 +79,15 @@ var StoryList = React.createClass({
   render: function() {
 
     if (this.data.displaySubmitForm) {
-      var form = <form className="main form" onSubmit={this.submitNewStory}>
-        <div className="form-group">
-          <label className="control-label" htmlFor="title">タイトル</label>
-          <div className="controls">
-            <input name="title" id="title" type="text" value={this.state.newStoryTitle} placeholder="Name your new story's title." className="form-control" onChange={this.newStoryTitleChange}/>
+      var form = <div className="ui segment">
+        <form className="ui form" onSubmit={this.submitNewStory}>
+          <div className="field">
+            <label>タイトル</label>
+            <input name="title" id="title" type="text" value={this.state.newStoryTitle} placeholder="新しいストーリーのタイトルを入力してください。" onChange={this.newStoryTitleChange} kl_vkbd_parsed="true" />
           </div>
-        </div>
-        <input type="submit" value="Submit" className="btn btn-primary"/>
-      </form>;
+          <input type="submit" value="投稿  " className="ui submit button"/>
+        </form>
+      </div>;
     } else {
       var form = {}
     }

@@ -75,17 +75,17 @@ Story = React.createClass({
   render: function() {
 
     if (this.props.meteorUserExist) {
-      var sortableHandle = <i className="sortable-handle mdi-action-view-headline pull-left">=&nbsp;</i>;
-      var plusButton = <button type="button" className="plus" data-dismiss="alert" onClick={this.insertStory.bind(this, this.props.story._id)}>
-        <span aria-hidden="true">+</span><span className="sr-only">Plus</span>
+      var sortableHandle = <i className="sortable-handle mdi-action-view-headline">=&nbsp;</i>;
+      var plusButton = <button type="button" className="plus circular ui icon button" data-dismiss="alert" onClick={this.insertStory.bind(this, this.props.story._id)}>
+        <i className="plus icon"></i>
       </button>;
 
-      var closeButton = <button type="button" className="close" data-dismiss="alert" onClick={this.deleteStory.bind(this, this.props.story._id)}>
-        <span aria-hidden="true">&times;</span><span className="sr-only">Close</span>
+      var closeButton = <button type="button" className="close circular ui icon button" data-dismiss="alert" onClick={this.deleteStory.bind(this, this.props.story._id)}>
+        <i className="remove icon"></i>
       </button>;
 
-      var editButton =  <button type="button" className="edit pull-right" data-dismiss="alert" onClick={this.goToStoryPage.bind(this, this.props.story._id)}>
-        <span aria-hidden="true">Edit</span><span className="sr-only">Edit</span>
+      var editButton =  <button type="button" className="edit circular ui icon button" data-dismiss="alert" onClick={this.goToStoryPage.bind(this, this.props.story._id)}>
+        <i className="edit icon"></i>
       </button>;
     } else {
       var sortableHandle = {};
@@ -96,17 +96,21 @@ Story = React.createClass({
 
     var contentEditable = this.state.editable && this.props.meteorUserExist;
 
-    return <li data-id={this.props.story._id} data-order={this.props.story.order} className="sortable-item removable well well-sm">
-      { sortableHandle }
-      { plusButton }
-      <span className="name" contentEditable={contentEditable}
-            onClick={this.editableThisStory}
-            onBlur={this.completeEditing.bind(this, this.props.story._id)}
-            onKeyDown={this.completeEditing.bind(this, this.props.story._id)}
-          >{this.props.story.title}</span>
-      <span className="badge">{this.props.story.order}</span>
-      { editButton }
-      { closeButton }
-    </li>
+    return <li data-id={this.props.story._id} data-order={this.props.story.order} className="sortable-item removable ui grid segment">
+          <div className="two wide column">
+            { sortableHandle }
+            <span className="badge one wide column">{this.props.story.order}</span>
+            { plusButton }
+          </div>
+          <span className="name ten wide column" contentEditable={contentEditable}
+                onClick={this.editableThisStory}
+                onBlur={this.completeEditing.bind(this, this.props.story._id)}
+                onKeyDown={this.completeEditing.bind(this, this.props.story._id)}
+              >{this.props.story.title}</span>
+          <div className="two wide column">
+            { editButton }
+            { closeButton }
+          </div>
+        </li>;
   }
 });

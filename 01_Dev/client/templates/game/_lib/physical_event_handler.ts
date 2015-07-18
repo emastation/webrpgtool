@@ -57,20 +57,28 @@ module WrtGame {
     return keyProperty(allowedUiKeys);
   }
 
-  document.onkeydown = function (e){
-    // 矢印キーが押されている場合は
-    if ( 37 <= e.keyCode && e.keyCode <= 40 ) {
+  export function preventDefaultArrowKey() {
+    document.onkeydown = function (e){
+      // 矢印キーが押されている場合は
+      if ( 37 <= e.keyCode && e.keyCode <= 40 ) {
 
-      // キーボード操作をキャンセルする
-      if (e.preventDefault) {
-        // デフォルトの動作を無効化する
-        e.preventDefault();
-      } else {
-        // デフォルトの動作を無効化する（アタッチイベント利用時や、InternetExplorer 8 以前の場合）
-        e.keyCode = 0;
+        // キーボード操作をキャンセルする
+        if (e.preventDefault) {
+          // デフォルトの動作を無効化する
+          e.preventDefault();
+        } else {
+          // デフォルトの動作を無効化する（アタッチイベント利用時や、InternetExplorer 8 以前の場合）
+          e.keyCode = 0;
 
-        return false;
+          return false;
+        }
       }
+    };
+  }
+
+  export function enableDefaultArrowKey() {
+    document.onkeydown = function (e) {
+      return true;
     }
-  };
+  }
 }

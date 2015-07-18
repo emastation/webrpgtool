@@ -72,4 +72,10 @@ Template.gamePage.rendered = function() {
   $('body').contextMenu(menu,{triggerOn:'contextmenu'});
 };
 
+Template.gamePage.onCreated(function () {
+  WrtGame.preventDefaultArrowKey();
+});
 
+Template.gamePage.onDestroyed(function () {
+  WrtGame.enableDefaultArrowKey();
+});

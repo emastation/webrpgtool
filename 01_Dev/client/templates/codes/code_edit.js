@@ -2,8 +2,12 @@ Template.codeEdit.events({
   'submit form': function (e) {
     e.preventDefault();
 
-    var currentCodeId = this.code._id;
 
+    Meteor.call('excecuteJailedCode', {alert: console.log}, function(error, result) { // display the error to the user and abort
+
+    });
+
+      var currentCodeId = this.code._id;
     var code = MongoCollections.Codes.findOne(currentCodeId);
     if (!ownsDocument(Meteor.userId(), code)) {
       alert("今編集しようとしているコードは、あなたのコードではありません。送信をキャンセルします。");

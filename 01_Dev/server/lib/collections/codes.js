@@ -7,6 +7,7 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
       javascript: String
     });
 
+
     var typescriptSimpleAPI = Meteor.npmRequire('typescript-simple');
     codeAttributes.javascript = typescriptSimpleAPI(codeAttributes.typescript);
     console.log(codeAttributes.javascript);
@@ -55,5 +56,20 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
     return {
       _id: obj.codeId
     };
+  },
+
+  excecuteJailedCode: function (api) {
+    check(api, Object);
+
+    var jailed = Meteor.npmRequire('jailed');
+
+    var code = "application.remote.alert('Hello from the plugin!');";
+
+    var api = {
+      alert: console.log
+    };
+
+    var plugin = new jailed.DynamicPlugin(code, api);
+
   }
 });

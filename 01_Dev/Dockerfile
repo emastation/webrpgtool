@@ -14,6 +14,7 @@ RUN apt-get install -y build-essential
 RUN update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
 RUN npm install -g typescript@1.4.1
 RUN npm install -g typescript-simple
+RUN npm install -g jailed
 
 RUN curl https://install.meteor.com/ | sh
 

@@ -26,6 +26,6 @@ jsx
 react-meteor-data
 semantic:ui
 flemay:less-autoprefixer
-useraccounts:semantic-ui
 accounts-password
+aldeed:console-me
 accounts-ui

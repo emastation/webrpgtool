@@ -1,4 +1,5 @@
 {
   "typescript": "1.4.1",
-  "typescript-simple": "1.0.3"
+  "typescript-simple": "1.0.3",
+  "jailed": "0.2.0"
 }

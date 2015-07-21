@@ -147,21 +147,21 @@ var StoryScenePage = React.createClass({
     });
 
     if (this.data.displaySubmitForm) {
-      var form = <form className="main form" onSubmit={this.submitNewItem}>
-        <div className="form-group">
-          <label className="control-label" htmlFor="title">センテンス</label>
-          <div className="controls">
+      var form = <div className="ui segment">
+        <form className="ui form" onSubmit={this.submitNewItem}>
+          <div className="field">
+            <label>センテンス</label>
             <select value={this.data.selectedCharacterId} onChange={this.onChangeSelectCharacterId}>
               {characterOptions}
             </select>
             <select value={this.data.selectedCharacterImageId} onChange={this.onChangeSelectCharacterImageId}>
               {characterImageOptions}
             </select>
-            <textarea name="text" id="text" placeholder="Name your new sentence." className="form-control" onChange={this.newTextChange}>{this.state.newText}</textarea>
+            <textarea name="text" id="text" placeholder="Name your new sentence." onChange={this.newTextChange}>{this.state.newText}</textarea>
           </div>
-        </div>
-        <input type="submit" value="Submit" className="btn btn-primary"/>
-      </form>;
+          <input type="submit" value="Submit" className="ui submit button"/>
+        </form>
+      </div>;
     } else {
       var form = {}
     }

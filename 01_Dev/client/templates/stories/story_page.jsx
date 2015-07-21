@@ -85,15 +85,15 @@ var StoryPage = React.createClass({
   render: function() {
 
     if (this.data.displaySubmitForm) {
-      var form = <form className="main form" onSubmit={this.submitNewItem}>
-        <div className="form-group">
-          <label className="control-label" htmlFor="title">シーンの新規作成</label>
-          <div className="controls">
-            <input name="title" id="title" type="text" value={this.state.newSceneName} placeholder="新しいシーンの名前を入力してください。" className="form-control" onChange={this.newSceneNameChange}/>
+      var form = <div className="ui segment">
+        <form className="ui form" onSubmit={this.submitNewItem}>
+          <div className="field">
+            <label>シーンの新規作成</label>
+            <input name="title" id="title" type="text" value={this.state.newSceneName} placeholder="新しいシーンの名前を入力してください。" onChange={this.newSceneNameChange}/>
           </div>
-        </div>
-        <input type="submit" value="Submit" className="btn btn-primary"/>
-      </form>;
+          <input type="submit" value="Submit" className="ui submit button"/>
+        </form>
+      </div>;
     } else {
       var form = {}
     }

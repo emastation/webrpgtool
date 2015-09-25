@@ -60,10 +60,17 @@
           // display the error to the user
           alert(error.reason);
         } else {
-//          Router.go('mapPage', {_id: currentMapId});
           window.location = '#map/'+currentMapId;
         }
       });
+    }
+
+    deleteMap(e) {
+      e.preventDefault();
+
+      var currentMapId = opts.map._id;
+      MongoCollections.Maps.remove(currentMapId);
+      window.location = '#maps';
     }
   </script>
 </map-edit-main-form>

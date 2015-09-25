@@ -4,7 +4,7 @@
     <a class={item: true, active: isMaps} id="header-navlink-maps" href="#maps">マップ</a>
     <a class={item: true, active: isScripts} id="header-navlink-scripts" href="#">スクリプト</a>
     <a class={item: true, active: isStories} id="header-navlink-stories" href="#">ストーリー</a>
-    <a class="item"></a>
+    <div class="item" id="loginButtonsDiv"></div>
   </div>
 
   <script>
@@ -13,5 +13,18 @@
     this.isScripts = opts.page === 'scripts';
     this.isStories = opts.page === 'stories';
 
+    this.on('mount', ()=> {
+      var loginButtons = window.document.getElementById('loginButtonsDiv');
+      if(loginButtons) {
+        Blaze.render(Template.loginButtons, loginButtons);
+      }
+    });
   </script>
+
+  <style scoped>
+    #login-dropdown-list {
+        right: 0px !important;
+        left :auto;
+    }
+  </style>
 </site-header>

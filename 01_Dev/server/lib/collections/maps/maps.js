@@ -1,5 +1,5 @@
-Meteor.methods({ // クライアントから呼ばれるサーバーコード。クライアントからアクセス可能にするためにlib以下のファイルに定義する。
-  mapCreate: function(mapAttributes) {
+Meteor.methods({
+  createMap: function(mapAttributes) {
     check(Meteor.userId(), String);
     check(mapAttributes, {
       title: String,

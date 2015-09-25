@@ -39,7 +39,7 @@
         "0,0,0,0,0\n"
       };
 
-      Meteor.call('mapCreate', map, function(error, result) { // display the error to the user and abort
+      Meteor.call('createMap', map, function(error, result) { // display the error to the user and abort
         if (error)
           return alert(error.reason);
 
@@ -47,7 +47,7 @@
         if (result.mapExists)
           alert('This title has already been posted');
 
-        Router.go('mapEdit', {_id: result._id});
+        this.title.value = ''
       });
 
     }

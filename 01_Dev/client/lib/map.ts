@@ -98,6 +98,9 @@ class MapManager {
 
             case MapLayer.SCRIPT:
               layerId = MapLayer.SCRIPT;
+              if (that.currentTileIndex !== 0 && that.currentTileScriptName === '0') {
+                return;
+              }
               mapData[that.mapName].layers[layerId].data[cellX+mapWidth*cellY] = that.currentTileIndex;
               cellStr = that.currentTileScriptName;
               that.modifyMap(cellX, cellY, cellStr, 'script');

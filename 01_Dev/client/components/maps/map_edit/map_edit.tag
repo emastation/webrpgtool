@@ -4,7 +4,7 @@
     <map-edit-manipulate-panel map={map} map_textures={mapTextures} map_tile_types={mapTileTypes}
                             height_tile_div_style_str_array={heightTileDivStyleStrArray}></map-edit-manipulate-panel>
     <div class="eight wide column"></div>
-    <map-edit-script-panel codes={this.data.codes}></map-edit-script-panel>
+    <map-edit-script-panel codes={codes}></map-edit-script-panel>
   </div>
   <div id="map-container">
     <canvas id="world" />
@@ -30,6 +30,11 @@
 
     this.getMapTileTypes = ()=> {
       this.mapTileTypes = MongoCollections.MapTileTypes.find().fetch();
+      this.update();
+    }
+
+    this.getCodes = ()=> {
+      this.codes = MongoCollections.Codes.find().fetch();
       this.update();
     }
 
@@ -114,13 +119,18 @@
           this.getMapTileTypes();
         }
       });
-
+      Meteor.subscribe('codes', {
+        onReady: ()=>{
+          this.getCodes();
+        }
+      });
     });
 
     this.on('update', ()=>{
       this.getMap();
       this.getMapTextures();
       this.getMapTileTypes();
+      this.getCodes();
     });
 
   </script>

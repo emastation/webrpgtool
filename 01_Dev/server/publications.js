@@ -9,3 +9,7 @@ Meteor.publish('map_textures', function() {
 Meteor.publish('map_tile_types', function() {
   return MongoCollections.MapTileTypes.find();
 });
+
+Meteor.publish('codes', function() {
+  return MongoCollections.Codes.find();
+});

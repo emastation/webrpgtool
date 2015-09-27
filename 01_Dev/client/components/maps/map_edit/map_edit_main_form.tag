@@ -80,10 +80,26 @@
       this.script_array.value = map.script_array
     }
 
+    resetMap(e) {
+      e.preventDefault();
+
+      this.title.value = opts.map.title;
+      this.width.value = opts.map.width;
+      this.height.value = opts.map.height;
+      this.type_array.value = opts.map.type_array;
+      this.height_array.value = opts.map.height_array;
+      this.script_array.value = opts.map.script_array;
+
+      WRT.map.mapManager.setMap(opts.map);
+      WRT.map.mapManager.reloadMap();
+
+      // 赤い四角の選択を、テクスチャ０番目に戻す
+      mapEditUpdateSelectedClass($("a[id^='texture_']>div").get(0));
+    }
+
     this.on('updated', ()=>{
       if (!_.isUndefined(WRT.map.mapManager) && _.isNull(WRT.map.mapManager.callbackOnChangeMap)) {
         WRT.map.mapManager.callbackOnChangeMap = this.reloadCurrentMapDataFromMapManager;
-        texture_0_elem = $("a[id^='texture_']>div").get(0);
       }
     });
 

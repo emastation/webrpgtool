@@ -20,7 +20,7 @@
       <div class="field">
         <label>床の高さ</label>
         <div class="clearfix">
-          { this.props.heightTileDivStyleStrArray.map(this.renderFloorHeightTileDivStyleStrArray) }
+          <height-tile-div-style-str-array each={opts.height_tile_div_style_str_array} model={this} floor_or_ceiling="floor"/>
         </div>
       </div>
     </div>
@@ -28,13 +28,9 @@
       <div class="field">
         <label>天井の高さ</label>
         <div class="clearfix">
-          { this.props.heightTileDivStyleStrArray.map(this.renderCeilingHeightTileDivStyleStrArray) }
+          <height-tile-div-style-str-array each={opts.height_tile_div_style_str_array} model={this} floor_or_ceiling="ceiling"/>
         </div>
       </div>
     </div>
   </div>
-
-  <script>
-
-  </script>
 </map-edit-manipulate-panel>

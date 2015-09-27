@@ -72,5 +72,20 @@
       MongoCollections.Maps.remove(currentMapId);
       window.location = '#maps';
     }
+
+    reloadCurrentMapDataFromMapManager() {
+      var map = WRT.map.mapManager.getMap();
+      this.type_array.value = map.type_array,
+      this.height_array.value = map.height_array,
+      this.script_array.value = map.script_array
+    }
+
+    this.on('updated', ()=>{
+      if (!_.isUndefined(WRT.map.mapManager) && _.isNull(WRT.map.mapManager.callbackOnChangeMap)) {
+        WRT.map.mapManager.callbackOnChangeMap = this.reloadCurrentMapDataFromMapManager;
+        texture_0_elem = $("a[id^='texture_']>div").get(0);
+      }
+    });
+
   </script>
 </map-edit-main-form>

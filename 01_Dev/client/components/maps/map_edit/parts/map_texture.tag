@@ -6,9 +6,24 @@
     </div>
   </a>
 
-  <script>
 
+  <script>
+    this.on('mount', ()=>{
+      setTimeout(function(){
+        $($("a[id^='texture_']>div").get(0)).addClass('selected'); // select texture of index 0 at first
+      }, 0)
+    });
+
+    selectMapTexture(e) {
+      e.preventDefault();
+
+      WRT.map.mapManager.switchMapLayer(0);
+      WRT.map.mapManager.setCurrentTileIndex($(e.target).data('mtid'));
+
+      mapEditUpdateSelectedClass(e.target);
+    }
   </script>
+
 
   <style scoped>
     .control-tile {

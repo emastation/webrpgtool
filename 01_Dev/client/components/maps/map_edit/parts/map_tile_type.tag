@@ -6,6 +6,17 @@
     </div>
   </a>
 
+  <script>
+    selectMapTileType(e) {
+      e.preventDefault();
+
+      WRT.map.mapManager.switchMapLayer(1);
+      WRT.map.mapManager.setCurrentTileIndex($(e.target).data('mttid'));
+
+      mapEditUpdateSelectedClass(e.target);
+    }
+  </script>
+
   <style scoped>
     .control-tile {
       float: left;

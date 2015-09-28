@@ -18,9 +18,9 @@
     </p>
     <p><br />
       submitted by {opts.map.author}&nbsp;
-      <a href="javascript:void(0)" onclick={goToGamePage.bind(opts.map._id)}>ゲームプレイ</a>&nbsp;
+      <a href="#game/{opts.map._id}">ゲームプレイ</a>&nbsp;
       <a href="#map/{opts.map._id}/edit" if={isLogin} onclick={goToMapEdit}>編集&nbsp;</a>
-      <a href="#map/{opts.map._id}" onclick={goToMapPage(opts.map._id)} class="discuss btn btn-default">詳細</a>
+      <a href="#map/{opts.map._id}" class="discuss btn btn-default">詳細</a>
     </p>
   </div>
 

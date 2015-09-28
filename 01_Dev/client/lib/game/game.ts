@@ -35,7 +35,7 @@ module WrtGame {
       novelPlayer.init();
 
       var mapMovement = this.initEvents();
-      this.initTmlib(()=>{
+//      this.initTmlib(()=>{
         this.initBabylon(data, mapMovement);
         this.initUserFunctions();
 
@@ -43,7 +43,7 @@ module WrtGame {
         // type, canBubble, cancelable, view, detail
         e.initUIEvent('resize', true, true, window, 0)
         window.dispatchEvent(e);
-      });
+//      });
     }
 
     private initEvents() {
@@ -97,7 +97,7 @@ module WrtGame {
         light.position = camera.position;
       });
 //      var map = new WrtGame.FlatMap(scene, data.map, data.mapTextures.fetch());
-      var map = new WrtGame.PolygonMap(scene, data.map, data.mapTextures.fetch());
+      var map = new WrtGame.PolygonMap(scene, data.map, data.mapTextures);
 
       var aspect = canvas.width / canvas.height;
 

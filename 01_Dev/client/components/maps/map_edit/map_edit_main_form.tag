@@ -48,8 +48,8 @@
       var currentMapId = opts.map._id;
       var mapProperties = {
         title: this.title.value,
-        width: this.width.value,
-        height: this.height.value,
+        width: parseInt(this.width.value),
+        height: parseInt(this.height.value),
         type_array: this.type_array.value,
         height_array: this.height_array.value,
         script_array: this.script_array.value

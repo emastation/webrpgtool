@@ -4,6 +4,7 @@
     <route path="maps"><site-header page="maps" /></route>
     <route path="map/:map_id"><site-header page="maps" /></route>
     <route path="map/:map_id/edit"><site-header page="maps" /></route>
+    <route path="codes"><site-header page="codes" /></route>
     <route path="game/:map_id"><site-header /></route>
   </router>
   <router>
@@ -11,6 +12,7 @@
     <route path="maps"><maps-top></maps-top></route>
     <route path="map/:map_id"><map-page opts={parent.parent.mapFunc} /></route>
     <route path="map/:map_id/edit"><map-edit opts={parent.parent.mapFunc} /></route>
+    <route path="codes"><codes-top opts={parent.parent.mapFunc} /></route>
     <route path="game/:map_id"><game opts={parent.parent.mapFunc} /></route>
   </router>
   <script>

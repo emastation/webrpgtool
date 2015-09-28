@@ -4,6 +4,7 @@
       <input type="submit" value="新規投稿" class="ui submit button"/>
     </form>
   </div>
+  <codes-list />
 
 
 </codes-top>

@@ -1,5 +1,5 @@
 Meteor.methods({ // クライアントから呼ばれるサーバーコード。クライアントからアクセス可能にするためにlib以下のファイルに定義する。
-  codeCreate: function (codeAttributes) {
+  createCode: function (codeAttributes) {
     check(Meteor.userId(), String);
     check(codeAttributes, {
       name: String,
@@ -29,7 +29,7 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
       _id: codeId
     };
   },
-  codeUpdate: function (obj) {
+  updateCode: function (obj) {
     check(Meteor.userId(), String);
     check(obj, Object);
     check(obj.codeAttributes, {
@@ -50,7 +50,7 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
     };
   },
 
-  codeDelete: function (idToDelete) {
+  deleteCode: function (idToDelete) {
     check(Meteor.userId(), String);
     check(idToDelete, String);
 

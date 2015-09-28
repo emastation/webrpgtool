@@ -3,7 +3,15 @@
     <p>{opts.code.name}　（識別子：{opts.code.identifier}）</p>
     <p>JavaScript</p>
     <p class="ui segment">{opts.code.javascript}</p>
-    <p><a href="#" class="ui button" onclick={this.goToEditPage.bind(this, this.props.code._id)}>編集</a>
-      <a href="#" class="ui button" onclick={this.deleteCode.bind(this, this.props.code._id)}>削除</a></p>
+    <p><a href="#code/{opts.code._id}/edit" class="ui button">編集</a>
+      <a href="#" class="ui button" onclick={deleteCode.bind(this, opts.code._id)}>削除</a></p>
   </div>
+
+  <script>
+    deleteCode(id) {
+      if (confirm("Delete this code?")) {
+        Meteor.call('deleteCode', id);
+      }
+    }
+  </script>
 </code-item>

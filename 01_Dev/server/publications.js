@@ -13,3 +13,11 @@ Meteor.publish('map_tile_types', function() {
 Meteor.publish('codes', function() {
   return MongoCollections.Codes.find();
 });
+
+Meteor.publish('uiScreens', function() {
+  return MongoCollections.UiScreens.find();
+});
+
+Meteor.publish('uiTables', function() {
+  return MongoCollections.UiTables.find();
+});

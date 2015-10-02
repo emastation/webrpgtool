@@ -3,7 +3,7 @@ declare var MongoCollections:any;
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
   /**
-   *  マップ上の移動を処理するクラス
+   *  UI Operation Class
    */
   export class UiOperation {
     private static _instance:UiOperation;

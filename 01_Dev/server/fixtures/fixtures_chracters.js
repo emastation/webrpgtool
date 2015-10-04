@@ -181,4 +181,103 @@ if (Characters.find().count() === 0) {
 
 }
 
+
+var Stories = MongoCollections.Stories;
+var storyIds = [];
+if (Stories.find().count() === 0) {
+  [
+    {title: 'Story_1'},
+    {title: 'Story_2'},
+    {title: 'Story_3'},
+    {title: 'Story_4'}
+  ].forEach(function (attribute, i) {
+        storyIds.push(Stories.insert({
+          title: attribute.title,
+          order: i
+        }));
+      }
+  );
+
+  // Story_1
+  var StoryScenes = MongoCollections.StoryScenes;
+  var sceneOfStory_1 = StoryScenes.insert({storyId: storyIds[0], name: 'シーン１', order: 0});
+  var sentence1_OfSceneOfStory_1 = {
+    sceneId: sceneOfStory_1,
+    comment: "This is a sentence.",
+    text: 'Story_1だよ！',
+    characterId: mika,
+    characterImageId: mikaImages[0],
+    position: 'RightEdge'
+  };
+  var sentence2_OfSceneOfStory_1 = {
+    sceneId: sceneOfStory_1,
+    comment: "This is a sentence.",
+    text: 'そんなこといわれても…',
+    characterId: ran,
+    characterImageId: ranImages[1],
+    position: 'LeftEdge'
+  };
+  var sentence3_OfSceneOfStory_1 = {
+    sceneId: sceneOfStory_1,
+    comment: "This is a sentence.",
+    text: '焦ってもしょうがないですわ',
+    characterId: ayumi,
+    characterImageId: ayumiImages[2],
+    position: 'Center'
+  };
+  var sentence4_OfSceneOfStory_1 = {
+    sceneId: sceneOfStory_1,
+    comment: "This is a sentence.",
+    text: 'そうだよ。ここはボクにまかせて',
+    characterId: tsubasa,
+    characterImageId: tsubasaImages[3],
+    position: 'LeftEdge'
+  };
+  Meteor.call("sentencePush", sentence1_OfSceneOfStory_1);
+  Meteor.call("sentencePush", sentence2_OfSceneOfStory_1);
+  Meteor.call("sentencePush", sentence3_OfSceneOfStory_1);
+  Meteor.call("sentencePush", sentence4_OfSceneOfStory_1);
+
+  // Story_2
+  var StoryScenes = MongoCollections.StoryScenes;
+  var sceneOfStory_2 = StoryScenes.insert({storyId: storyIds[1], name: 'シーン１', order: 0});
+  var sentence1_OfSceneOfStory_2 = {
+    sceneId: sceneOfStory_2,
+    comment: "This is a sentence.",
+    text: 'Story_2だよ！',
+    characterId: mika,
+    characterImageId: mikaImages[0],
+    position: 'RightEdge'
+  };
+  var sentence2_OfSceneOfStory_2 = {
+    sceneId: sceneOfStory_2,
+    comment: "This is a sentence.",
+    text: 'そんなこといわれても…',
+    characterId: ran,
+    characterImageId: ranImages[1],
+    position: 'LeftEdge'
+  };
+  var sentence3_OfSceneOfStory_2 = {
+    sceneId: sceneOfStory_2,
+    comment: "This is a sentence.",
+    text: '焦ってもしょうがないですわ',
+    characterId: ayumi,
+    characterImageId: ayumiImages[2],
+    position: 'Center'
+  };
+  var sentence4_OfSceneOfStory_2 = {
+    sceneId: sceneOfStory_2,
+    comment: "This is a sentence.",
+    text: 'そうだよ。ここはボクにまかせて',
+    characterId: tsubasa,
+    characterImageId: tsubasaImages[3],
+    position: 'LeftEdge'
+  };
+  Meteor.call("sentencePush", sentence1_OfSceneOfStory_2);
+  Meteor.call("sentencePush", sentence2_OfSceneOfStory_2);
+  Meteor.call("sentencePush", sentence3_OfSceneOfStory_2);
+  Meteor.call("sentencePush", sentence4_OfSceneOfStory_2);
+
+}
+
 wrt_fixtureLoadedCount = (typeof wrt_fixtureLoadedCount !== "undefined") ? wrt_fixtureLoadedCount++ : 0;

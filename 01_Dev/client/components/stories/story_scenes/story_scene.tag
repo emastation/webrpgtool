@@ -1,15 +1,15 @@
-<story-item>
+<story-scene-item>
   <div class="sortable-item removable ui grid segment">
     <div class="two wide column">
       <i if={isLogin} class="sortable-handle mdi-action-view-headline">=&nbsp;</i>
-      <span class="badge one wide column">{opts.story.order}</span>
+      <span class="badge one wide column">{opts.story_scene.order}</span>
       <button if={isLogin} type="button" class="plus circular ui icon button" onclick={insertStory}>
         <i class="plus icon"></i>
       </button>
     </div>
     <div class="name twelve wide column" ondblclick={editableThisStory}>
-      <span if={!contentEditable}>{opts.story.title}</span>
-      <input if={contentEditable} type="text" name="storyTitle" value={opts.story.title} onblur={completeEditing} onkeydown={completeEditing}>
+      <span if={!contentEditable}>{opts.story_scene.name}</span>
+      <input if={contentEditable} type="text" name="storySceneName" value={opts.story_scene.name} onblur={completeEditing} onkeydown={completeEditing}>
     </div>
     <div class="two wide column">
       <a href="#story/{opts.story._id}">
@@ -43,14 +43,15 @@
     }
 
     insertStory(e) {
-      var storyModelClicked = MongoCollections.Stories.findOne(opts.story._id);
+      var storySceneModelClicked = MongoCollections.StoryScenes.findOne(opts.story_scene._id);
 
-      var story = {
-        title: '新規ストーリー',
-        order: storyModelClicked.order
+      var storyScene = {
+        storyId: opts.story_id,
+        name: '新規シーン',
+        order: storySceneModelClicked.order
       };
 
-      Meteor.call('insertStory', story, function(error, result) {
+      Meteor.call('addStoryScene', storyScene, function(error, result) {
         if (error)
           return alert(error.reason);
 
@@ -61,7 +62,7 @@
     }
 
     deleteStory() {
-      Meteor.call('deleteStory', opts.story._id, function(error, result) {
+      Meteor.call('deleteStoryScene', opts.story_scene._id, function(error, result) {
   //      if (error)
   //        return alert(error.reason);
       });
@@ -76,11 +77,11 @@
         return true; // 処理を抜ける
       }
 
-      var story = {
-        title: this.storyTitle.value
+      var storyScene = {
+        name: this.storySceneName.value
       };
 
-      MongoCollections.Stories.update(opts.story._id, {$set: story}, function(error) {
+      MongoCollections.StoryScenes.update(opts.story_scene._id, {$set: storyScene}, function(error) {
         if (error) {
           // display the error to the user
           alert(error.reason);
@@ -99,4 +100,4 @@
       width: 100%;
     }
   </style>
-</story-item>
+</story-scene-item>

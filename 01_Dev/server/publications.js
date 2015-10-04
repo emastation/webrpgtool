@@ -21,3 +21,7 @@ Meteor.publish('uiScreens', function() {
 Meteor.publish('uiTables', function() {
   return MongoCollections.UiTables.find();
 });
+
+Meteor.publish('stories', function() {
+  return MongoCollections.Stories.find();
+});

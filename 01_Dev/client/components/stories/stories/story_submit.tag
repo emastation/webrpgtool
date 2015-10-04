@@ -1,4 +1,4 @@
-<story-submit>
+<story-submit if={isLogin}>
   <div class="ui segment">
     <form class="ui form" onsubmit={submitNewStory}>
       <div class="field">
@@ -29,6 +29,10 @@
 
       this.title.value = '';
     }
+    Meteor.autorun(()=> {
+      this.isLogin = Meteor.userId() ? true : false
+      this.update();
+    });
   </script>
 
 </story-submit>

@@ -86,6 +86,7 @@ var SortableMixin = {
     };
 
     this.on('mount', ()=>{
+      _defaultOptions = _.extend(_defaultOptions, this.sortableOptions);
       Sortable.create($(this.sortableRoot).get(0), _defaultOptions);
     });
   },

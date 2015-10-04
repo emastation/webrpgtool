@@ -138,7 +138,7 @@ Meteor.methods({
     check(storyId, String);
     var storyScenes = MongoCollections.StoryScenes.find({storyId:storyId}).fetch();
     storyScenes.forEach(function(storyScene){
-      Meteor.call('dleteStorySceneWithoutSort', storyScene._id);
+      Meteor.call('deleteStorySceneWithoutSort', storyScene._id);
     });
 
   }

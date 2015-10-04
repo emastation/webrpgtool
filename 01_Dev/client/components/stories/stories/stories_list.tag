@@ -7,6 +7,9 @@
     // Sortable Settings [start]
     this.collectionName = 'stories';
     this.sortableRoot = '#stories-list';
+    this.sortableOptions = {
+      handle: ".sortable-handle"
+    };
     // Sortable Settings [end]
 
     this.on('mount', ()=>{

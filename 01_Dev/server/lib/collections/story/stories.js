@@ -94,7 +94,7 @@ Meteor.methods({
     Stories.update(selector, modifier, {multi: true});
 
     // storyに属しているすべてのstoryScenesの削除
-    Meteor.call('allStoryScenesOfStoryDelete', idToDelete);
+    Meteor.call('deleteAllStoryScenesOfStory', idToDelete);
 
     Stories.remove(idToDelete);
   }

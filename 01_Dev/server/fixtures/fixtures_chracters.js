@@ -233,10 +233,10 @@ if (Stories.find().count() === 0) {
     characterImageId: tsubasaImages[3],
     position: 'LeftEdge'
   };
-  Meteor.call("sentencePush", sentence1_OfSceneOfStory_1);
-  Meteor.call("sentencePush", sentence2_OfSceneOfStory_1);
-  Meteor.call("sentencePush", sentence3_OfSceneOfStory_1);
-  Meteor.call("sentencePush", sentence4_OfSceneOfStory_1);
+  Meteor.call("pushSentence", sentence1_OfSceneOfStory_1);
+  Meteor.call("pushSentence", sentence2_OfSceneOfStory_1);
+  Meteor.call("pushSentence", sentence3_OfSceneOfStory_1);
+  Meteor.call("pushSentence", sentence4_OfSceneOfStory_1);
 
   // Story_2
   var StoryScenes = MongoCollections.StoryScenes;
@@ -273,10 +273,10 @@ if (Stories.find().count() === 0) {
     characterImageId: tsubasaImages[3],
     position: 'LeftEdge'
   };
-  Meteor.call("sentencePush", sentence1_OfSceneOfStory_2);
-  Meteor.call("sentencePush", sentence2_OfSceneOfStory_2);
-  Meteor.call("sentencePush", sentence3_OfSceneOfStory_2);
-  Meteor.call("sentencePush", sentence4_OfSceneOfStory_2);
+  Meteor.call("pushSentence", sentence1_OfSceneOfStory_2);
+  Meteor.call("pushSentence", sentence2_OfSceneOfStory_2);
+  Meteor.call("pushSentence", sentence3_OfSceneOfStory_2);
+  Meteor.call("pushSentence", sentence4_OfSceneOfStory_2);
 
 }
 

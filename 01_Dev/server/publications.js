@@ -29,3 +29,19 @@ Meteor.publish('stories', function() {
 Meteor.publish('storyScenes', function() {
   return MongoCollections.StoryScenes.find();
 });
+
+Meteor.publish('storyItems', function() {
+  return MongoCollections.StoryItems.find();
+});
+
+Meteor.publish('sentences', function() {
+  return MongoCollections.Sentences.find();
+});
+
+Meteor.publish('characters', function() {
+  return MongoCollections.Characters.find();
+});
+
+Meteor.publish('characterImages', function() {
+  return MongoCollections.CharacterImages.find();
+});

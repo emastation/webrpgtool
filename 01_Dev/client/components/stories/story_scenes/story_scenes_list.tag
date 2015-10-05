@@ -30,6 +30,7 @@
 
     this.on('update', ()=>{
       this.sortingScopeValue = opts.story_id;
+      this.getStoryScenes();
     });
 
     Meteor.autorun(()=> {

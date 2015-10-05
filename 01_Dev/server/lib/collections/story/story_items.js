@@ -98,7 +98,11 @@ Meteor.methods({
     StoryItems.update(selector, modifier, {multi: true});
 
     StoryItems.remove(id);
-    Meteor.call(storyItemToDelete.contentType +'Delete', storyItemToDelete.contentId);
+
+    var _capitalize = function(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    Meteor.call('delete' + _capitalize(storyItemToDelete.contentType), storyItemToDelete.contentId);
   },
 
   /**

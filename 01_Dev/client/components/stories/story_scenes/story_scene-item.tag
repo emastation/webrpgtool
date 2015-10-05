@@ -12,7 +12,7 @@
       <input if={contentEditable} type="text" name="storySceneName" value={opts.story_scene.name} onblur={completeEditing} onkeydown={completeEditing}>
     </div>
     <div class="two wide column">
-      <a href="#story/{opts.story._id}">
+      <a href="#story/{opts.story_id}/scene/{opts.story_scene._id}">
         <button if={isLogin} type="button" class="edit circular ui icon button">
           <i class="edit icon"></i>
         </button>

@@ -77,6 +77,7 @@ var SortableMixin = {
         // do nothing - drag and drop in the same location
       }
 
+      Session.set(this.collectionName + '_changed', Date.now());
     }
 
 

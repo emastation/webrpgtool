@@ -3,7 +3,7 @@
     <p>Game! {data.map.title}</p>
     <canvas id="renderCanvas"></canvas>
     <canvas id="tmlibCanvas"></canvas>
-    <game-ui></game-ui>
+    <game-ui id="game-ui"></game-ui>
   </div>
 
   <script>
@@ -60,15 +60,74 @@
         }
       });
 
+      var deferCharacterImages = $.Deferred();
+      Meteor.subscribe('characterImages', {
+        onReady: ()=>{
+          this.getMapTileTypes();
+          deferCharacterImages.resolve();
+        }
+      });
+
+      Meteor.subscribe('stories');
+      Meteor.subscribe('storyScenes');
+      Meteor.subscribe('storyItems');
+      Meteor.subscribe('sentences');
+      Meteor.subscribe("characters");
+      Meteor.subscribe('codes');
+
       // Game class initialization after all assets load complite
-      $.when(deferMaps.promise(), deferMapTextures.promise(), deferMapTileTypes.promise()).done(()=> {
+      $.when(deferMaps.promise(), deferMapTextures.promise(), deferMapTileTypes.promise(), deferCharacterImages.promise()).done(()=> {
         var game = WrtGame.Game.getInstance();
         game.init(this.data);
 		  });
+
+      WrtGame.preventDefaultArrowKey();
+
+    });
+
+    this.on('unmount', ()=>{
+      WrtGame.enableDefaultArrowKey();
+    //  $('body').contextMenu( 'destroy' );
+      var game = WrtGame.Game.getInstance();
+      game.clear();
     });
 
     this.on('update', ()=>{
       this.getMap();
     });
   </script>
+
+  <style scoped>
+    div#canvasWrapper {
+      position: absolute;
+      top: 50px;
+    }
+
+    canvas#renderCanvas {
+      width: 1200px;
+      height: 800px;
+      margin: 0px;
+      position: absolute;
+      top: 0px;
+      z-index: 100;
+    }
+
+    canvas#tmlibCanvas {
+      width: 1200px;
+      height: 800px;
+      margin: 0px;
+      position: absolute;
+      top: 0px;
+      z-index: 300;
+    }
+
+    #game-ui {
+      width: 1200px;
+      height: 800px;
+      margin: 0px;
+      position: absolute;
+      top: 0px;
+      z-index: 200;
+    }
+  </style>
 </game>

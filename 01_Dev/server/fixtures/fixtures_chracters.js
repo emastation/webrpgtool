@@ -280,4 +280,45 @@ if (Stories.find().count() === 0) {
 
 }
 
+
+var Backgrounds = MongoCollections.Backgrounds;
+var backgroundIds = [];
+if (Backgrounds.find().count() === 0) {
+  [
+    {
+      name: '図書館',
+      identifier: 'library',
+      imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/129247956548116104261_BG43a.jpg',
+      thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/129247956548116104261_BG43a.jpg'
+    },
+    {
+      name: '通学路',
+      identifier: 'street',
+      imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/129385824010916303746_BG40a.jpg',
+      thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/129385824010916303746_BG40a.jpg'
+    },
+    {
+      name: '教室',
+      identifier: 'classroom',
+      imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/134242346756813113074_BG261a_80.jpg',
+      thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/134242346756813113074_BG261a_80.jpg'
+    },
+    {
+      name: '駅前',
+      identifier: 'station',
+      imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/134534968737813210724_bg44a_80.jpg',
+      thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/134534968737813210724_bg44a_80.jpg'
+    },
+  ].forEach(function (attribute, i) {
+        backgroundIds.push(Backgrounds.insert({
+          name: attribute.name,
+          identifier: attribute.identifier,
+          imageUrl: attribute.imageUrl,
+          thumbnailUrl: attribute.thumbnailUrl,
+          order: i
+        }));
+      }
+  );
+}
+
 wrt_fixtureLoadedCount = (typeof wrt_fixtureLoadedCount !== "undefined") ? wrt_fixtureLoadedCount++ : 0;

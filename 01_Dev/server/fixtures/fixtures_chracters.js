@@ -281,9 +281,9 @@ if (Stories.find().count() === 0) {
 }
 
 
-var Backgrounds = MongoCollections.Backgrounds;
-var backgroundIds = [];
-if (Backgrounds.find().count() === 0) {
+var BackgroundImages = MongoCollections.BackgroundImages;
+var backgroundImageIds = [];
+if (BackgroundImages.find().count() === 0) {
   [
     {
       name: '図書館',
@@ -310,7 +310,7 @@ if (Backgrounds.find().count() === 0) {
       thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/134534968737813210724_bg44a_80.jpg'
     },
   ].forEach(function (attribute, i) {
-        backgroundIds.push(Backgrounds.insert({
+        backgroundImageIds.push(BackgroundImages.insert({
           name: attribute.name,
           identifier: attribute.identifier,
           imageUrl: attribute.imageUrl,

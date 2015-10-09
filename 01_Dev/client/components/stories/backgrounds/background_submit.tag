@@ -2,27 +2,27 @@
   <form class="ui form" onsubmit={submitNewItem}>
     <div class="field">
       <select name="backgroundSelect" onchange={onChangeSelectBackgroundId}>
-        <option each={backgrounds} value={_id}>{name}</option>
+        <option each={backgroundImages} value={_id}>{name}</option>
       </select>
     </div>
     <input type="submit" value="追加" class="ui submit button"/>
   </form>
 
   <script>
-    this.getBackgrounds = ()=> {
-      this.backgrounds = MongoCollections.Backgrounds.find().fetch();
+    this.getBackgroundImages = ()=> {
+      this.backgroundImages = MongoCollections.BackgroundImages.find().fetch();
     };
 
     this.on('mount', ()=>{
-      Meteor.subscribe('backgrounds', {
+      Meteor.subscribe('backgroundImages', {
         onReady: ()=>{
-          this.getBackgrounds();
+          this.getBackgroundImages();
         }
       });
     });
 
     Meteor.autorun(()=> {
-      this.getBackgrounds();
+      this.getBackgroundImages();
       this.update();
     });
   </script>

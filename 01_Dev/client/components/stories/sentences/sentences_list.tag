@@ -1,10 +1,10 @@
 <sentences-list id="sentences-list">
   <div each={name, i in storyItems} data-id={name._id} data-order={name.order}>
     <div each={sentence in contents[i].sentence}>
-      <sentence-item story_item={name} sentence_item={sentence} scene_id={parent.opts.scene_id} />
+      <sentence-item story_item={name} sentence_item={sentence} scene_id={parent.parent.opts.scene_id} />
     </div>
     <div each={background in contents[i].background}>
-      <background-item story_item={name} background_item={background} scene_id={parent.opts.scene_id} />
+      <background-item story_item={name} background_item={background} scene_id={parent.parent.opts.scene_id} />
     </div>
   </div>
   <script>

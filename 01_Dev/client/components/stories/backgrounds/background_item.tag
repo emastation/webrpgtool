@@ -15,12 +15,53 @@
       <img src={backgroundImage.thumbnailUrl} />
     </div>
     <span class="badge">{opts.story_item.order}</span>
-    <button if={isLogin} type="button" class="close circular ui icon button" data-dismiss="alert" onclick={deleteSentence}>
+    <button if={isLogin} type="button" class="close circular ui icon button" data-dismiss="alert" onclick={deleteBackground}>
       <i class="remove icon"></i>
     </button>
   </div>
 
   <script>
+    insertBackground(id) {
+      var storyItemModelClicked = MongoCollections.StoryItems.findOne(opts.story_item._id);
+      var attributes = {
+        sceneId: opts.scene_id,
+        comment: "This is a background.",
+        backgroundImageId: opts.background_item.backgroundImageId,
+        order: storyItemModelClicked.order
+      };
+
+      Meteor.call('insertBackground', attributes, function(error, result) { // display the error to the user and abort
+        if (error) {
+          return alert(error.reason);
+        }
+        Session.set('storyItems_changed', Date.now());
+      });
+    }
+
+    deleteBackground() {
+      Meteor.call('deleteStoryItem', opts.background_item.storyItemId, function(error, result) {
+        if (error) {
+          return alert(error.reason);
+        }
+        Session.set('storyItems_changed', Date.now());
+      });
+    }
+
+    onChangeSelectBackgroundImageId(e) {
+      this.selectedBackgroundImageId = e.target.value;
+
+      var background = {
+        backgroundImageId: e.target.value
+      };
+
+      MongoCollections.Backgrounds.update(opts.background_item._id, {$set: background}, function(error) {
+        if (error) {
+          // display the error to the user
+          alert(error.reason);
+        }
+      });
+    }
+
     this.on('update', ()=>{
       if (!opts.background_item) {
         return;

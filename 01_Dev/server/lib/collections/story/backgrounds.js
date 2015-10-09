@@ -91,7 +91,7 @@ Meteor.methods({
 
     var data = {
       storyItemAttributes: storyItemAttributes,
-      backgroundImageId: attributes.text,
+      backgroundImageId: attributes.backgroundImageId,
     };
 
     return Meteor.call('createBackgroundAndStoryItem', data);
@@ -102,6 +102,6 @@ Meteor.methods({
     check(Meteor.userId(), String);
     check(id, String);
 
-    MongoCollections.Background.remove(id);
+    MongoCollections.Backgrounds.remove(id);
   }
 });

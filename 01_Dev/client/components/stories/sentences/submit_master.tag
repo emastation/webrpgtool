@@ -12,7 +12,8 @@
       </a>
     </div>
     <div class="ui bottom attached segment">
-      <sentence-submit scene_id={opts.scene_id} />
+      <sentence-submit if={currentTabName === 'sentence'} scene_id={opts.scene_id} />
+      <background-submit if={currentTabName === 'background'} scene_id={opts.scene_id} />
     </div>
   </div>
 

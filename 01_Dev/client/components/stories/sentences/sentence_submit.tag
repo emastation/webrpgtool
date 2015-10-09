@@ -1,7 +1,6 @@
 <sentence-submit>
   <form class="ui form" onsubmit={submitNewItem}>
     <div class="field">
-      <label>センテンス</label>
       <select name="characterSelect" onchange={onChangeSelectCharacterId}>
         <option each={characters} value={_id}>{name}</option>
       </select>
@@ -13,7 +12,7 @@
       </select>
       <textarea name="text" placeholder="セリフを入力してください。" />
     </div>
-    <input type="submit" value="Submit" class="ui submit button"/>
+    <input type="submit" value="追加" class="ui submit button"/>
   </form>
 
   <script>

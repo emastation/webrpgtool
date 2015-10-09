@@ -45,3 +45,7 @@ Meteor.publish('characters', function() {
 Meteor.publish('characterImages', function() {
   return MongoCollections.CharacterImages.find();
 });
+
+Meteor.publish('backgrounds', function() {
+  return MongoCollections.Backgrounds.find();
+});

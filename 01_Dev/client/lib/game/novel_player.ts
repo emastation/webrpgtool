@@ -11,6 +11,7 @@ module WrtGame {
     private _currentPlayingStoryName:string = null;
     private _isPlaying:boolean = false;
     private _novelWasFinished = true;
+    private _bgmPlayer:BgmPlayer = null;
     public static getInstance():NovelPlayer
     {
       if(NovelPlayer._instance == null) {
@@ -21,6 +22,9 @@ module WrtGame {
 
     public init() {
       var novelPlayerThis:NovelPlayer = this;
+      this._bgmPlayer = BgmPlayer.getInstance();
+      this._bgmPlayer.preloadBGMs(null, null);
+
       // シーンを定義
       tm.define("MainScene", {
         superClass: "tm.app.Scene",
@@ -74,7 +78,7 @@ module WrtGame {
         },
 
         update: function (app) {
-
+          novelPlayerThis._bgmPlayer.loop();
         }
 
       });
@@ -111,6 +115,8 @@ module WrtGame {
           storyItems[i].content = MongoCollections.Sentences.findOne({_id: storyItems[i].contentId});
         } else if (storyItems[i].contentType === 'background') {
           storyItems[i].content = MongoCollections.Backgrounds.findOne({_id: storyItems[i].contentId});
+        } else if (storyItems[i].contentType === 'bgm') {
+          storyItems[i].content = MongoCollections.Bgms.findOne({_id: storyItems[i].contentId});
         }
       }
       that.storyItems = storyItems;
@@ -244,6 +250,10 @@ module WrtGame {
         that.addChildAt(that.imgBackGround, 0);
         tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 0.0}, {alpha: 1.0}, 500, null).start();
 //        that.imgBackGroundOld = that.imgBackGround;
+      } else if (currentStoryItem.contentType === 'bgm') {
+        var bgmAudio = MongoCollections.BgmAudios.findOne({_id: currentStoryItem.content.bgmAudioId});
+        var transitionTime = (currentStoryItem.content.transition === 'crossfade') ? 3000 : 0;
+        this._bgmPlayer.play(bgmAudio.identifier, currentStoryItem.content.volume, transitionTime);
       }
 
       that.addChildAt(that.imgMessageWindow, 20);

@@ -140,6 +140,13 @@ module WrtGame {
           ASSETS[backgroundImages[key].imageUrl] = backgroundImages[key].imageUrl;
         }
       }
+      var bgmAudios = MongoCollections.BgmAudios.find().fetch();
+      bgmAudios.forEach((bgmAudio)=>{
+        if (bgmAudio.identifier === 'none') {
+          return;
+        }
+        ASSETS[bgmAudio.identifier] = bgmAudio.audioUrl;
+      });
 
       // main
       tm.main(function() {

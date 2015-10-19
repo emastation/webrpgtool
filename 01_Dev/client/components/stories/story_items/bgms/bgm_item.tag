@@ -95,7 +95,10 @@
       this.bgmAudio = results[0];
       this.update();
       setTimeout(()=>{
-        $('#bgm_audio_' + opts.bgm_item._id).get(0).volume = opts.bgm_item.volume;
+        audioTag = $('#bgm_audio_' + opts.bgm_item._id).get(0);
+        if (audioTag) {
+          audioTag.volume = opts.bgm_item.volume;
+        }
       }, 0)
     });
   </script>

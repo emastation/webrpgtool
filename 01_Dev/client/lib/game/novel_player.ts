@@ -32,13 +32,12 @@ module WrtGame {
 
           var canvas = tm.dom.Element("#tmlibCanvas");
 
-
-          //メッセージウィンドウ
+          // MessageWindow
           var imgMessageWindow = tm.display.RoundRectangleShape(Game.SCREEN_WIDTH - 40, 250, {
             fillStyle: "#333377",
             strokeStyle: "#003300",
             lineWidth: 3
-          }).addChildTo(this);
+          });
           imgMessageWindow.setPosition(imgMessageWindow.width/2 + 20, Game.SCREEN_HEIGHT - imgMessageWindow.height/2 - 20);//);
           imgMessageWindow.alpha= 0.5;
 
@@ -47,7 +46,7 @@ module WrtGame {
           };
           this.imgMessageWindow = imgMessageWindow;
 
-          //メッセージ
+          // MessageArea in the MessageWindow
           var lblMessage = tm.ui.LabelArea( "" ).addChildTo(imgMessageWindow);
           lblMessage.setPosition(20, 20);
           lblMessage.setFillStyle("#ffffff");
@@ -57,7 +56,8 @@ module WrtGame {
 
           this.lblMessage = lblMessage;
 
-          this.sentenceIndex = 0;
+
+          this.storyItemIndex = 0;
           var that = this;
 
           canvas.event.pointstart(function(e) {
@@ -91,9 +91,10 @@ module WrtGame {
       }
 
       var that = this._tmMainScene;
-      that.sentenceIndex = 0;
+      that.storyItemIndex = 0;
       that.imgMessageWindow.visible = true;
       that.lblMessage.visible = true;
+      that.lblMessage.text = '';
 
       this._currentPlayingStoryName = StoryName;
       var that = this._tmMainScene;
@@ -105,10 +106,14 @@ module WrtGame {
 
       var scene = MongoCollections.StoryScenes.find({storyId: story[0]._id}).fetch();
       var storyItems = MongoCollections.StoryItems.find({sceneId: scene[0]._id}, {sort: { order: 1 }}).fetch();
-      that.sentences = [];
       for (var i=0; i<storyItems.length; i++) {
-        that.sentences.push(MongoCollections.Sentences.find({_id: storyItems[i].contentId}).fetch()[0]);
+        if (storyItems[i].contentType === 'sentence') {
+          storyItems[i].content = MongoCollections.Sentences.findOne({_id: storyItems[i].contentId});
+        } else if (storyItems[i].contentType === 'background') {
+          storyItems[i].content = MongoCollections.Backgrounds.findOne({_id: storyItems[i].contentId});
+        }
       }
+      that.storyItems = storyItems;
 
       this._isPlaying = true;
       this._novelWasFinished = false;
@@ -161,7 +166,7 @@ module WrtGame {
       var that = this._tmMainScene;
 
       // すでにStoryが終了していた場合は、後片付けしてreturnする
-      if (_.isUndefined(that.sentences[that.sentenceIndex])) {
+      if (_.isUndefined(that.storyItems[that.storyItemIndex])) {
 
         that.characters.forEach(function(character, index, characters){
           if(!_.isUndefined(characters[index])) {
@@ -176,40 +181,58 @@ module WrtGame {
 
         return;
       }
+      var currentStoryItem = that.storyItems[that.storyItemIndex];
+      if (currentStoryItem.contentType === 'sentence') {
+        var characterImage = MongoCollections.CharacterImages.findOne({_id: currentStoryItem.content.characterImageId});
+        var sentence = that.storyItems[that.storyItemIndex].content;
+        var characterPosIndex = this.getCharacterPositionIndex(sentence.position);
 
-      var characterImage = MongoCollections.CharacterImages.find({_id: that.sentences[that.sentenceIndex].characterImageId}).fetch()[0];
-      var sentence = that.sentences[that.sentenceIndex];
-      var characterPosIndex = this.getCharacterPositionIndex(sentence.position);
+        // if there is somebody at new character's position.
+        if(!_.isUndefined(that.characters[characterPosIndex])) {
+          that.characters[characterPosIndex].remove(); // remove that old character from the stage,
+          delete that.characters[characterPosIndex]; // and delete that old character.
+        }
 
-      if(!_.isUndefined(that.characters[characterPosIndex])) {
-        that.characters[characterPosIndex].remove();
-        delete that.characters[characterPosIndex];
+        // for each character position, if there is the same character as the new character, remove and delete the same character.
+        that.characters.forEach(function(character, index, characters){
+          if(_.isUndefined(characters[index])) {
+            return;
+          }
+          if(characters[index].characterId === sentence.characterId) {
+            characters[index].remove();
+            delete characters[index];
+          }
+        });
+
+        // display the new character.
+        if(characterImage.portraitImageUrl !== '') {
+          that.characters[characterPosIndex] = tm.display.Sprite(characterImage.portraitImageUrl);
+          that.characters[characterPosIndex].characterId = sentence.characterId;
+          that.addChildAt(that.characters[characterPosIndex], 10);
+          var characterScale = 1.15;
+          var horizontalPosition = this.getCharacterHorizontalPosition(sentence.position);
+          that.characters[characterPosIndex].setPosition(horizontalPosition, Game.SCREEN_HEIGHT-that.characters[characterPosIndex].height*characterScale/2);
+          that.characters[characterPosIndex].setScale(characterScale * this.getCharacterHorizontalFlip(sentence.position),
+              characterScale);
+        }
+
+        // display the new sentence text
+        that.lblMessage.text = sentence.text;
+      } else if (currentStoryItem.contentType === 'background') {
+        // Background
+        var backgroundImage = MongoCollections.BackgroundImages.findOne({_id: currentStoryItem.content.backgroundImageId});
+
+        that.removeChild(that.imgBackGround)
+        delete that.imgBackGround;
+
+        that.imgBackGround = tm.display.Sprite(backgroundImage.imageUrl, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
+        that.imgBackGround.setPosition(Game.SCREEN_WIDTH/2, Game.SCREEN_HEIGHT/2);
+        that.addChildAt(that.imgBackGround, 0);
       }
 
-      that.characters.forEach(function(character, index, characters){
-        if(_.isUndefined(characters[index])) {
-          return;
-        }
-        if(characters[index].characterId === sentence.characterId) {
-          characters[index].remove();
-          delete characters[index];
-        }
-      });
+      that.addChildAt(that.imgMessageWindow, 20);
 
-      if(characterImage.portraitImageUrl !== '') {
-        that.characters[characterPosIndex] = tm.display.Sprite(characterImage.portraitImageUrl);
-        that.characters[characterPosIndex].characterId = sentence.characterId;
-        that.addChildAt(that.characters[characterPosIndex], 0);
-        var characterScale = 1.15;
-        var horizontalPosition = this.getCharacterHorizontalPosition(sentence.position);
-        that.characters[characterPosIndex].setPosition(horizontalPosition, Game.SCREEN_HEIGHT-that.characters[characterPosIndex].height*characterScale/2);
-        that.characters[characterPosIndex].setScale(characterScale * this.getCharacterHorizontalFlip(sentence.position),
-            characterScale);
-      }
-
-      that.lblMessage.text = sentence.text;
-
-      that.sentenceIndex++;
+      that.storyItemIndex++;
     }
   }
 }

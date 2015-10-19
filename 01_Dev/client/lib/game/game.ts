@@ -129,9 +129,15 @@ module WrtGame {
       };
 
       var characterImages = MongoCollections.CharacterImages.find({useForNovel:true}).fetch();
+      var backgroundImages = MongoCollections.BackgroundImages.find().fetch();
       for(var key in characterImages) {
         if ("" !== characterImages[key].portraitImageUrl) {
           ASSETS[characterImages[key].portraitImageUrl] = characterImages[key].portraitImageUrl;
+        }
+      }
+      for(var key in backgroundImages) {
+        if ("" !== backgroundImages[key].imageUrl) {
+          ASSETS[backgroundImages[key].imageUrl] = backgroundImages[key].imageUrl;
         }
       }
 

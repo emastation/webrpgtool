@@ -286,6 +286,12 @@ var backgroundImageIds = [];
 if (BackgroundImages.find().count() === 0) {
   [
     {
+      name: '（背景なし）',
+      identifier: 'none',
+      imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/none.png',
+      thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/none.png'
+    },
+    {
       name: '図書館',
       identifier: 'library',
       imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/129247956548116104261_BG43a.jpg',

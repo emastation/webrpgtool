@@ -19,10 +19,16 @@
 
   <script>
     this.currentTabName = 'sentence';
+    window.wrtSubmitMasterRiotComponent = this;
 
     switchTab(tabName) {
       this.currentTabName = tabName;
     }
+
+    this.on('insertStoryItem', (order)=>{
+      var capitalizedTabName = this.currentTabName.capitalize();
+      window['wrt' + capitalizedTabName + 'SubmitRiotComponent'].trigger('insert' + capitalizedTabName, order);
+    });
   </script>
 
   <style scoped>

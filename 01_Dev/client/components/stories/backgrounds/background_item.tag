@@ -23,19 +23,8 @@
   <script>
     insertBackground(id) {
       var storyItemModelClicked = MongoCollections.StoryItems.findOne(opts.story_item._id);
-      var attributes = {
-        sceneId: opts.scene_id,
-        comment: "This is a background.",
-        backgroundImageId: opts.background_item.backgroundImageId,
-        order: storyItemModelClicked.order
-      };
 
-      Meteor.call('insertBackground', attributes, function(error, result) { // display the error to the user and abort
-        if (error) {
-          return alert(error.reason);
-        }
-        Session.set('storyItems_changed', Date.now());
-      });
+      window.wrtSubmitMasterRiotComponent.trigger('insertStoryItem', storyItemModelClicked.order);
     }
 
     deleteBackground() {

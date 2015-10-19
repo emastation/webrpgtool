@@ -17,7 +17,8 @@
 
   <script>
     this.characterPositions = CHARACTER_POSITIONS;
-
+    window.wrtSentenceSubmitRiotComponent = this;
+//    riot.observable(this);
 
     submitNewItem(e) {
       e.preventDefault();
@@ -78,6 +79,34 @@
           });
         }
       });
+    });
+
+    this.on('insertSentence', (order)=>{
+      var sceneId = opts.scene_id;
+
+      if (!this.selectedCharacterId) {
+        return;
+      }
+
+      var attributes = {
+        sceneId: sceneId,
+        comment: "This is a sentence.",
+        text: this.text.value,
+        characterId: this.selectedCharacterId,
+        characterImageId: this.characterImageSelect.value,
+        position: this.characterPositionSelect.value,
+        order: order
+      };
+
+      var that = this;
+      Meteor.call('insertSentence', attributes, (error, result)=> {
+        if (error) {
+          return alert(error.reason);
+        }
+        this.text.value = ''
+        Session.set('storyItems_changed', Date.now());
+      });
+
     });
 
     Meteor.autorun(()=> {

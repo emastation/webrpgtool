@@ -31,24 +31,10 @@
     this.characterPositions = CHARACTER_POSITIONS;
 
     insertSentence(id) {
-      var storyItemModelClicked = MongoCollections.StoryItems.findOne(opts.story_item._id);
-      var attributes = {
-        sceneId: opts.scene_id,
-        comment: "This is a sentence.",
-        text: 'New Sentence',
-        characterId: this.selectedCharacterId,
-        characterImageId: this.selectedCharacterImageId,
-        position: 'RightEdge',
-        order: storyItemModelClicked.order
-      };
 
-      Meteor.call('insertSentence', attributes, function(error, result) { // display the error to the user and abort
-        if (error) {
-          return alert(error.reason);
-        }
-        Session.set('storyItems_changed', Date.now());
-        
-      });
+      var storyItemModelClicked = MongoCollections.StoryItems.findOne(opts.story_item._id);
+
+      window.wrtSubmitMasterRiotComponent.trigger('insertStoryItem', storyItemModelClicked.order);
     }
 
     completeEditing(evt) {

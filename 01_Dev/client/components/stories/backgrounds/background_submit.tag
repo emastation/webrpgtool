@@ -9,7 +9,7 @@
   </form>
 
   <script>
-
+    window.wrtBackgroundSubmitRiotComponent = this;
     submitNewItem(e) {
       e.preventDefault();
 
@@ -41,6 +41,27 @@
           this.getBackgroundImages();
         }
       });
+    });
+
+    this.on('insertBackground', (order)=>{
+
+      var sceneId = opts.scene_id;
+
+      var attributes = {
+        sceneId: sceneId,
+        comment: "This is a background.",
+        backgroundImageId: this.backgroundImageSelect.value,
+        order: order
+      };
+
+      var that = this;
+      Meteor.call('insertBackground', attributes, (error, result)=> {
+        if (error) {
+          return alert(error.reason);
+        }
+        Session.set('storyItems_changed', Date.now());
+      });
+
     });
 
     Meteor.autorun(()=> {

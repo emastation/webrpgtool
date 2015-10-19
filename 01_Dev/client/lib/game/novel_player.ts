@@ -174,6 +174,12 @@ module WrtGame {
             delete characters[index];
           }
         });
+
+        if (that.imgBackGround) {
+          that.imgBackGround.remove();
+          delete that.imgBackGround;
+        }
+
         that.imgMessageWindow.visible = false;
         this._novelWasFinished = true;
         var mapMovement = MapMovement.getInstance();

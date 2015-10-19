@@ -288,30 +288,35 @@ if (BackgroundImages.find().count() === 0) {
     {
       name: '（背景なし）',
       identifier: 'none',
+      author: '気まぐれアフター',
       imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/none.png',
       thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/none.png'
     },
     {
       name: '図書館',
-      identifier: 'library',
+      identifier: 'kimagureafter_library',
+      author: '気まぐれアフター',
       imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/129247956548116104261_BG43a.jpg',
       thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/129247956548116104261_BG43a.jpg'
     },
     {
       name: '通学路',
-      identifier: 'street',
+      identifier: 'kimagureafter_street',
+      author: '気まぐれアフター',
       imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/129385824010916303746_BG40a.jpg',
       thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/129385824010916303746_BG40a.jpg'
     },
     {
       name: '教室',
-      identifier: 'classroom',
+      identifier: 'kimagureafter_classroom',
+      author: '気まぐれアフター',
       imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/134242346756813113074_BG261a_80.jpg',
       thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/134242346756813113074_BG261a_80.jpg'
     },
     {
       name: '駅前',
-      identifier: 'station',
+      identifier: 'kimagureafter_station',
+      author: '気まぐれアフター',
       imageUrl: 'https://www.emastation.com/wrt/material/backgrounds/images/134534968737813210724_bg44a_80.jpg',
       thumbnailUrl:  'https://www.emastation.com/wrt/material/backgrounds/thumbnails/134534968737813210724_bg44a_80.jpg'
     },
@@ -319,6 +324,49 @@ if (BackgroundImages.find().count() === 0) {
         backgroundImageIds.push(BackgroundImages.insert({
           name: attribute.name,
           identifier: attribute.identifier,
+          author: attribute.author,
+          imageUrl: attribute.imageUrl,
+          thumbnailUrl: attribute.thumbnailUrl,
+          order: i
+        }));
+      }
+  );
+}
+
+var BgmAudios = MongoCollections.BgmAudios;
+var bgmAudiosIds = [];
+if (BgmAudios.find().count() === 0) {
+  [
+    {
+      name: '（背景なし）',
+      identifier: 'none',
+      author: '',
+      imageUrl: '',
+      thumbnailUrl:  ''
+    },
+    {
+      name: 'Near',
+      identifier: 'Methuselah_Near',
+      author: 'Methuselah',
+      audioUrl: 'https://www.emastation.com/wrt/material/bgms/Methuselah/near.mp3',
+    },
+    {
+      name: '水精幻譚',
+      identifier: 'hitokiri_water',
+      author: 'ひときりの部屋',
+      audioUrl: 'https://www.emastation.com/wrt/material/bgms/hitokiri_room/water.mp3',
+    },
+    {
+      name: 'b5',
+      identifier: 'hitokiri_b5',
+      author: 'ひときりの部屋',
+      audioUrl: 'https://www.emastation.com/wrt/material/bgms/hitokiri_room/b5.mp3',
+    }
+  ].forEach(function (attribute, i) {
+        bgmAudiosIds.push(BgmAudios.insert({
+          name: attribute.name,
+          identifier: attribute.identifier,
+          author: attribute.author,
           imageUrl: attribute.imageUrl,
           thumbnailUrl: attribute.thumbnailUrl,
           order: i

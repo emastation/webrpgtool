@@ -338,7 +338,7 @@ var bgmAudiosIds = [];
 if (BgmAudios.find().count() === 0) {
   [
     {
-      name: '（背景なし）',
+      name: '（BGMなし）',
       identifier: 'none',
       author: '',
       imageUrl: '',

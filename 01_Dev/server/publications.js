@@ -53,3 +53,11 @@ Meteor.publish('backgrounds', function() {
 Meteor.publish('backgroundImages', function() {
   return MongoCollections.BackgroundImages.find();
 });
+
+Meteor.publish('bgms', function() {
+  return MongoCollections.Bgms.find();
+});
+
+Meteor.publish('bgmAudios', function() {
+  return MongoCollections.BgmAudios.find();
+});

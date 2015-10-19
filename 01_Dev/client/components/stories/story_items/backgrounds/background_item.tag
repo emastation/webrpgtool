@@ -37,8 +37,6 @@
     }
 
     onChangeSelectBackgroundImageId(e) {
-      this.selectedBackgroundImageId = e.target.value;
-
       var background = {
         backgroundImageId: e.target.value
       };

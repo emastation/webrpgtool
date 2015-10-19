@@ -6,6 +6,9 @@
     <div each={background in contents[i].background}>
       <background-item story_item={name} background_item={background} scene_id={parent.parent.opts.scene_id} />
     </div>
+    <div each={bgm in contents[i].bgm}>
+      <bgm-item story_item={name} bgm_item={bgm} scene_id={parent.parent.opts.scene_id} />
+    </div>
   </div>
   <script>
     this.mixin('sortable');
@@ -28,11 +31,14 @@
 
       var sentenceIds = [];
       var backgroundIds = [];
+      var bgmIds = [];
       this.storyItems.forEach(function(storyItem){
         if (storyItem.contentType === 'sentence') {
           sentenceIds.push(storyItem.contentId); // storyItemsが持っているcontentIdが、sentenceIdだった場合、それらの配列を作る
         } else if (storyItem.contentType === 'background') {
           backgroundIds.push(storyItem.contentId); // storyItemsが持っているcontentIdが、backgroundIdだった場合、それらの配列を作る
+        } else if (storyItem.contentType === 'bgm') {
+          bgmIds.push(storyItem.contentId); // storyItemsが持っているcontentIdが、backgroundIdだった場合、それらの配列を作る
         }
       });
 
@@ -44,13 +50,17 @@
       var selector = {_id: {$in: backgroundIds}};
       var backgroundsTmp = MongoCollections.Backgrounds.find(selector).fetch();
 
+      var selector = {_id: {$in: bgmIds}};
+      var bgmsTmp = MongoCollections.Bgms.find(selector).fetch();
+
       // storyItemの配列に対応するcontents配列（sentenceやbackgroundなどが入った配列）を作る。
       // それぞれの配列で、同じ添え字箇所だと、その値は対応付けされたstoryItem&contentになっている。
       this.contents = [];
       this.storyItems.forEach((storyItem)=>{
         var content = {
           sentence: [],
-          background: []
+          background: [],
+          bgm: []
         };
         if (storyItem.contentType === 'sentence') {
           var sentence = _.where(sentencesTmp, { '_id': storyItem.contentId })[0];
@@ -58,6 +68,9 @@
         } else if (storyItem.contentType === 'background') {
           var background = _.where(backgroundsTmp, { '_id': storyItem.contentId })[0];
           content.background.push(background);
+        } else if (storyItem.contentType === 'bgm') {
+          var bgm = _.where(bgmsTmp, { '_id': storyItem.contentId })[0];
+          content.bgm.push(bgm);
         }
         this.contents.push(content);
       });
@@ -84,8 +97,19 @@
           deferBackgrounds.resolve();
         }
       });
+      var deferBgms = $.Deferred();
+      Meteor.subscribe('bgms', {
+        onReady: ()=>{
+          deferBgms.resolve();
+        }
+      });
 
-      $.when(deferStoryItems.promise(), deferSentences.promise(), deferBackgrounds.promise()).done(()=> {
+      $.when(
+        deferStoryItems.promise(),
+        deferSentences.promise(),
+        deferBackgrounds.promise(),
+        deferBgms.promise()
+      ).done(()=> {
         this.getContents();
       });
     });

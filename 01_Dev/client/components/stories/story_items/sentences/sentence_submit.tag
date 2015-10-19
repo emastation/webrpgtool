@@ -1,15 +1,27 @@
 <sentence-submit>
   <form class="ui form" onsubmit={submitNewItem}>
+    <div class="fields">
+      <div class="five wide field">
+        <label>キャラクター</label>
+        <select name="characterSelect" onchange={onChangeSelectCharacterId}>
+          <option each={characters} value={_id}>{name}</option>
+        </select>
+      </div>
+      <div class="five wide field">
+        <label>ポーズ</label>
+        <select name="characterImageSelect">
+          <option each={characterImages} value={_id}>{pose}</option>
+        </select>
+      </div>
+      <div class="five wide field">
+        <label>表示位置</label>
+        <select name="characterPositionSelect">
+          <option each={characterPositions} value={identifier}>{name}</option>
+        </select>
+      </div>
+    </div>
     <div class="field">
-      <select name="characterSelect" onchange={onChangeSelectCharacterId}>
-        <option each={characters} value={_id}>{name}</option>
-      </select>
-      <select name="characterImageSelect">
-        <option each={characterImages} value={_id}>{pose}</option>
-      </select>
-      <select name="characterPositionSelect">
-        <option each={characterPositions} value={identifier}>{name}</option>
-      </select>
+      <label>セリフ</label>
       <textarea name="text" placeholder="セリフを入力してください。" />
     </div>
     <input type="submit" value="追加" class="ui submit button"/>
@@ -118,4 +130,11 @@
       this.update();
     });
   </script>
+
+  <style scoped>
+    .selects {
+      width: 100%;
+      float: left;
+    }
+  </style>
 </sentence-submit>

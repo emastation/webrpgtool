@@ -1,6 +1,7 @@
 <background-submit>
   <form class="ui form" onsubmit={submitNewItem}>
     <div class="field">
+      <label>背景</label>
       <select name="backgroundImageSelect" onchange={onChangeSelectBackgroundId}>
         <option each={backgroundImages} value={_id}>{name}</option>
       </select>

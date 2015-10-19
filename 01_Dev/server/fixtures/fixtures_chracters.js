@@ -367,8 +367,7 @@ if (BgmAudios.find().count() === 0) {
           name: attribute.name,
           identifier: attribute.identifier,
           author: attribute.author,
-          imageUrl: attribute.imageUrl,
-          thumbnailUrl: attribute.thumbnailUrl,
+          audioUrl: attribute.audioUrl,
           order: i
         }));
       }

@@ -48,11 +48,13 @@ module WrtGame {
           this.imgMessageWindow = imgMessageWindow;
 
           //メッセージ
-          var lblMessage = tm.display.Label( "" ).addChildTo(imgMessageWindow);
-          lblMessage.setPosition(-imgMessageWindow.width/2 + 20, -imgMessageWindow.height/2 + 20);
-          lblMessage.setAlign("left").setBaseline("top");
+          var lblMessage = tm.ui.LabelArea( "" ).addChildTo(imgMessageWindow);
+          lblMessage.setPosition(20, 20);
           lblMessage.setFillStyle("#ffffff");
-          lblMessage.setFontSize(48);
+          lblMessage.fontSize = 48;
+          lblMessage.setWidth( imgMessageWindow.width - 10 );
+          lblMessage.setHeight( imgMessageWindow.height - 10 );
+
           this.lblMessage = lblMessage;
 
           this.sentenceIndex = 0;

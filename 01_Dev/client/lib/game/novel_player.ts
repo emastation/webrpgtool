@@ -222,12 +222,22 @@ module WrtGame {
         // Background
         var backgroundImage = MongoCollections.BackgroundImages.findOne({_id: currentStoryItem.content.backgroundImageId});
 
-        that.removeChild(that.imgBackGround)
-        delete that.imgBackGround;
+        if(that.imgBackGround) {
+          tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 1.0}, {alpha: 0.0}, 500, null).on("finish",
+            (function(self, background){
+              return function (e) {
+                that.removeChild(background)
+//                delete self.background;
+              };
+            })(that, that.imgBackGround)
+          ).start();
+        }
 
         that.imgBackGround = tm.display.Sprite(backgroundImage.imageUrl, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
         that.imgBackGround.setPosition(Game.SCREEN_WIDTH/2, Game.SCREEN_HEIGHT/2);
         that.addChildAt(that.imgBackGround, 0);
+        tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 0.0}, {alpha: 1.0}, 500, null).start();
+//        that.imgBackGroundOld = that.imgBackGround;
       }
 
       that.addChildAt(that.imgMessageWindow, 20);

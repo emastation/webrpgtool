@@ -1,4 +1,4 @@
-<sentences-list id="sentences-list">
+<story-items-list id="sentences-list">
   <div each={name, i in storyItems} data-id={name._id} data-order={name.order}>
     <div each={sentence in contents[i].sentence}>
       <sentence-item story_item={name} sentence_item={sentence} scene_id={parent.parent.opts.scene_id} />
@@ -103,4 +103,4 @@
     });
 
   </script>
-</sentences-list>
+</story-items-list>

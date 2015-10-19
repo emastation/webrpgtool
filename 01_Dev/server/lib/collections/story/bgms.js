@@ -15,7 +15,7 @@ Meteor.methods({
       submitted: new Date()
     });
 
-    var id = MongoCollections.Backgrounds.insert(recordObj);
+    var id = MongoCollections.Bgms.insert(recordObj);
 
     return {
       _id: id
@@ -35,6 +35,8 @@ Meteor.methods({
     var bgmAttributes = {
       bgmAudioId: data.bgmAudioId,
       storyItemId: storyItemId._id,
+      volume: data.volume,
+      transition: data.transition
     };
 
     var bgmId = Meteor.call('createBgm', bgmAttributes);
@@ -72,8 +74,8 @@ Meteor.methods({
     var data = {
       storyItemAttributes: storyItemAttributes,
       bgmAudioId: attributes.bgmAudioId,
-      volume: Number,
-      transition: String
+      volume: attributes.volume,
+      transition: attributes.transition
     };
 
     return Meteor.call('createBgmAndStoryItem', data);
@@ -102,8 +104,8 @@ Meteor.methods({
     var data = {
       storyItemAttributes: storyItemAttributes,
       bgmAudioId: attributes.bgmAudioId,
-      volume: Number,
-      transition: String
+      volume: attributes.volume,
+      transition: attributes.transition
     };
 
     return Meteor.call('createBgmAndStoryItem', data);

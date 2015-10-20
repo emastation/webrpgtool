@@ -277,7 +277,9 @@ module WrtGame {
 
 
       var currentScene = this.nextScene();
-
+      if (!currentScene) {
+        return;
+      }
       var currentStoryItem = currentScene.storyItems[that.storyItemIndex];
 
       // すでにStoryが終了していた場合は、

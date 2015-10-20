@@ -48,6 +48,7 @@
       var storyScene = {
         storyId: opts.story_id,
         name: '新規シーン',
+        choices: [],
         order: storySceneModelClicked.order
       };
 

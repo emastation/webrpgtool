@@ -5,6 +5,7 @@ Meteor.methods({
     check(attributes, {
       storyId: String,
       name: String,
+      choices: Array,
       order: Number
     });
 
@@ -43,6 +44,7 @@ Meteor.methods({
     check(attributes, {
       storyId: String,
       name: String,
+      choices: Array,
       order: Number
     });
 
@@ -80,6 +82,7 @@ Meteor.methods({
     check(attributes, {
       storyId: String,
       name: String,
+      choices: Array,
       order: Number
     });
 
@@ -125,7 +128,7 @@ Meteor.methods({
   deleteStorySceneWithoutSort: function (idToDelete) {
     check(idToDelete, String);
 
-    // storySceneに属していすべてのstoryItems削除
+    // storySceneに属しているすべてのstoryItems削除
     Meteor.call('deleteAllStoryItemsOfStoryScene', idToDelete);
 
     // StoryScene削除

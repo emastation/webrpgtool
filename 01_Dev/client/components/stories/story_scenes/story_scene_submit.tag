@@ -18,6 +18,7 @@
       var attributes = {
         storyId: storyId,
         name: this.title.value,
+        choices: [],
         order: -1
       };
 

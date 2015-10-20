@@ -198,49 +198,105 @@ if (Stories.find().count() === 0) {
       }
   );
 
-  // Story_1
   var StoryScenes = MongoCollections.StoryScenes;
-  var sceneOfStory_1 = StoryScenes.insert({storyId: storyIds[0], name: 'シーン１', order: 0});
-  var sentence1_OfSceneOfStory_1 = {
-    sceneId: sceneOfStory_1,
+
+  /// Story_1
+
+  // scene_A_of_story_1
+  var scene_A_of_story_1 = StoryScenes.insert({
+      storyId: storyIds[0],
+      name: 'シーンA',
+      choices: [],
+      order: 0
+    });
+  var sentence_1_of_scene_A_of_story_1 = {
+    sceneId: scene_A_of_story_1,
     comment: "This is a sentence.",
-    text: 'Story_1だよ！',
+    text: 'Story_1のSceneAだよ！',
     characterId: mika,
     characterImageId: mikaImages[0],
     position: 'RightEdge'
   };
-  var sentence2_OfSceneOfStory_1 = {
-    sceneId: sceneOfStory_1,
+  Meteor.call("pushSentence", sentence_1_of_scene_A_of_story_1);
+
+  // scene_B_of_story_1
+  var scene_B_of_story_1 = StoryScenes.insert({
+      storyId: storyIds[0],
+      name: 'シーンB',
+      choices: [],
+      order: 0
+    });
+  var sentence_1_of_scene_B_of_story_1 = {
+    sceneId: scene_B_of_story_1,
     comment: "This is a sentence.",
-    text: 'そんなこといわれても…',
+    text: 'Story_1のSceneBですわ！',
+    characterId: ayumi,
+    characterImageId: ayumiImages[0],
+    position: 'RightEdge'
+  };
+  Meteor.call("pushSentence", sentence_1_of_scene_B_of_story_1);
+
+  // scene_1_of_story_1
+  var scene_1_of_story_1 = StoryScenes.insert({
+      storyId: storyIds[0],
+      name: 'シーン１',
+      choices: [
+        {
+          sentence: 'そうだね。Aにしよう',
+          goTo: scene_A_of_story_1
+        },
+        {
+          sentence: 'そうだね。Bにしない？',
+          goTo: scene_B_of_story_1
+        }
+      ],
+      order: 0
+    });
+  var sentence_1_of_scene_1_of_story_1 = {
+    sceneId: scene_1_of_story_1,
+    comment: "This is a sentence.",
+    text: 'Story_1のScene1だよ！',
+    characterId: mika,
+    characterImageId: mikaImages[0],
+    position: 'RightEdge'
+  };
+  var sentence_2_of_scene_1_of_story_1 = {
+    sceneId: scene_1_of_story_1,
+    comment: "This is a sentence.",
+    text: 'これってテストなの…',
     characterId: ran,
     characterImageId: ranImages[1],
     position: 'LeftEdge'
   };
-  var sentence3_OfSceneOfStory_1 = {
-    sceneId: sceneOfStory_1,
+  var sentence_3_of_scene_1_of_story_1 = {
+    sceneId: scene_1_of_story_1,
     comment: "This is a sentence.",
-    text: '焦ってもしょうがないですわ',
+    text: 'どうやらそのようですわね',
     characterId: ayumi,
     characterImageId: ayumiImages[2],
     position: 'Center'
   };
-  var sentence4_OfSceneOfStory_1 = {
-    sceneId: sceneOfStory_1,
+  var sentence_4_of_scene_1_of_story_1 = {
+    sceneId: scene_1_of_story_1,
     comment: "This is a sentence.",
-    text: 'そうだよ。ここはボクにまかせて',
+    text: 'もっとマシなテスト文考えられなかったのかなぁ',
     characterId: tsubasa,
     characterImageId: tsubasaImages[3],
     position: 'LeftEdge'
   };
-  Meteor.call("pushSentence", sentence1_OfSceneOfStory_1);
-  Meteor.call("pushSentence", sentence2_OfSceneOfStory_1);
-  Meteor.call("pushSentence", sentence3_OfSceneOfStory_1);
-  Meteor.call("pushSentence", sentence4_OfSceneOfStory_1);
+  Meteor.call("pushSentence", sentence_1_of_scene_1_of_story_1);
+  Meteor.call("pushSentence", sentence_2_of_scene_1_of_story_1);
+  Meteor.call("pushSentence", sentence_3_of_scene_1_of_story_1);
+  Meteor.call("pushSentence", sentence_4_of_scene_1_of_story_1);
 
-  // Story_2
-  var StoryScenes = MongoCollections.StoryScenes;
-  var sceneOfStory_2 = StoryScenes.insert({storyId: storyIds[1], name: 'シーン１', order: 0});
+
+  /// Story_2
+  var sceneOfStory_2 = StoryScenes.insert({
+    storyId: storyIds[1],
+    name: 'シーン１',
+    choices: [],
+    order: 0
+  });
   var sentence1_OfSceneOfStory_2 = {
     sceneId: sceneOfStory_2,
     comment: "This is a sentence.",

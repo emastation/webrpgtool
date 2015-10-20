@@ -1,5 +1,5 @@
 <story-scenes-list id="story-scenes-list">
-  <div each={storyScenes} data-id={_id} data-order={order}><story-scene-item story_scene={this} story_id={parent.opts.story_id} /></div>
+  <div each={storyScenes} data-id={_id} data-order={order}><story-scene-item story_scenes={parent.storyScenes} story_scene={this} story_id={parent.opts.story_id} /></div>
   <script>
     this.mixin('sortable');
 

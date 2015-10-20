@@ -168,6 +168,78 @@ module WrtGame {
       }
     }
 
+
+    private nextSentence(currentStoryItem) {
+      var that = this._tmMainScene;
+
+      var characterImage = MongoCollections.CharacterImages.findOne({_id: currentStoryItem.content.characterImageId});
+      var sentence = that.storyItems[that.storyItemIndex].content;
+      var characterPosIndex = this.getCharacterPositionIndex(sentence.position);
+
+      // if there is somebody at new character's position.
+      if(!_.isUndefined(that.characters[characterPosIndex])) {
+        that.characters[characterPosIndex].remove(); // remove that old character from the stage,
+        delete that.characters[characterPosIndex]; // and delete that old character.
+      }
+
+      // for each character position, if there is the same character as the new character, remove and delete the same character.
+      that.characters.forEach(function(character, index, characters){
+        if(_.isUndefined(characters[index])) {
+          return;
+        }
+        if(characters[index].characterId === sentence.characterId) {
+          characters[index].remove();
+          delete characters[index];
+        }
+      });
+
+      // display the new character.
+      if(characterImage.portraitImageUrl !== '') {
+        that.characters[characterPosIndex] = tm.display.Sprite(characterImage.portraitImageUrl);
+        that.characters[characterPosIndex].characterId = sentence.characterId;
+        that.addChildAt(that.characters[characterPosIndex], 10);
+        var characterScale = 1.15;
+        var horizontalPosition = this.getCharacterHorizontalPosition(sentence.position);
+        that.characters[characterPosIndex].setPosition(horizontalPosition, Game.SCREEN_HEIGHT-that.characters[characterPosIndex].height*characterScale/2);
+        that.characters[characterPosIndex].setScale(characterScale * this.getCharacterHorizontalFlip(sentence.position),
+            characterScale);
+      }
+
+      // display the new sentence text
+      that.lblMessage.text = sentence.text;
+    }
+
+    private nextBackground(currentStoryItem) {
+      var that = this._tmMainScene;
+
+      var backgroundImage = MongoCollections.BackgroundImages.findOne({_id: currentStoryItem.content.backgroundImageId});
+
+      if(that.imgBackGround) {
+        tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 1.0}, {alpha: 0.0}, 500, null).on("finish",
+          (function(self, background){
+            return function (e) {
+              that.removeChild(background)
+//                delete self.background;
+            };
+          })(that, that.imgBackGround)
+        ).start();
+      }
+
+      that.imgBackGround = tm.display.Sprite(backgroundImage.imageUrl, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
+      that.imgBackGround.setPosition(Game.SCREEN_WIDTH/2, Game.SCREEN_HEIGHT/2);
+      that.addChildAt(that.imgBackGround, 0);
+      tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 0.0}, {alpha: 1.0}, 500, null).start();
+
+    }
+
+    private nextBgm(currentStoryItem) {
+      var that = this._tmMainScene;
+
+      var bgmAudio = MongoCollections.BgmAudios.findOne({_id: currentStoryItem.content.bgmAudioId});
+      var transitionTime = (currentStoryItem.content.transition === 'crossfade') ? 3000 : 0;
+      this._bgmPlayer.play(bgmAudio.identifier, currentStoryItem.content.volume, transitionTime);
+    }
+
     public playNext() {
       var that = this._tmMainScene;
 
@@ -194,66 +266,13 @@ module WrtGame {
         return;
       }
       var currentStoryItem = that.storyItems[that.storyItemIndex];
+
       if (currentStoryItem.contentType === 'sentence') {
-        var characterImage = MongoCollections.CharacterImages.findOne({_id: currentStoryItem.content.characterImageId});
-        var sentence = that.storyItems[that.storyItemIndex].content;
-        var characterPosIndex = this.getCharacterPositionIndex(sentence.position);
-
-        // if there is somebody at new character's position.
-        if(!_.isUndefined(that.characters[characterPosIndex])) {
-          that.characters[characterPosIndex].remove(); // remove that old character from the stage,
-          delete that.characters[characterPosIndex]; // and delete that old character.
-        }
-
-        // for each character position, if there is the same character as the new character, remove and delete the same character.
-        that.characters.forEach(function(character, index, characters){
-          if(_.isUndefined(characters[index])) {
-            return;
-          }
-          if(characters[index].characterId === sentence.characterId) {
-            characters[index].remove();
-            delete characters[index];
-          }
-        });
-
-        // display the new character.
-        if(characterImage.portraitImageUrl !== '') {
-          that.characters[characterPosIndex] = tm.display.Sprite(characterImage.portraitImageUrl);
-          that.characters[characterPosIndex].characterId = sentence.characterId;
-          that.addChildAt(that.characters[characterPosIndex], 10);
-          var characterScale = 1.15;
-          var horizontalPosition = this.getCharacterHorizontalPosition(sentence.position);
-          that.characters[characterPosIndex].setPosition(horizontalPosition, Game.SCREEN_HEIGHT-that.characters[characterPosIndex].height*characterScale/2);
-          that.characters[characterPosIndex].setScale(characterScale * this.getCharacterHorizontalFlip(sentence.position),
-              characterScale);
-        }
-
-        // display the new sentence text
-        that.lblMessage.text = sentence.text;
+        this.nextSentence(currentStoryItem);
       } else if (currentStoryItem.contentType === 'background') {
-        // Background
-        var backgroundImage = MongoCollections.BackgroundImages.findOne({_id: currentStoryItem.content.backgroundImageId});
-
-        if(that.imgBackGround) {
-          tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 1.0}, {alpha: 0.0}, 500, null).on("finish",
-            (function(self, background){
-              return function (e) {
-                that.removeChild(background)
-//                delete self.background;
-              };
-            })(that, that.imgBackGround)
-          ).start();
-        }
-
-        that.imgBackGround = tm.display.Sprite(backgroundImage.imageUrl, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
-        that.imgBackGround.setPosition(Game.SCREEN_WIDTH/2, Game.SCREEN_HEIGHT/2);
-        that.addChildAt(that.imgBackGround, 0);
-        tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 0.0}, {alpha: 1.0}, 500, null).start();
-//        that.imgBackGroundOld = that.imgBackGround;
+        this.nextBackground(currentStoryItem);
       } else if (currentStoryItem.contentType === 'bgm') {
-        var bgmAudio = MongoCollections.BgmAudios.findOne({_id: currentStoryItem.content.bgmAudioId});
-        var transitionTime = (currentStoryItem.content.transition === 'crossfade') ? 3000 : 0;
-        this._bgmPlayer.play(bgmAudio.identifier, currentStoryItem.content.volume, transitionTime);
+        this.nextBgm(currentStoryItem);
       }
 
       that.addChildAt(that.imgMessageWindow, 20);

@@ -224,7 +224,7 @@ if (Stories.find().count() === 0) {
       storyId: storyIds[0],
       name: 'シーンB',
       choices: [],
-      order: 0
+      order: 1
     });
   var sentence_1_of_scene_B_of_story_1 = {
     sceneId: scene_B_of_story_1,
@@ -250,7 +250,7 @@ if (Stories.find().count() === 0) {
           goTo: scene_B_of_story_1
         }
       ],
-      order: 0
+      order: 2
     });
   var sentence_1_of_scene_1_of_story_1 = {
     sceneId: scene_1_of_story_1,

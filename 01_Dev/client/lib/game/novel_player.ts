@@ -108,8 +108,8 @@ module WrtGame {
         return false;
       }
 
-      var scene = MongoCollections.StoryScenes.find({storyId: story[0]._id}).fetch();
-      var storyItems = MongoCollections.StoryItems.find({sceneId: scene[0]._id}, {sort: { order: 1 }}).fetch();
+      var scenes = MongoCollections.StoryScenes.find({storyId: story[0]._id}).fetch();
+      var storyItems = MongoCollections.StoryItems.find({sceneId: scenes[0]._id}, {sort: { order: 1 }}).fetch();
       for (var i=0; i<storyItems.length; i++) {
         if (storyItems[i].contentType === 'sentence') {
           storyItems[i].content = MongoCollections.Sentences.findOne({_id: storyItems[i].contentId});
@@ -173,7 +173,7 @@ module WrtGame {
       var that = this._tmMainScene;
 
       var characterImage = MongoCollections.CharacterImages.findOne({_id: currentStoryItem.content.characterImageId});
-      var sentence = that.storyItems[that.storyItemIndex].content;
+      var sentence = currentStoryItem.content;
       var characterPosIndex = this.getCharacterPositionIndex(sentence.position);
 
       // if there is somebody at new character's position.
@@ -243,9 +243,10 @@ module WrtGame {
     public playNext() {
       var that = this._tmMainScene;
 
-      // すでにStoryが終了していた場合は、後片付けしてreturnする
-      if (_.isUndefined(that.storyItems[that.storyItemIndex])) {
+      var currentStoryItem = that.storyItems[that.storyItemIndex];
 
+      // すでにStoryが終了していた場合は、後片付けしてreturnする
+      if (_.isUndefined(currentStoryItem)) {
         that.characters.forEach(function(character, index, characters){
           if(!_.isUndefined(characters[index])) {
             characters[index].remove();
@@ -265,7 +266,6 @@ module WrtGame {
 
         return;
       }
-      var currentStoryItem = that.storyItems[that.storyItemIndex];
 
       if (currentStoryItem.contentType === 'sentence') {
         this.nextSentence(currentStoryItem);

@@ -12,6 +12,10 @@ module WrtGame {
     private _isPlaying:boolean = false;
     private _novelWasFinished = true;
     private _bgmPlayer:BgmPlayer = null;
+    private _nextSceneId = null;
+    private _getJustNextOrderScene = false;
+    private _scenes:any = null;
+    private _isWaitingChoice = false;
     public static getInstance():NovelPlayer
     {
       if(NovelPlayer._instance == null) {
@@ -108,18 +112,24 @@ module WrtGame {
         return false;
       }
 
-      var scenes = MongoCollections.StoryScenes.find({storyId: story[0]._id}).fetch();
-      var storyItems = MongoCollections.StoryItems.find({sceneId: scenes[0]._id}, {sort: { order: 1 }}).fetch();
-      for (var i=0; i<storyItems.length; i++) {
-        if (storyItems[i].contentType === 'sentence') {
-          storyItems[i].content = MongoCollections.Sentences.findOne({_id: storyItems[i].contentId});
-        } else if (storyItems[i].contentType === 'background') {
-          storyItems[i].content = MongoCollections.Backgrounds.findOne({_id: storyItems[i].contentId});
-        } else if (storyItems[i].contentType === 'bgm') {
-          storyItems[i].content = MongoCollections.Bgms.findOne({_id: storyItems[i].contentId});
+      var scenes = MongoCollections.StoryScenes.find({storyId: story[0]._id}, {sort: { order: 1 }}).fetch();
+      for (var i=0; i<scenes.length; i++) {
+        var storyItems = MongoCollections.StoryItems.find({sceneId: scenes[i]._id}, {sort: { order: 1 }}).fetch();
+        for (var j=0; j<storyItems.length; j++) {
+          if (storyItems[j].contentType === 'sentence') {
+            storyItems[j].content = MongoCollections.Sentences.findOne({_id: storyItems[j].contentId});
+          } else if (storyItems[j].contentType === 'background') {
+            storyItems[j].content = MongoCollections.Backgrounds.findOne({_id: storyItems[j].contentId});
+          } else if (storyItems[j].contentType === 'bgm') {
+            storyItems[j].content = MongoCollections.Bgms.findOne({_id: storyItems[j].contentId});
+          }
         }
+        scenes[i].storyItems = storyItems;
       }
-      that.storyItems = storyItems;
+      this._scenes = scenes;
+
+      this._nextSceneId = scenes[0]._id;
+      this._getJustNextOrderScene = false;
 
       this._isPlaying = true;
       this._novelWasFinished = false;
@@ -240,31 +250,113 @@ module WrtGame {
       this._bgmPlayer.play(bgmAudio.identifier, currentStoryItem.content.volume, transitionTime);
     }
 
-    public playNext() {
-      var that = this._tmMainScene;
+    private nextScene() {
+      var results = _.filter(this._scenes, (scene:any)=>{
+        return scene._id === this._nextSceneId;
+      });
 
-      var currentStoryItem = that.storyItems[that.storyItemIndex];
+      var matchedScene = results[0];
 
-      // すでにStoryが終了していた場合は、後片付けしてreturnする
-      if (_.isUndefined(currentStoryItem)) {
-        that.characters.forEach(function(character, index, characters){
-          if(!_.isUndefined(characters[index])) {
-            characters[index].remove();
-            delete characters[index];
-          }
+      if (this._getJustNextOrderScene) {
+        var results_2 = _.filter(this._scenes, (scene:any)=>{
+          return scene.order === matchedScene.order + 1;
         });
 
-        if (that.imgBackGround) {
-          that.imgBackGround.remove();
-          delete that.imgBackGround;
-        }
+        return results_2[0];
+      } else {
+        return matchedScene;
+      }
+    }
 
-        that.imgMessageWindow.visible = false;
-        this._novelWasFinished = true;
-        var mapMovement = MapMovement.getInstance();
-        mapMovement.playerIsMovable = true;
-
+    public playNext() {
+      if (this._isWaitingChoice) {
         return;
+      }
+
+      var that = this._tmMainScene;
+
+
+      var currentScene = this.nextScene();
+
+      var currentStoryItem = currentScene.storyItems[that.storyItemIndex];
+
+      // すでにStoryが終了していた場合は、
+      if (_.isUndefined(currentStoryItem)) {
+
+        // もし、シーンに選択肢が１つもなければ
+        if (currentScene.choices.length === 0) {
+          this._getJustNextOrderScene = true;
+          var nextScene = this.nextScene();
+          if (nextScene) { // if there is next scene
+            that.storyItemIndex = 0;
+            this._nextSceneId = nextScene._id
+            this._getJustNextOrderScene = false;
+            this.playNext(); // same as one more click screen.
+            return; // the story is not over yet.
+          }
+
+          // 後片付けしてreturnする
+          that.characters.forEach(function(character, index, characters){
+            if(!_.isUndefined(characters[index])) {
+              characters[index].remove();
+              delete characters[index];
+            }
+          });
+
+          if (that.imgBackGround) {
+            that.imgBackGround.remove();
+            delete that.imgBackGround;
+          }
+
+          that.imgMessageWindow.visible = false;
+          this._novelWasFinished = true;
+          var mapMovement = MapMovement.getInstance();
+          mapMovement.playerIsMovable = true;
+
+          return;
+        } else {
+          // シーンに選択肢が１つ以上あれば
+          if (this._isWaitingChoice) {
+            return;
+          }
+
+          console.log("hoge-gegegegee");
+
+
+          that.choiceLabelButtons = [];
+          currentScene.choices.forEach((choice, i, choices)=>{
+            var choiceLabelButton = tm.ui.LabelButton( choice.sentence );
+            choiceLabelButton.setFontSize(48);
+            choiceLabelButton.setAlpha(1);
+            choiceLabelButton.setShadowColor('black');
+            choiceLabelButton.setShadowOffset(3, 3);
+            choiceLabelButton.setShadowBlur(5);
+            choiceLabelButton.x = Game.SCREEN_WIDTH / 2;
+            choiceLabelButton.y = Game.SCREEN_HEIGHT / 2 + ((i-(choices.length-1)/2) * 100);
+            choiceLabelButton.setInteractive(true);
+            choiceLabelButton.addEventListener("touchend", ((index)=>{
+              return (e)=> {
+                console.log(""+index + ": " + currentScene.choices[index].goTo);
+                this._nextSceneId = currentScene.choices[index].goTo;
+                this._isWaitingChoice = false;
+                that.storyItemIndex = 0;
+
+                setTimeout(()=>{
+                  if (that.choiceLabelButtons) {
+                    that.choiceLabelButtons.forEach((choiceLabelButton)=>{
+                      choiceLabelButton.remove();
+                    });
+                  }
+                }, 0);
+              };
+            })(i));
+            that.addChildAt(choiceLabelButton, 30 + i);
+            that.choiceLabelButtons.push(choiceLabelButton);
+          });
+
+          this._isWaitingChoice = true;
+          return;
+        }
       }
 
       if (currentStoryItem.contentType === 'sentence') {

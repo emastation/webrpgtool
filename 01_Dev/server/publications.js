@@ -69,3 +69,7 @@ Meteor.publish('objectSchemata', function() {
 Meteor.publish('objects', function() {
   return MongoCollections.Objects.find();
 });
+
+Meteor.publish('games', function() {
+  return MongoCollections.Games.find();
+});

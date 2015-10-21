@@ -444,4 +444,14 @@ if (BgmAudios.find().count() === 0) {
   );
 }
 
+var Games = MongoCollections.Games;
+if (Games.find().count() === 0) {
+
+  Games.insert({
+    title: 'サンプルゲーム１',
+    gameType: 'novel', // rpg or novel
+    novelStories: [storyIds[0], storyIds[1]]
+  });
+}
+
 wrt_fixtureLoadedCount = (typeof wrt_fixtureLoadedCount !== "undefined") ? wrt_fixtureLoadedCount++ : 0;

@@ -326,9 +326,6 @@ module WrtGame {
             return;
           }
 
-          console.log("hoge-gegegegee");
-
-
           that.choiceLabelButtons = [];
           currentScene.choices.forEach((choice, i, choices)=>{
             var choiceLabelButton = tm.ui.LabelButton( choice.sentence );
@@ -365,6 +362,11 @@ module WrtGame {
         }
       }
 
+
+      if (that.storyItemIndex === 0 && currentScene.clear) { // when at the start point of the scene
+        this.clearAllElements();
+      }
+
       if (currentStoryItem.contentType === 'sentence') {
         this.nextSentence(currentStoryItem);
       } else if (currentStoryItem.contentType === 'background') {
@@ -376,6 +378,37 @@ module WrtGame {
       that.addChildAt(that.imgMessageWindow, 20);
 
       that.storyItemIndex++;
+    }
+
+    private clearAllElements() {
+      var that = this._tmMainScene;
+
+      // clear characters
+      that.characters.forEach(function(character, index, characters){
+        if(_.isUndefined(characters[index])) {
+          return;
+        }
+        characters[index].remove();
+        delete characters[index];
+      });
+
+      // clear background
+      if(that.imgBackGround) {
+        tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 1.0}, {alpha: 0.0}, 500, null).on("finish",
+          (function(self, background){
+            return function (e) {
+              that.removeChild(background)
+//                delete self.background;
+            };
+          })(that, that.imgBackGround)
+        ).start();
+      }
+
+      // stop BGM
+      this._bgmPlayer.stop();
+
+      // clear message
+      that.lblMessage.text = '';
     }
   }
 }

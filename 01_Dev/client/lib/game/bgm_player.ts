@@ -22,6 +22,7 @@ module WrtGame {
 
     private fadeoutTween:any = null;
     private fadeinTween:any = null;
+    private fadeoutTween_as_stop:any = null;
 
     private lastTimeOfBGM1:any = null;
     private lastTimeOfBGM2:any = null;
@@ -168,6 +169,40 @@ module WrtGame {
         console.log("BGM1に切り替えた！");
       }
 
+    }
+
+    public stop() {
+      if (typeof this.currentBGM === 'undefined') {
+        return;
+      } else if (this.currentBGM === "bgm_1") {
+        var volume = this.volume;
+        var crossfadeTime = 1500;
+        var bgm_1_src = this.bgm_1_src;
+        this.fadeoutTween_as_stop = new TWEEN.Tween( { volume: volume } );
+        this.fadeoutTween_as_stop
+            .to( { volume: 0 }, crossfadeTime )
+            .easing( TWEEN.Easing.Linear.None )
+            .onUpdate( function () {
+                tm.asset.Manager.get(bgm_1_src).volume = this.volume;
+            }).onComplete(function (){
+              tm.asset.Manager.get(bgm_1_src).stop();
+            })
+            .start();
+
+      } else { // bgm_2のときは
+        var volume = this.volume;
+        var crossfadeTime = 1500;
+        var bgm_2_src = this.bgm_2_src;
+        this.fadeoutTween_as_stop = new TWEEN.Tween( { volume: volume } );
+        this.fadeoutTween_as_stop
+            .to( { volume: 0 }, crossfadeTime )
+            .easing( TWEEN.Easing.Linear.None )
+            .onUpdate( function () {
+                tm.asset.Manager.get(bgm_2_src).volume = this.volume;
+            }).onComplete(function (){
+              tm.asset.Manager.get(bgm_2_src).stop();
+            }).start();
+      }
     }
 
     public loop(){

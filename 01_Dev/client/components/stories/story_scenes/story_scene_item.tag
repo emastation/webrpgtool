@@ -8,9 +8,15 @@
       </button>
     </div>
     <div class="name twelve wide column">
-      <div ondblclick={editableThisStorySceneName}>
-        <span if={!contentEditableThisStorySceneName}>{opts.story_scene.name}</span>
-        <input if={contentEditableThisStorySceneName} type="text" name="storySceneName" value={opts.story_scene.name} onblur={completeEditing} onkeydown={completeEditing}>
+      <div class="ui grid">
+        <div ondblclick={editableThisStorySceneName} class="ten wide column">
+          <span if={!contentEditableThisStorySceneName}>{opts.story_scene.name}</span>
+          <input if={contentEditableThisStorySceneName} type="text" name="storySceneName" value={opts.story_scene.name} onblur={completeEditing} onkeydown={completeEditing}>
+        </div>
+        <div class="six wide column">
+          <input type="checkbox" id="should_clear_{opts.story_scene._id}" class="should-clear" checked={opts.story_scene.clear} onchange={changeShouldClear} />
+          <span class="should-clear">シーン開始時に全ての要素をクリアする</span>
+        </div>
       </div>
       <label class="choices-label">分岐選択肢</label>
       <div class="ui grid segment" each={choice, i in opts.story_scene.choices}>
@@ -201,6 +207,22 @@
 
       this.saveEditedChoicesOfThisStoryScene(choices);
     }
+
+    changeShouldClear(e) {
+
+      var storyScene = {
+        clear: $('#should_clear_' + opts.story_scene._id).prop("checked")
+      };
+
+      MongoCollections.StoryScenes.update(opts.story_scene._id, {$set: storyScene}, (error)=> {
+        if (error) {
+          // display the error to the user
+          alert(error.reason);
+        }
+        this.update();
+      });
+
+    }
   </script>
 
   <style scoped>
@@ -217,6 +239,13 @@
       margin-top: 10px !important;
       font-weight: bold !important;
       display: inline-block;
+    }
+
+    input.should-clear {
+      width: 1em;
+    }
+    span.should-clear {
+      font-size: small;
     }
   </style>
 </story-scene-item>

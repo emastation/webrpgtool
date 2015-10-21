@@ -6,6 +6,7 @@ Meteor.methods({
       storyId: String,
       name: String,
       choices: Array,
+      clear: Boolean,
       order: Number
     });
 
@@ -45,6 +46,7 @@ Meteor.methods({
       storyId: String,
       name: String,
       choices: Array,
+      clear: Boolean,
       order: Number
     });
 
@@ -83,6 +85,7 @@ Meteor.methods({
       storyId: String,
       name: String,
       choices: Array,
+      clear: Boolean,
       order: Number
     });
 

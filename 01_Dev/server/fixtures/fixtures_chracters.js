@@ -207,6 +207,7 @@ if (Stories.find().count() === 0) {
       storyId: storyIds[0],
       name: 'シーンA',
       choices: [],
+      clear: false,
       order: 0
     });
   var sentence_1_of_scene_A_of_story_1 = {
@@ -224,6 +225,7 @@ if (Stories.find().count() === 0) {
       storyId: storyIds[0],
       name: 'シーンB',
       choices: [],
+      clear: false,
       order: 1
     });
   var sentence_1_of_scene_B_of_story_1 = {
@@ -250,6 +252,7 @@ if (Stories.find().count() === 0) {
           goTo: scene_B_of_story_1
         }
       ],
+      clear: false,
       order: 2
     });
   var sentence_1_of_scene_1_of_story_1 = {
@@ -295,6 +298,7 @@ if (Stories.find().count() === 0) {
     storyId: storyIds[1],
     name: 'シーン１',
     choices: [],
+    clear: false,
     order: 0
   });
   var sentence1_OfSceneOfStory_2 = {

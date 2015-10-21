@@ -93,7 +93,7 @@ module WrtGame {
       that.removeChildren();
     }
 
-    public loadStory(StoryName) {
+    public loadStory(StoryName, startSceneId) {
       if (!this._novelWasFinished) {
         return false;
       }
@@ -128,7 +128,11 @@ module WrtGame {
       }
       this._scenes = scenes;
 
-      this._nextSceneId = scenes[0]._id;
+      if (startSceneId) {
+        this._nextSceneId = startSceneId;
+      } else {
+        this._nextSceneId = scenes[0]._id;
+      }
       this._getJustNextOrderScene = false;
 
       this._isPlaying = true;

@@ -98,7 +98,7 @@
         game.init(null, true, ()=>{
           var novelPlayer = WrtGame.NovelPlayer.getInstance();
           var story = MongoCollections.Stories.findOne({_id: opts.story_id});
-          novelPlayer.loadStory(story.title);
+          novelPlayer.loadStory(story.title, opts.scene_id);
           novelPlayer.playNext();
         });
 		  });

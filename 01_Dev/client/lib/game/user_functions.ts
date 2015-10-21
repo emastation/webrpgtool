@@ -116,7 +116,7 @@ module WrtGame {
         playNovelNext:(storyName)=> {
           var novelPlayer = NovelPlayer.getInstance();
 
-          if(novelPlayer.loadStory(storyName)) {
+          if ( novelPlayer.loadStory(storyName, (void 0)) ) {
             novelPlayer.playNext();
           }
 

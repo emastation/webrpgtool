@@ -60,7 +60,7 @@
     this.contentEditableStorySceneChoices = [];
     this.initialChoiceSentence = "この選択肢の文章を編集してください。";
     Meteor.autorun(()=> {
-      this.isLogin = Meteor.userId() ? true : false
+      this.isLogin = Meteor.userId() ? true : false;
       this.update();
     });
 
@@ -129,36 +129,6 @@
       this.update();
     }
 
-    completeChoiceEditing(i, evt) {
-
-      if (!this.isLogin) {
-        return;
-      }
-      if (!_.isUndefined(evt.keyCode) && evt.keyCode !== 13) {// 何らかのキーが押されていて、それがEnterキー以外だった場合
-        return true; // 処理を抜ける
-      }
-
-      var choices = opts.story_scene.choices;
-      choices[i].sentence = evt.target.value;
-
-      var storyScene = {
-        choices: choices
-      };
-
-      MongoCollections.StoryScenes.update(opts.story_scene._id, {$set: storyScene}, function(error) {
-        if (error) {
-          // display the error to the user
-          alert(error.reason);
-        }
-      });
-
-      evt.target.blur();
-
-      this.contentEditableStorySceneChoices[i] = false;
-      this.update();
-
-    }
-
     saveEditedChoicesOfThisStoryScene(choices) {
       var storyScene = {
         choices: choices
@@ -171,6 +141,26 @@
         }
       });
       this.update();
+    }
+
+    completeChoiceEditing(i, evt) {
+
+      if (!this.isLogin) {
+        return;
+      }
+      if (!_.isUndefined(evt.keyCode) && evt.keyCode !== 13) {// 何らかのキーが押されていて、それがEnterキー以外だった場合
+        return true; // 処理を抜ける
+      }
+
+      var choices = opts.story_scene.choices;
+      choices[i].sentence = evt.target.value;
+
+      this.saveEditedChoicesOfThisStoryScene(choices);
+
+
+      evt.target.blur();
+      this.contentEditableStorySceneChoices[i] = false;
+
     }
 
     onChangeSelectChoiceGoto(i, evt) {

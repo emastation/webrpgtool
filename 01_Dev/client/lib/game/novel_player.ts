@@ -250,8 +250,13 @@ module WrtGame {
       var that = this._tmMainScene;
 
       var bgmAudio = MongoCollections.BgmAudios.findOne({_id: currentStoryItem.content.bgmAudioId});
-      var transitionTime = (currentStoryItem.content.transition === 'crossfade') ? 3000 : 0;
-      this._bgmPlayer.play(bgmAudio.identifier, currentStoryItem.content.volume, transitionTime);
+
+      if (bgmAudio.identifier === 'none') {
+        this._bgmPlayer.stop();
+      } else {
+        var transitionTime = (currentStoryItem.content.transition === 'crossfade') ? 3000 : 0;
+        this._bgmPlayer.play(bgmAudio.identifier, currentStoryItem.content.volume, transitionTime);
+      }
     }
 
     private nextScene() {

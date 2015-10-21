@@ -1,4 +1,4 @@
-<object-schemata-submit>
+<object-schema-submit>
   <div class="ui segment">
     <form id="object-schema-form" class="ui form" onsubmit={submitNewObjectSchema}>
       <div className="field">
@@ -31,7 +31,7 @@
         name: this.name.value,
         identifier: this.identifier.value,
         extends: '',
-        attributes: {}
+        attributes: []
       };
 
       Meteor.call('createObjectSchema', attribute, function(error, result) { // display the error to the user and abort
@@ -48,4 +48,4 @@
     }
   </script>
 
-</object-schemata-submit>
+</object-schema-submit>

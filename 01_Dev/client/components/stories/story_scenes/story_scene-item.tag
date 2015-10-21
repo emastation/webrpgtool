@@ -1,6 +1,6 @@
 <story-scene-item>
   <div class="sortable-item removable ui grid segment">
-    <div class="two wide column">
+    <div class="one wide column">
       <i if={isLogin} class="sortable-handle mdi-action-view-headline">=&nbsp;</i>
       <span class="badge one wide column">{opts.story_scene.order}</span>
       <button if={isLogin} type="button" class="plus circular ui icon button" onclick={insertStory}>
@@ -44,7 +44,12 @@
         </div>
       </div>
     </div>
-    <div class="two wide column">
+    <div class="three wide column">
+      <a href="#story_play/{opts.story_id}/scene/{opts.story_scene._id}">
+        <button type="button" class="edit circular ui icon button">
+          <i class="play icon"></i>
+        </button>
+      </a>
       <a href="#story/{opts.story_id}/scene/{opts.story_scene._id}">
         <button if={isLogin} type="button" class="edit circular ui icon button">
           <i class="edit icon"></i>

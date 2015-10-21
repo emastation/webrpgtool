@@ -30,20 +30,28 @@ module WrtGame {
       return Game._instance;
     }
 
-    public init(data:any) {
+    public init(data:any, onlyNovel = false, callbackWhenOnlyNovel:Function = null) {
       var novelPlayer = WrtGame.NovelPlayer.getInstance();
       novelPlayer.init();
 
-      var mapMovement = this.initEvents();
-      this.initTmlib(()=>{
-        this.initBabylon(data, mapMovement);
-        this.initUserFunctions();
+      if (!onlyNovel) {
+        var mapMovement = this.initEvents();
+      }
 
-        var e = document.createEvent('UIEvents')
-        // type, canBubble, cancelable, view, detail
-        e.initUIEvent('resize', true, true, window, 0)
-        window.dispatchEvent(e);
-      });
+      if (onlyNovel) {
+        this.initTmlib(callbackWhenOnlyNovel);
+      } else {
+        this.initTmlib(()=>{
+
+          this.initBabylon(data, mapMovement);
+          this.initUserFunctions();
+
+          var e = document.createEvent('UIEvents')
+          // type, canBubble, cancelable, view, detail
+          e.initUIEvent('resize', true, true, window, 0)
+          window.dispatchEvent(e);
+        });
+      }
     }
 
     private initEvents() {

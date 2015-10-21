@@ -61,3 +61,11 @@ Meteor.publish('bgms', function() {
 Meteor.publish('bgmAudios', function() {
   return MongoCollections.BgmAudios.find();
 });
+
+Meteor.publish('objectSchemata', function() {
+  return MongoCollections.ObjectSchemata.find();
+});
+
+Meteor.publish('objects', function() {
+  return MongoCollections.Objects.find();
+});

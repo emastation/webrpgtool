@@ -7,11 +7,16 @@
         <i class="plus icon"></i>
       </button>
     </div>
-    <div class="name twelve wide column" ondblclick={editableThisStory}>
+    <div class="name ten wide column" ondblclick={editableThisStory}>
       <span if={!contentEditable}>{opts.story.title}</span>
       <input if={contentEditable} type="text" name="storyTitle" value={opts.story.title} onblur={completeEditing} onkeydown={completeEditing}>
     </div>
-    <div class="two wide column">
+    <div class="four wide column">
+      <a href="#story_play/{opts.story._id}">
+        <button type="button" class="edit circular ui icon button">
+          <i class="play icon"></i>
+        </button>
+      </a>
       <a href="#story/{opts.story._id}">
         <button if={isLogin} type="button" class="edit circular ui icon button">
           <i class="edit icon"></i>

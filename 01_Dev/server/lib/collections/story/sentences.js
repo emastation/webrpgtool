@@ -61,6 +61,7 @@ Meteor.methods({
     check(attributes, {
       sceneId: String,
       comment: String,
+      needClick: Boolean,
       text: String,
       characterId: String,
       characterImageId: String,
@@ -72,6 +73,7 @@ Meteor.methods({
       contentId: '',
       contentType: 'sentence',
       comment: attributes.comment,
+      needClick: attributes.needClick,
       order: -1
     };
 
@@ -92,6 +94,7 @@ Meteor.methods({
     check(attributes, {
       sceneId: String,
       comment: String,
+      needClick: Boolean,
       text: String,
       characterId: String,
       characterImageId: String,
@@ -104,6 +107,7 @@ Meteor.methods({
       contentId: '',
       contentType: 'sentence',
       comment: attributes.comment,
+      needClick: attributes.needClick,
       order: attributes.order
     };
 

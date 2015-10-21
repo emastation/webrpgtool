@@ -1,14 +1,16 @@
 <story-items-list id="sentences-list">
-  <div each={name, i in storyItems} data-id={name._id} data-order={name.order}>
+  <div each={storyItem, i in storyItems} data-id={storyItem._id} data-order={storyItem.order}>
     <div each={sentence in contents[i].sentence}>
-      <sentence-item story_item={name} sentence_item={sentence} scene_id={parent.parent.opts.scene_id} />
+      <sentence-item story_item={storyItem} sentence_item={sentence} scene_id={parent.parent.opts.scene_id} />
     </div>
     <div each={background in contents[i].background}>
-      <background-item story_item={name} background_item={background} scene_id={parent.parent.opts.scene_id} />
+      <background-item story_item={storyItem} background_item={background} scene_id={parent.parent.opts.scene_id} />
     </div>
     <div each={bgm in contents[i].bgm}>
-      <bgm-item story_item={name} bgm_item={bgm} scene_id={parent.parent.opts.scene_id} />
+      <bgm-item story_item={storyItem} bgm_item={bgm} scene_id={parent.parent.opts.scene_id} />
     </div>
+    <hr if={storyItem.needClick} onclick={toggleNeedClick.bind(this, i)} class="needClick" />
+    <hr if={!storyItem.needClick} onclick={toggleNeedClick.bind(this, i)} class="dontNeedClick" />
   </div>
   <script>
     this.mixin('sortable');
@@ -21,6 +23,20 @@
       handle: ".sortable-handle"
     };
     // Sortable Settings [end]
+
+    toggleNeedClick(i) {
+      var attribute = {
+        needClick: !this.storyItems[i].needClick
+      };
+
+      MongoCollections.StoryItems.update(this.storyItems[i]._id, {$set: attribute}, (error)=> {
+        if (error) {
+          // display the error to the user
+          alert(error.reason);
+        }
+        this.update();
+      });
+    }
 
     this.getContents = ()=> {
       // sceneに属するstoryItemsをソートされた状態で取得する
@@ -127,4 +143,18 @@
     });
 
   </script>
+
+  <style scoped>
+    hr.needClick {
+      height: 10px;
+      background-color: #DDDDDD;
+      color: #DDDDDD;
+    }
+    hr.dontNeedClick {
+      height: 10px;
+      background-color: #FFFFFF;
+      color: #DDDDDD;
+    }
+
+  </style>
 </story-items-list>

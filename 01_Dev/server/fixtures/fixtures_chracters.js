@@ -213,6 +213,7 @@ if (Stories.find().count() === 0) {
   var sentence_1_of_scene_A_of_story_1 = {
     sceneId: scene_A_of_story_1,
     comment: "This is a sentence.",
+    needClick: true,
     text: 'Story_1のSceneAだよ！',
     characterId: mika,
     characterImageId: mikaImages[0],
@@ -231,6 +232,7 @@ if (Stories.find().count() === 0) {
   var sentence_1_of_scene_B_of_story_1 = {
     sceneId: scene_B_of_story_1,
     comment: "This is a sentence.",
+    needClick: true,
     text: 'Story_1のSceneBですわ！',
     characterId: ayumi,
     characterImageId: ayumiImages[0],
@@ -258,6 +260,7 @@ if (Stories.find().count() === 0) {
   var sentence_1_of_scene_1_of_story_1 = {
     sceneId: scene_1_of_story_1,
     comment: "This is a sentence.",
+    needClick: true,
     text: 'Story_1のScene1だよ！',
     characterId: mika,
     characterImageId: mikaImages[0],
@@ -266,6 +269,7 @@ if (Stories.find().count() === 0) {
   var sentence_2_of_scene_1_of_story_1 = {
     sceneId: scene_1_of_story_1,
     comment: "This is a sentence.",
+    needClick: true,
     text: 'これってテストなの…',
     characterId: ran,
     characterImageId: ranImages[1],
@@ -274,6 +278,7 @@ if (Stories.find().count() === 0) {
   var sentence_3_of_scene_1_of_story_1 = {
     sceneId: scene_1_of_story_1,
     comment: "This is a sentence.",
+    needClick: true,
     text: 'どうやらそのようですわね',
     characterId: ayumi,
     characterImageId: ayumiImages[2],
@@ -282,6 +287,7 @@ if (Stories.find().count() === 0) {
   var sentence_4_of_scene_1_of_story_1 = {
     sceneId: scene_1_of_story_1,
     comment: "This is a sentence.",
+    needClick: true,
     text: 'もっとマシなテスト文考えられなかったのかなぁ',
     characterId: tsubasa,
     characterImageId: tsubasaImages[3],
@@ -304,6 +310,7 @@ if (Stories.find().count() === 0) {
   var sentence1_OfSceneOfStory_2 = {
     sceneId: sceneOfStory_2,
     comment: "This is a sentence.",
+    needClick: true,
     text: 'Story_2だよ！',
     characterId: mika,
     characterImageId: mikaImages[0],
@@ -312,6 +319,7 @@ if (Stories.find().count() === 0) {
   var sentence2_OfSceneOfStory_2 = {
     sceneId: sceneOfStory_2,
     comment: "This is a sentence.",
+    needClick: true,
     text: 'そんなこといわれても…',
     characterId: ran,
     characterImageId: ranImages[1],
@@ -320,6 +328,7 @@ if (Stories.find().count() === 0) {
   var sentence3_OfSceneOfStory_2 = {
     sceneId: sceneOfStory_2,
     comment: "This is a sentence.",
+    needClick: true,
     text: '焦ってもしょうがないですわ',
     characterId: ayumi,
     characterImageId: ayumiImages[2],
@@ -328,6 +337,7 @@ if (Stories.find().count() === 0) {
   var sentence4_OfSceneOfStory_2 = {
     sceneId: sceneOfStory_2,
     comment: "This is a sentence.",
+    needClick: true,
     text: 'そうだよ。ここはボクにまかせて',
     characterId: tsubasa,
     characterImageId: tsubasaImages[3],

@@ -383,6 +383,10 @@ module WrtGame {
       that.addChildAt(that.imgMessageWindow, 20);
 
       that.storyItemIndex++;
+
+      if (!currentStoryItem.needClick) {
+        this.playNext();
+      }
     }
 
     private clearAllElements() {

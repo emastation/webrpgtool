@@ -19,6 +19,7 @@
       var attributes = {
         sceneId: sceneId,
         comment: "This is a background.",
+        needClick: true,
         backgroundImageId: this.backgroundImageSelect.value,
       };
 
@@ -51,6 +52,7 @@
       var attributes = {
         sceneId: sceneId,
         comment: "This is a background.",
+        needClick: true,
         backgroundImageId: this.backgroundImageSelect.value,
         order: order
       };

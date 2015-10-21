@@ -52,6 +52,7 @@ Meteor.methods({
     check(attributes, {
       sceneId: String,
       comment: String,
+      needClick: Boolean,
       backgroundImageId: String,
     });
 
@@ -60,6 +61,7 @@ Meteor.methods({
       contentId: '',
       contentType: 'background',
       comment: attributes.comment,
+      needClick: attributes.needClick,
       order: -1
     };
 
@@ -77,6 +79,7 @@ Meteor.methods({
     check(attributes, {
       sceneId: String,
       comment: String,
+      needClick: Boolean,
       backgroundImageId: String,
       order: Number
     });
@@ -86,6 +89,7 @@ Meteor.methods({
       contentId: '',
       contentType: 'background',
       comment: attributes.comment,
+      needClick: attributes.needClick,
       order: attributes.order
     };
 

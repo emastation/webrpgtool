@@ -58,6 +58,7 @@ Meteor.methods({
     check(attributes, {
       sceneId: String,
       comment: String,
+      needClick: Boolean,
       bgmAudioId: String,
       volume: Number,
       transition: String
@@ -68,6 +69,7 @@ Meteor.methods({
       contentId: '',
       contentType: 'bgm',
       comment: attributes.comment,
+      needClick: attributes.needClick,
       order: -1
     };
 
@@ -87,6 +89,7 @@ Meteor.methods({
     check(attributes, {
       sceneId: String,
       comment: String,
+      needClick: Boolean,
       bgmAudioId: String,
       volume: Number,
       transition: String,
@@ -98,6 +101,7 @@ Meteor.methods({
       contentId: '',
       contentType: 'bgm',
       comment: attributes.comment,
+      needClick: attributes.needClick,
       order: attributes.order
     };
 

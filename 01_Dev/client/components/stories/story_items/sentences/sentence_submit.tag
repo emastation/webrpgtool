@@ -44,6 +44,7 @@
       var attributes = {
         sceneId: sceneId,
         comment: "This is a sentence.",
+        needClick: true,
         text: this.text.value,
         characterId: this.selectedCharacterId,
         characterImageId: this.characterImageSelect.value,
@@ -103,6 +104,7 @@
       var attributes = {
         sceneId: sceneId,
         comment: "This is a sentence.",
+        needClick: true,
         text: this.text.value,
         characterId: this.selectedCharacterId,
         characterImageId: this.characterImageSelect.value,

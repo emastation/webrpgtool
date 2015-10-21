@@ -33,6 +33,7 @@
       var attributes = {
         sceneId: sceneId,
         comment: "This is a bgm.",
+        needClick: true,
         bgmAudioId: this.bgmAudioSelect.value,
         volume: parseFloat(this.volume.value),
         transition: this.bgmTransitionSelect.value
@@ -67,6 +68,7 @@
       var attributes = {
         sceneId: sceneId,
         comment: "This is a bgm.",
+        needClick: true,
         bgmAudioId: this.bgmAudioSelect.value,
         volume: parseFloat(this.volume.value),
         transition: this.bgmTransitionSelect.value,

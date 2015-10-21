@@ -7,6 +7,7 @@ Meteor.methods({
       contentId: String,
       contentType: String,
       comment: String,
+      needClick: Boolean,
       order: Number
     });
 
@@ -39,6 +40,7 @@ Meteor.methods({
       contentId: String,
       contentType: String,
       comment: String,
+      needClick: Boolean,
       order: Number
     });
 
@@ -67,6 +69,7 @@ Meteor.methods({
       contentId: String,
       contentType: String,
       comment: String,
+      needClick: Boolean,
       order: Number
     });
 

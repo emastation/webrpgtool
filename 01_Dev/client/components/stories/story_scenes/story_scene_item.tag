@@ -94,6 +94,7 @@
         storyId: opts.story_id,
         name: '新規シーン',
         choices: [],
+        clear: false,
         order: storySceneModelClicked.order
       };
 

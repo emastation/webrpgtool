@@ -19,6 +19,7 @@
         storyId: storyId,
         name: this.title.value,
         choices: [],
+        clear: false,
         order: -1
       };
 

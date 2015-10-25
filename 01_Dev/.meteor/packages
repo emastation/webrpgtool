@@ -25,3 +25,7 @@ meteortypescript:compiler
 meteortypescript:typescript-libs
 rubaxa:sortable
 stevezhu:lodash
+meteorhacks:npm
+
+
+npm-container

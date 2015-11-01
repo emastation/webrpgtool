@@ -1,5 +1,5 @@
 <object-schemata-list>
-  <object-schema-item each={objectSchemata} object_schema={this}></map-item>
+  <object-schema-item each={objectSchemata} object_schema={this}></object-schema-item>
   <script>
     this.on('mount', ()=>{
       Meteor.subscribe('objectSchemata');

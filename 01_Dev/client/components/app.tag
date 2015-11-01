@@ -12,7 +12,7 @@
     <route path="story/:story_id/scene/:scene_id"><site-header page="stories" /></route>
     <route path="story_play/:story_id"><site-header page="stories" /></route>
     <route path="story_play/:story_id/scene/:scene_id"><site-header page="stories" /></route>
-    <route path="objects"><site-header page="objects" /></route>
+    <route path="schemata"><site-header page="objects" /></route>
     <route path="game/:map_id"><site-header /></route>
   </router>
   <router>
@@ -28,6 +28,7 @@
     <route path="story/:story_id/scene/:scene_id"><story-scene-page opts={parent.parent.routeFunc} /></route>
     <route path="story_play/:story_id"><story-play opts={parent.parent.routeFunc} /></route>
     <route path="story_play/:story_id/scene/:scene_id"><story-play opts={parent.parent.routeFunc} /></route>
+    <route path="schemata"><objects-top opts={parent.parent.routeFunc} /></route>
     <route path="objects"><objects-top opts={parent.parent.routeFunc} /></route>
     <route path="game/:map_id"><game opts={parent.parent.routeFunc} /></route>
   </router>

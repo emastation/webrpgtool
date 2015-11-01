@@ -4,7 +4,7 @@
     <a class={item: true, active: isMaps} id="header-navlink-maps" href="#maps">マップ</a>
     <a class={item: true, active: isCodes} id="header-navlink-scripts" href="#codes">スクリプト</a>
     <a class={item: true, active: isStories} id="header-navlink-stories" href="#stories">ストーリー</a>
-    <a class={item: true, active: isObjects} id="header-navlink-stories" href="#objects">オブジェクト</a>
+    <a class={item: true, active: isObjects} id="header-navlink-stories" href="#schemata">オブジェクト</a>
     <div class="item" id="loginButtonsDiv"></div>
   </div>
 

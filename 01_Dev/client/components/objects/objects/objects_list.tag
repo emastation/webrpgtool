@@ -1,5 +1,5 @@
 <objects-list>
-  <object-item each={objects} object={this} is_login={parent.opts.is_login}></object-item>
+  <object-item each={objects} object={this} object_schema={objectSchema} is_login={parent.opts.is_login}></object-item>
   <script>
   this.objects = [];
 
@@ -8,6 +8,15 @@
       this.objectSchema = MongoCollections.ObjectSchemata.findOne({_id: opts.schema_id});
       if (this.objectSchema) {
         this.objects = MongoCollections.Objects.find({schema_identifier: this.objectSchema.identifier}).fetch();
+        this.objects.forEach((object)=> {
+          object.attributes.forEach((attribute)=> {
+            var schemaAttrib = _.filter(this.objectSchema.attributes, (attrib)=>{
+              return attrib.identifier === attribute.identifier;
+            })[0];
+            attribute.name = schemaAttrib.name;
+            attribute.type = schemaAttrib.type;
+          });
+        });
         this.update();
       }
     }

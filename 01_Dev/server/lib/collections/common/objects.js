@@ -54,8 +54,6 @@ Meteor.methods({
       return object.schema_identifier;
     });
 
-    console.log(sameIdentifierObjects.length);
-
     if (sameIdentifierObjects.length !== uniqedSameIdentifierObjects.length) {
 
       // rollback
@@ -73,4 +71,17 @@ Meteor.methods({
     }
 
   },
+
+  updateObjectAttributes: function(obj) {
+
+    var Objects = MongoCollections.Objects;
+
+    var attribute = {
+      attributes: obj.objectAttributes
+    }
+
+    // update
+    Objects.update(obj.objectId, {$set: attribute});
+
+  }
 });

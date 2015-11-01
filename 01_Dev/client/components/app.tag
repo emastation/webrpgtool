@@ -13,6 +13,7 @@
     <route path="story_play/:story_id"><site-header page="stories" /></route>
     <route path="story_play/:story_id/scene/:scene_id"><site-header page="stories" /></route>
     <route path="schemata"><site-header page="objects" /></route>
+    <route path="schema/:schema_id"><site-header page="objects" /></route>
     <route path="game/:map_id"><site-header /></route>
   </router>
   <router>

@@ -3,7 +3,6 @@ Meteor.methods({
     check(Meteor.userId(), String);
     check(attribute, {
       identifier: String,
-      name: String,
       attributes: Array
     });
 

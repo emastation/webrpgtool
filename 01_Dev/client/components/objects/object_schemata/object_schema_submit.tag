@@ -9,7 +9,7 @@
         <label>identifier</label>
         <input name="identifier" id="identifier" type="text" placeholder="追加したいオブジェクトスキーマのユニークな識別子を入力してください。" kl_vkbd_parsed="true"/>
       </div>
-      <input type="submit" id="map-submit" class="ui button" value="追加" />
+      <input type="submit" id="object-schema-submit" class="ui button" value="追加" />
     </form>
   </div>
 

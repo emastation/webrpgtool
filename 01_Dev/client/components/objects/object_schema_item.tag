@@ -39,6 +39,7 @@
           <select if={isLogin} value={attribute.type} onchange={onChangeSelectAttributeType.bind(this, i)}>
             <option value="number">数値</option>
             <option value="string">文字列</option>
+            <option value="boolean">真偽値</option>
           </select>
         </div>
         <div class="two wide column">

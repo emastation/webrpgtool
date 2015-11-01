@@ -1,13 +1,39 @@
 <objects-list>
   <object-item each={objects} object={this}></object-item>
   <script>
-    this.on('mount', ()=>{
-      Meteor.subscribe('objects');
-    });
+  this.objects = [];
 
-    Meteor.autorun(()=> {
-      this.objects = MongoCollections.Objects.find().fetch();
-      this.update();
+  getObjects() {
+    if(!_.isUndefined(opts.schema_id)) {
+      this.objectSchema = MongoCollections.ObjectSchemata.findOne({_id: opts.schema_id});
+      if (this.objectSchema) {
+        this.objects = MongoCollections.Objects.find({schema_identifier: this.objectSchema.identifier}).fetch();
+        this.update();
+      }
+    }
+  }
+
+  this.on('mount', ()=>{
+    var deferObjectSchemata = $.Deferred();
+    Meteor.subscribe('objectSchemata', {
+      onReady: ()=>{
+        deferObjectSchemata.resolve();
+      }
     });
+    var deferObjects = $.Deferred();
+    Meteor.subscribe('objects', {
+      onReady: ()=>{
+        deferObjects.resolve();
+      }
+    });
+    $.when(deferObjectSchemata.promise(), deferObjects.promise()).done(()=> {
+      this.getObjects();
+    });
+  });
+
+  this.on('update', ()=>{
+    this.getObjects();
+  });
+
   </script>
 </objects-list>

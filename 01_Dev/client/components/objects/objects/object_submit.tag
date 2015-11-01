@@ -27,6 +27,7 @@
 
       var submitData = {
         identifier: this.identifier.value,
+        schema_identifier: this.objectSchema.identifier,
         attributes: []
       };
 

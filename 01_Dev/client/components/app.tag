@@ -29,7 +29,7 @@
     <route path="story_play/:story_id"><story-play opts={parent.parent.routeFunc} /></route>
     <route path="story_play/:story_id/scene/:scene_id"><story-play opts={parent.parent.routeFunc} /></route>
     <route path="schemata"><objects-top opts={parent.parent.routeFunc} /></route>
-    <route path="objects"><objects-top opts={parent.parent.routeFunc} /></route>
+    <route path="schema/:schema_id"><objects-page opts={parent.parent.routeFunc} /></route>
     <route path="game/:map_id"><game opts={parent.parent.routeFunc} /></route>
   </router>
   <script>

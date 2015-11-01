@@ -57,6 +57,11 @@
       </div>
     </div>
     <div class="two wide column">
+      <a href="#schema/{opts.object_schema._id}">
+        <button if={isLogin} type="button" class="close circular ui icon button" data-dismiss="alert">
+          <i class="edit icon"></i>
+        </button>
+      </a>
       <button if={isLogin} type="button" class="close circular ui icon button" data-dismiss="alert" onclick={deleteObjectSchema}>
         <i class="remove icon"></i>
       </button>

@@ -1,5 +1,5 @@
 <objects-top>
-  <object-schemata-submit if={isLogin}></object-schemata-submit>
+  <object-schema-submit if={isLogin}></object-schema-submit>
   <object-schemata-list></object-schemata-list>
   <script>
     Meteor.autorun(()=> {

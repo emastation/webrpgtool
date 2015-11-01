@@ -22,7 +22,7 @@
         return;
       }
 
-      if (this.name.value === '') {
+      if (this.identifier.value === '') {
         alert('識別子を入力してください。');
         return;
       }

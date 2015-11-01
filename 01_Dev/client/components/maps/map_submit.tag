@@ -1,7 +1,7 @@
 <map-submit>
   <div class="ui segment">
     <form id="map-form" class="ui form" onsubmit={submitNewMap}>
-      <div className="field">
+      <div class="field">
         <label>タイトル</label>
         <input name="title" id="title" type="text" placeholder="追加したいマップのタイトルを入力してください。" kl_vkbd_parsed="true"/>
       </div>

@@ -2,11 +2,11 @@
   <div class="ui segment">
     <form id="object-schema-form" class="ui form" onsubmit={submitNewObject}>
       <h1>{objectSchema.name} のデータ管理</h1>
-      <div className="field">
+      <div class="field">
         <label>identifier</label>
         <input name="identifier" id="identifier" type="text" placeholder="追加したいオブジェクトのユニークな識別子を入力してください。" kl_vkbd_parsed="true"/>
       </div>
-      <div className="field" each={objectSchema.attributes}>
+      <div class="field" each={objectSchema.attributes}>
         <label>{name}</label>
         <input if={type==='string'} name={identifier} type="text" id="object_submit_text_{identifier}" kl_vkbd_parsed="true" />
         <input if={type==='number'} name={identifier} type="number" id="object_submit_number_{identifier}" kl_vkbd_parsed="true" />

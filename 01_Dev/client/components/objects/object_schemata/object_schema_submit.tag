@@ -1,11 +1,11 @@
 <object-schema-submit>
   <div class="ui segment">
     <form id="object-schema-form" class="ui form" onsubmit={submitNewObjectSchema}>
-      <div className="field">
+      <div class="field">
         <label>名前</label>
         <input name="name" id="name" type="text" placeholder="追加したいオブジェクトスキーマの名前を入力してください。" kl_vkbd_parsed="true"/>
       </div>
-      <div className="field">
+      <div class="field">
         <label>identifier</label>
         <input name="identifier" id="identifier" type="text" placeholder="追加したいオブジェクトスキーマのユニークな識別子を入力してください。" kl_vkbd_parsed="true"/>
       </div>

@@ -54,7 +54,9 @@
         if (result.exists)
           alert('すでに登録されている識別子です。');
 
-        this.name.value = ''
+        Session.set('ObjectItem_changed', Date.now());
+
+        this.identifier.value = ''
       });
 
     }

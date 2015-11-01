@@ -30,5 +30,47 @@ Meteor.methods({
     return {
       _id: id
     };
-  }
+  },
+
+  updateObjectIdentifier: function(obj) {
+
+    var Objects = MongoCollections.Objects;
+
+    var attribute = {
+      identifier: obj.objectIdentifier
+    }
+
+    var object = Objects.findOne(obj.objectId);
+    var backupAttributes = {
+      identifier: object.identifier
+    }
+
+    // update
+    Objects.update(obj.objectId, {$set: attribute});
+
+    // check duplication
+    var sameIdentifierObjects = Objects.find({identifier: obj.objectIdentifier}).fetch();
+    var uniqedSameIdentifierObjects = _.uniq(sameIdentifierObjects, false, function(object) {
+      return object.schema_identifier;
+    });
+
+    console.log(sameIdentifierObjects.length);
+
+    if (sameIdentifierObjects.length !== uniqedSameIdentifierObjects.length) {
+
+      // rollback
+      Objects.update(obj.objectId, {$set: backupAttributes}, function(error) {
+        if (error) {
+          return {
+            error: error.reason
+          };
+        }
+      });
+
+      return {
+        exists: true
+      }
+    }
+
+  },
 });

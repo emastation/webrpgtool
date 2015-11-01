@@ -1,5 +1,5 @@
 <objects-list>
-  <object-item each={objects} object={this}></object-item>
+  <object-item each={objects} object={this} is_login={parent.opts.is_login}></object-item>
   <script>
   this.objects = [];
 
@@ -32,6 +32,11 @@
   });
 
   this.on('update', ()=>{
+    this.getObjects();
+  });
+
+  Meteor.autorun(()=> {
+    Session.get('ObjectItem_changed');
     this.getObjects();
   });
 

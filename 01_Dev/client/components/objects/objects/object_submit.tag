@@ -1,6 +1,7 @@
 <object-submit>
   <div class="ui segment">
     <form id="object-schema-form" class="ui form" onsubmit={submitNewObject}>
+      <h1>{objectSchema.name} のデータ管理</h1>
       <div className="field">
         <label>identifier</label>
         <input name="identifier" id="identifier" type="text" placeholder="追加したいオブジェクトのユニークな識別子を入力してください。" kl_vkbd_parsed="true"/>

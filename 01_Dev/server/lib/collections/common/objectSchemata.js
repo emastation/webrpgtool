@@ -98,14 +98,10 @@ Meteor.methods({
       });
       var currentDiffArray = lodash.xor(matchIdentifers, currentIdentifiers);
       var newDiffArray = lodash.xor(matchIdentifers, newIdentifiers);
-      console.log(matchIdentifers);
-      console.log(currentIdentifiers);
-      console.log(currentDiffArray);
       if (currentDiffArray.length !== 0) {
         var changedCurrentIdentifier = currentDiffArray[0];
         var changedNewIdentifier = newDiffArray[0];
         objects.forEach(function(object) {
-          console.log(changedCurrentIdentifier);
           var index = lodash.findIndex(object.attributes, {identifier: changedCurrentIdentifier});
           object.attributes[index].identifier = changedNewIdentifier;
           var attribute = {

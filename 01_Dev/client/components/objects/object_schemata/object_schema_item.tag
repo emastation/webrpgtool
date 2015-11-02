@@ -185,6 +185,10 @@
         return true; // 処理を抜ける
       }
 
+      if (evt.target.value === opts.object_schema.attributes[i].name || evt.target.value === '') {
+        return true;
+      }
+
       var attributes = opts.object_schema.attributes;
       var backupAttributes = lodash.cloneDeep(attributes);
       attributes[i].name = evt.target.value;
@@ -204,6 +208,10 @@
       }
       if (!_.isUndefined(evt.keyCode) && evt.keyCode !== 13) {// 何らかのキーが押されていて、それがEnterキー以外だった場合
         return true; // 処理を抜ける
+      }
+
+      if (evt.target.value === opts.object_schema.attributes[i].identifier || evt.target.value === '') {
+        return true;
       }
 
       var attributes = opts.object_schema.attributes;

@@ -1,9 +1,14 @@
 <object-item>
   <div class="ui grid segment">
-    <div class="sixteen wide column" ondblclick={editableIdentifier}>
+    <div class="fifteen wide column" ondblclick={editableIdentifier}>
       <label>識別子</label>
       <span if={!contentEditableIdentifier}>{opts.object.identifier}</span>
       <input if={contentEditableIdentifier} type="text" value={opts.object.identifier} onblur={completeIdentifierEditing} onkeydown={completeIdentifierEditing}>
+    </div>
+    <div class="one wide column">
+      <button if={opts.is_login} type="button" class="close circular ui icon button" data-dismiss="alert" onclick={deleteObject}>
+        <i class="remove icon"></i>
+      </button>
     </div>
     <div class="sixteen wide column" each={opts.object.attributes}>
       <label>{name}</label>
@@ -84,6 +89,10 @@
         Session.set('ObjectItem_changed', Date.now());
       });
 
+    }
+
+    deleteObject() {
+      MongoCollections.Objects.remove(opts.object._id);
     }
   </script>
 </object-item>

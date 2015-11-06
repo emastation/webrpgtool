@@ -444,4 +444,52 @@ if (BgmAudios.find().count() === 0) {
   );
 }
 
+
+var SoundEffectAudios = MongoCollections.SoundEffectAudios;
+var soundEffectAudiosIds = [];
+if (SoundEffectAudios.find().count() === 0) {
+  [
+    {
+      name: '（サウンドエフェクトなし）',
+      identifier: 'none',
+      author: '',
+      imageUrl: '',
+      thumbnailUrl:  ''
+    },
+    {
+      name: '爆発・大砲(3)',
+      identifier: 'TamMusicFactory_bigshot3',
+      author: 'Tam Music Factory',
+      audioUrl: 'https://www.emastation.com/wrt/material/sounds/tam_music_factory/bigshot3.wav',
+    },
+    {
+      name: '目覚まし電子音',
+      identifier: 'TamMusicFactory_alarm1',
+      author: 'Tam Music Factory',
+      audioUrl: 'https://www.emastation.com/wrt/material/sounds/tam_music_factory/alarm1.wav',
+    },
+    {
+      name: '鳥の鳴声（いっぱい）',
+      identifier: 'TamMusicFactory_bird',
+      author: 'Tam Music Factory',
+      audioUrl: 'https://www.emastation.com/wrt/material/sounds/tam_music_factory/bird.mp3',
+    },
+    {
+      name: '学校チャイム風(1)（短）ステレオ',
+      identifier: 'TamMusicFactory_chime1s',
+      author: 'Tam Music Factory',
+      audioUrl: 'https://www.emastation.com/wrt/material/sounds/tam_music_factory/chime1s.mp3',
+    }
+  ].forEach(function (attribute, i) {
+        soundEffectAudiosIds.push(SoundEffectAudios.insert({
+          name: attribute.name,
+          identifier: attribute.identifier,
+          author: attribute.author,
+          audioUrl: attribute.audioUrl,
+          order: i
+        }));
+      }
+  );
+}
+
 wrt_fixtureLoadedCount = (typeof wrt_fixtureLoadedCount !== "undefined") ? wrt_fixtureLoadedCount++ : 0;

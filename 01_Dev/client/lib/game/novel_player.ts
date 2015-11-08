@@ -122,6 +122,8 @@ module WrtGame {
             storyItems[j].content = MongoCollections.Backgrounds.findOne({_id: storyItems[j].contentId});
           } else if (storyItems[j].contentType === 'bgm') {
             storyItems[j].content = MongoCollections.Bgms.findOne({_id: storyItems[j].contentId});
+          } else if (storyItems[j].contentType === 'soundEffect') {
+            storyItems[j].content = MongoCollections.SoundEffects.findOne({_id: storyItems[j].contentId});
           }
         }
         scenes[i].storyItems = storyItems;
@@ -259,6 +261,18 @@ module WrtGame {
       }
     }
 
+    private nextSoundEffect(currentStoryItem) {
+      var that = this._tmMainScene;
+
+      var soundEffectAudio = MongoCollections.SoundEffectAudios.findOne({_id: currentStoryItem.content.soundEffectAudioId});
+
+      var soundEffect = tm.asset.Manager.get(soundEffectAudio.identifier);
+      soundEffect.stop();
+      soundEffect.volume = currentStoryItem.content.volume;
+      soundEffect.play();
+    }
+
+
     private nextScene() {
       var results = _.filter(this._scenes, (scene:any)=>{
         return scene._id === this._nextSceneId;
@@ -378,6 +392,8 @@ module WrtGame {
         this.nextBackground(currentStoryItem);
       } else if (currentStoryItem.contentType === 'bgm') {
         this.nextBgm(currentStoryItem);
+      } else if (currentStoryItem.contentType === 'soundEffect') {
+        this.nextSoundEffect(currentStoryItem);
       }
 
       that.addChildAt(that.imgMessageWindow, 20);

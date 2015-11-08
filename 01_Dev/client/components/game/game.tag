@@ -77,6 +77,8 @@
       Meteor.subscribe("backgroundImages");
       Meteor.subscribe('bgms');
       Meteor.subscribe('bgmAudios');
+      Meteor.subscribe('soundEffects');
+      Meteor.subscribe('soundEffectAudios');
       Meteor.subscribe('codes');
 
       // Game class initialization after all assets load complite

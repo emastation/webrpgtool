@@ -155,7 +155,13 @@ module WrtGame {
         }
         ASSETS[bgmAudio.identifier] = bgmAudio.audioUrl;
       });
-
+      var soundEffectAudios = MongoCollections.SoundEffectAudios.find().fetch();
+      soundEffectAudios.forEach((soundEffectAudio)=>{
+        if (soundEffectAudio.identifier === 'none') {
+          return;
+        }
+        ASSETS[soundEffectAudio.identifier] = soundEffectAudio.audioUrl;
+      });
       // main
       tm.main(function() {
         // キャンバスアプリケーションを生成
@@ -166,7 +172,7 @@ module WrtGame {
         // ウィンドウにフィットさせる
 //        app.fitWindow();
 
-        // ローダーで画像を読み込む
+        // ローダーでアセットを読み込む
         var loading = tm.game.LoadingScene({
           assets: ASSETS,
           width: Game.SCREEN_WIDTH,

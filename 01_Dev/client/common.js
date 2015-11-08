@@ -9,4 +9,9 @@ Meteor.autorun(function() {
       window.wrtBgmAudios = MongoCollections.BgmAudios.find().fetch();
     }
   });
+  Meteor.subscribe('soundEffectAudios', {
+    onReady: ()=> {
+      window.wrtSoundEffectAudios = MongoCollections.SoundEffectAudios.find().fetch();
+    }
+  });
 });

@@ -9,6 +9,9 @@
     <div each={bgm in contents[i].bgm}>
       <bgm-item story_item={storyItem} bgm_item={bgm} scene_id={parent.parent.opts.scene_id} />
     </div>
+    <div each={soundEffect in contents[i].soundEffect}>
+      <sound-effect-item story_item={storyItem} sound_effect_item={soundEffect} scene_id={parent.parent.opts.scene_id} />
+    </div>
     <hr if={storyItem.needClick} onclick={toggleNeedClick.bind(this, i)} class="needClick" />
     <hr if={!storyItem.needClick} onclick={toggleNeedClick.bind(this, i)} class="dontNeedClick" />
   </div>
@@ -48,6 +51,7 @@
       var sentenceIds = [];
       var backgroundIds = [];
       var bgmIds = [];
+      var soundEffectIds = [];
       this.storyItems.forEach(function(storyItem){
         if (storyItem.contentType === 'sentence') {
           sentenceIds.push(storyItem.contentId); // storyItemsが持っているcontentIdが、sentenceIdだった場合、それらの配列を作る
@@ -55,6 +59,8 @@
           backgroundIds.push(storyItem.contentId); // storyItemsが持っているcontentIdが、backgroundIdだった場合、それらの配列を作る
         } else if (storyItem.contentType === 'bgm') {
           bgmIds.push(storyItem.contentId); // storyItemsが持っているcontentIdが、backgroundIdだった場合、それらの配列を作る
+        } else if (storyItem.contentType === 'soundEffect') {
+          soundEffectIds.push(storyItem.contentId); // storyItemsが持っているcontentIdが、backgroundIdだった場合、それらの配列を作る
         }
       });
 
@@ -66,8 +72,13 @@
       var selector = {_id: {$in: backgroundIds}};
       var backgroundsTmp = MongoCollections.Backgrounds.find(selector).fetch();
 
+      // bgmIdの配列をセレクタにして、bgmの配列を取得する
       var selector = {_id: {$in: bgmIds}};
       var bgmsTmp = MongoCollections.Bgms.find(selector).fetch();
+
+      // soundEffectIdの配列をセレクタにして、soundEffectの配列を取得する
+      var selector = {_id: {$in: soundEffectIds}};
+      var soundEffectsTmp = MongoCollections.SoundEffects.find(selector).fetch();
 
       // storyItemの配列に対応するcontents配列（sentenceやbackgroundなどが入った配列）を作る。
       // それぞれの配列で、同じ添え字箇所だと、その値は対応付けされたstoryItem&contentになっている。
@@ -76,7 +87,8 @@
         var content = {
           sentence: [],
           background: [],
-          bgm: []
+          bgm: [],
+          soundEffect: []
         };
         if (storyItem.contentType === 'sentence') {
           var sentence = _.where(sentencesTmp, { '_id': storyItem.contentId })[0];
@@ -87,6 +99,9 @@
         } else if (storyItem.contentType === 'bgm') {
           var bgm = _.where(bgmsTmp, { '_id': storyItem.contentId })[0];
           content.bgm.push(bgm);
+        } else if (storyItem.contentType === 'soundEffect') {
+          var soundEffect = _.where(soundEffectsTmp, { '_id': storyItem.contentId })[0];
+          content.soundEffect.push(soundEffect);
         }
         this.contents.push(content);
       });
@@ -119,12 +134,19 @@
           deferBgms.resolve();
         }
       });
+      var deferSoundEffects = $.Deferred();
+      Meteor.subscribe('soundEffects', {
+        onReady: ()=>{
+          deferSoundEffects.resolve();
+        }
+      });
 
       $.when(
         deferStoryItems.promise(),
         deferSentences.promise(),
         deferBackgrounds.promise(),
-        deferBgms.promise()
+        deferBgms.promise(),
+        deferSoundEffects.promise()
       ).done(()=> {
         this.getContents();
       });

@@ -10,11 +10,15 @@
       <a class={item:true, active: currentTabName === 'bgm' } onclick={switchTab.bind(this, 'bgm')}>
         BGM
       </a>
+      <a class={item:true, active: currentTabName === 'soundEffect' } onclick={switchTab.bind(this, 'soundEffect')}>
+        サウンドエフェクト
+      </a>
     </div>
     <div class="ui bottom attached segment">
       <sentence-submit if={currentTabName === 'sentence'} scene_id={opts.scene_id} />
       <background-submit if={currentTabName === 'background'} scene_id={opts.scene_id} />
       <bgm-submit if={currentTabName === 'bgm'} scene_id={opts.scene_id} />
+      <sound-effect-submit if={currentTabName === 'soundEffect'} scene_id={opts.scene_id} />
     </div>
   </div>
 
@@ -26,8 +30,12 @@
       this.currentTabName = tabName;
     }
 
+    var _capitalize = function(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
     this.on('insertStoryItem', (order)=>{
-      var capitalizedTabName = this.currentTabName.capitalize();
+      var capitalizedTabName = _capitalize(this.currentTabName);
       window['wrt' + capitalizedTabName + 'SubmitRiotComponent'].trigger('insert' + capitalizedTabName, order);
     });
   </script>

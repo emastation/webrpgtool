@@ -450,13 +450,6 @@ var soundEffectAudiosIds = [];
 if (SoundEffectAudios.find().count() === 0) {
   [
     {
-      name: '（サウンドエフェクトなし）',
-      identifier: 'none',
-      author: '',
-      imageUrl: '',
-      thumbnailUrl:  ''
-    },
-    {
       name: '爆発・大砲(3)',
       identifier: 'TamMusicFactory_bigshot3',
       author: 'Tam Music Factory',

@@ -62,6 +62,14 @@ Meteor.publish('bgmAudios', function() {
   return MongoCollections.BgmAudios.find();
 });
 
+Meteor.publish('soundEffects', function() {
+  return MongoCollections.SoundEffects.find();
+});
+
+Meteor.publish('soundEffectAudios', function() {
+  return MongoCollections.SoundEffectAudios.find();
+});
+
 Meteor.publish('objectSchemata', function() {
   return MongoCollections.ObjectSchemata.find();
 });

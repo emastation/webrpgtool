@@ -77,6 +77,19 @@
           deferBgmAudios.resolve();
         }
       });
+      var deferSoundEffects = $.Deferred();
+      Meteor.subscribe('soundEffects', {
+        onReady: ()=>{
+          deferSoundEffects.resolve();
+        }
+      });
+
+      var deferSoundEffectAudios = $.Deferred();
+      Meteor.subscribe('soundEffectAudios', {
+        onReady: ()=>{
+          deferSoundEffectAudios.resolve();
+        }
+      });
 
 
       // Game class initialization after all assets load complite
@@ -91,7 +104,9 @@
           deferBackgrounds.promise(),
           deferBackgroundImages.promise(),
           deferBgms.promise(),
-          deferBgmAudios.promise()
+          deferBgmAudios.promise(),
+          deferSoundEffects.promise(),
+          deferSoundEffectAudios.promise()
         ]
       ).done(()=> {
         var game = WrtGame.Game.getInstance();

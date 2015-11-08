@@ -68,21 +68,110 @@
         }
       });
 
-      Meteor.subscribe('stories');
-      Meteor.subscribe('storyScenes');
-      Meteor.subscribe('storyItems');
-      Meteor.subscribe('sentences');
-      Meteor.subscribe("characters");
-      Meteor.subscribe("backgrounds");
-      Meteor.subscribe("backgroundImages");
-      Meteor.subscribe('bgms');
-      Meteor.subscribe('bgmAudios');
-      Meteor.subscribe('soundEffects');
-      Meteor.subscribe('soundEffectAudios');
-      Meteor.subscribe('codes');
+      var deferStories = $.Deferred();
+      Meteor.subscribe('stories', {
+        onReady: ()=>{
+          deferStories.resolve();
+        }
+      });
+
+      var deferStoryScenes = $.Deferred();
+      Meteor.subscribe('storyScenes', {
+        onReady: ()=>{
+          deferStoryScenes.resolve();
+        }
+      });
+
+      var deferStoryItems = $.Deferred();
+      Meteor.subscribe('storyItems', {
+        onReady: ()=>{
+          deferStoryItems.resolve();
+        }
+      });
+
+      var deferSentences = $.Deferred();
+      Meteor.subscribe('sentences', {
+        onReady: ()=>{
+          deferSentences.resolve();
+        }
+      });
+
+      var deferCharacters = $.Deferred();
+      Meteor.subscribe('characters', {
+        onReady: ()=>{
+          deferCharacters.resolve();
+        }
+      });
+
+      var deferBackgrounds = $.Deferred();
+      Meteor.subscribe('backgrounds', {
+        onReady: ()=>{
+          deferBackgrounds.resolve();
+        }
+      });
+
+      var deferBackgroundImages = $.Deferred();
+      Meteor.subscribe('backgroundImages', {
+        onReady: ()=>{
+          deferBackgroundImages.resolve();
+        }
+      });
+
+      var deferBgms = $.Deferred();
+      Meteor.subscribe('bgms', {
+        onReady: ()=>{
+          deferBgms.resolve();
+        }
+      });
+
+      var deferBgmAudios = $.Deferred();
+      Meteor.subscribe('bgmAudios', {
+        onReady: ()=>{
+          deferBgmAudios.resolve();
+        }
+      });
+
+      var deferSoundEffects = $.Deferred();
+      Meteor.subscribe('soundEffects', {
+        onReady: ()=>{
+          deferSoundEffects.resolve();
+        }
+      });
+
+      var deferSoundEffectAudios = $.Deferred();
+      Meteor.subscribe('soundEffectAudios', {
+        onReady: ()=>{
+          deferSoundEffectAudios.resolve();
+        }
+      });
+
+      var deferCodes = $.Deferred();
+      Meteor.subscribe('codes', {
+        onReady: ()=>{
+          deferCodes.resolve();
+        }
+      });
+
 
       // Game class initialization after all assets load complite
-      $.when(deferMaps.promise(), deferMapTextures.promise(), deferMapTileTypes.promise(), deferCharacterImages.promise()).done(()=> {
+      $.when(
+        deferMaps.promise(),
+        deferMapTextures.promise(),
+        deferMapTileTypes.promise(),
+        deferCharacterImages.promise(),
+        deferStories.resolve(),
+        deferStoryScenes.resolve(),
+        deferStoryItems.resolve(),
+        deferSentences.resolve(),
+        deferCharacters.resolve(),
+        deferBackgrounds.resolve(),
+        deferBackgroundImages.resolve(),
+        deferBgms.resolve(),
+        deferBgmAudios.resolve(),
+        deferSoundEffects.resolve(),
+        deferSoundEffectAudios.resolve(),
+        deferCodes.resolve()
+      ).done(()=> {
         var game = WrtGame.Game.getInstance();
         game.init(this.data);
 		  });

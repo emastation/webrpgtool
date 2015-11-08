@@ -18,36 +18,7 @@
         {opts.object_schema.extend}
       </p>
       <h4>アトリビュート</h4>
-      <div each={attribute, i in opts.object_schema.attributes} class="ui grid segment">
-        <div class="one wide column">
-          <button if={isLogin} type="button" class="plus circular ui icon button" onclick={insertAttribute.bind(this, i)}>
-            <i class="plus icon"></i>
-          </button>
-        </div>
-        <div class="four wide column" ondblclick={editableThisAttributeIdentifier.bind(this, i)}>
-          <label>識別子</label>
-          <span if={_.isUndefined(this.contentEditableAttributeIdentifiers[i]) || this.contentEditableAttributeIdentifiers[i] === false}>{attribute.identifier}</span>
-          <input if={(!_.isUndefined(this.contentEditableAttributeIdentifiers[i])) && this.contentEditableAttributeIdentifiers[i] === true} type="text" value={attribute.identifier} onblur={completeAttributeIdentifierEditing.bind(this, i)} onkeydown={completeAttributeIdentifierEditing.bind(this, i)}>
-        </div>
-        <div class="five wide column" ondblclick={editableThisAttributeName.bind(this, i)}>
-          <label>名前</label>
-          <span if={_.isUndefined(this.contentEditableAttributeNames[i]) || this.contentEditableAttributeNames[i] === false}>{attribute.name}</span>
-          <input if={(!_.isUndefined(this.contentEditableAttributeNames[i])) && this.contentEditableAttributeNames[i] === true} type="text" value={attribute.name} onblur={completeAttributeNameEditing.bind(this, i)} onkeydown={completeAttributeNameEditing.bind(this, i)}>
-        </div>
-        <div class="four wide column" ondblclick={editableThisAttributeName.bind(this, i)}>
-          <label>タイプ</label>
-          <select if={isLogin} value={attribute.type} onchange={onChangeSelectAttributeType.bind(this, i)}>
-            <option value="number">数値</option>
-            <option value="string">文字列</option>
-            <option value="boolean">真偽値</option>
-          </select>
-        </div>
-        <div class="two wide column">
-          <button if={isLogin} type="button" class="close circular ui icon button" data-dismiss="alert" onclick={deleteThisAttribute.bind(this, i)}>
-            <i class="remove icon"></i>
-          </button>
-        </div>
-      </div>
+      <object-schema-item-attribute each={attribute, i in opts.object_schema.attributes} parent={parent} is_login={isLogin} object_schema={parent.opts.object_schema} attribute={attribute} i={i} />
       <div class="ui grid segment no-boader">
         <div class="one wide column">
           <button if={isLogin} type="button" class="plus circular ui icon button" onclick={pushNewAttribute}>
@@ -69,12 +40,10 @@
   </div>
 
   <script>
-    this.contentEditableAttributeNames = [];
-    this.contentEditableAttributeIdentifiers = [];
-    this.initialAttributeName = "新規アトリビュート名";
-    this.initialAttributeIdentifier = "new_identifier"
     this.contentEditableName = false;
     this.contentEditableIdentifier = false;
+    this.initialAttributeName = "新規アトリビュート名";
+    this.initialAttributeIdentifier = "new_identifier"
 
     editableName() {
       this.contentEditableName = this.isLogin;
@@ -84,29 +53,6 @@
     editableIdentifier() {
       this.contentEditableIdentifier = this.isLogin;
       this.update();
-    }
-
-    editableThisAttributeName(i) {
-      this.contentEditableAttributeNames[i] = this.isLogin;
-      this.update();
-    }
-
-    editableThisAttributeIdentifier(i) {
-      this.contentEditableAttributeIdentifiers[i] = this.isLogin;
-      this.update();
-    }
-
-    saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes) {
-      Meteor.call('updateObjectSchemaAttributes', {
-        objectSchemaId: opts.object_schema._id,
-        attributes: attributes
-      }, (error, result)=> {
-        if (result) {
-          alert(result);
-          opts.object_schema.attributes = backupAttributes;
-        }
-        this.update();
-      });
     }
 
     completeNameEditing(evt) {
@@ -176,74 +122,17 @@
       this.update();
     }
 
-    completeAttributeNameEditing(i, evt) {
-
-      if (!this.isLogin) {
-        return;
-      }
-      if (!_.isUndefined(evt.keyCode) && evt.keyCode !== 13) {// 何らかのキーが押されていて、それがEnterキー以外だった場合
-        return true; // 処理を抜ける
-      }
-
-      if (evt.target.value === opts.object_schema.attributes[i].name || evt.target.value === '') {
-        return true;
-      }
-
-      var attributes = opts.object_schema.attributes;
-      var backupAttributes = lodash.cloneDeep(attributes);
-      attributes[i].name = evt.target.value;
-
-      this.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
-
-
-      evt.target.blur();
-      this.contentEditableAttributeNames[i] = false;
-
-    }
-
-    completeAttributeIdentifierEditing(i, evt) {
-
-      if (!this.isLogin) {
-        return;
-      }
-      if (!_.isUndefined(evt.keyCode) && evt.keyCode !== 13) {// 何らかのキーが押されていて、それがEnterキー以外だった場合
-        return true; // 処理を抜ける
-      }
-
-      if (evt.target.value === opts.object_schema.attributes[i].identifier || evt.target.value === '') {
-        return true;
-      }
-
-      var attributes = opts.object_schema.attributes;
-      var backupAttributes = lodash.cloneDeep(attributes);
-      attributes[i].identifier = evt.target.value;
-
-      this.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
-
-
-      evt.target.blur();
-      this.contentEditableAttributeIdentifiers[i] = false;
-
-    }
-
-    onChangeSelectAttributeType(i, evt) {
-      var attributes = opts.object_schema.attributes;
-      var backupAttributes = lodash.cloneDeep(attributes);
-      attributes[i].type = evt.target.value;
-
-      this.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
-    }
-
-    insertAttribute(i) {
-      var attributes = opts.object_schema.attributes;
-      var backupAttributes = lodash.cloneDeep(attributes);
-      attributes.splice(i, 0, {
-        identifier: this.initialAttributeIdentifier,
-        name: this.initialAttributeName,
-        type: "number",
+    saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes) {
+      Meteor.call('updateObjectSchemaAttributes', {
+        objectSchemaId: opts.object_schema._id,
+        attributes: attributes
+      }, (error, result)=> {
+        if (result) {
+          alert(result);
+          opts.object_schema.attributes = backupAttributes;
+        }
+        this.update();
       });
-
-      this.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
     }
 
     pushNewAttribute(i) {
@@ -254,14 +143,6 @@
         name: this.initialAttributeName,
         type: "number",
       });
-
-      this.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
-    }
-
-    deleteThisAttribute(i) {
-      var attributes = opts.object_schema.attributes;
-      var backupAttributes = lodash.cloneDeep(attributes);
-      attributes.splice(i, 1);
 
       this.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
     }

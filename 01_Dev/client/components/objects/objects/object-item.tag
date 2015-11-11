@@ -1,7 +1,7 @@
 <object-item>
   <div class="ui grid segment">
     <div class="fifteen wide column" ondblclick={editableIdentifier}>
-      <label>識別子</label>
+      <label>識別子：</label>
       <span if={!contentEditableIdentifier}>{opts.object.identifier}</span>
       <input if={contentEditableIdentifier} type="text" value={opts.object.identifier} onblur={completeIdentifierEditing} onkeydown={completeIdentifierEditing}>
     </div>
@@ -11,7 +11,7 @@
       </button>
     </div>
     <div class="sixteen wide column" each={attribute, i in opts.object.attributes}>
-      <label>{name}</label>
+      <label>{attribute.name}：</label>
       <input each={attribute.type==='string' ? [true]:[]} type="text" id="object_item_{parent.parent.opts.object._id}_text_{attribute.identifier}" value={attribute.value} kl_vkbd_parsed="true" onchange={changeAttribute.bind(this, attribute.identifier, attribute.type)} />
       <input each={attribute.type==='number' ? [true]:[]} type="number" id="object_item_{parent.parent.opts.object._id}_number_{attribute.identifier}" value={attribute.value} kl_vkbd_parsed="true" onchange={changeAttribute.bind(this, attribute.identifier, attribute.type)} />
       <input each={attribute.type==='boolean' ? [true]:[]} type="checkbox" id="object_item_{parent.parent.opts.object._id}_checkbox_{attribute.identifier}" checked={attribute.value} onchange={changeAttribute.bind(this, attribute.identifier, attribute.type)} />
@@ -36,7 +36,7 @@
       if (lodash.findIndex(opts.object_schema.attributes[i].options, { 'identifier': opts.object.attributes[i].value}) === -1) {
         var value = opts.object_schema.attributes[i].options[0] ? opts.object_schema.attributes[i].options[0].identifier : '';
         setTimeout(()=>{
-          this.changeAttribute(opts.object_schema.attributes[i].identifier, 'select');          
+          this.changeAttribute(opts.object_schema.attributes[i].identifier, 'select');
         }, 0);
         return value;
       }
@@ -81,9 +81,7 @@
 
       var attributes = opts.object.attributes;
       attributes.forEach((attribute)=>{
-        delete attribute.name;
-        delete attribute.type;
-        delete attribute.options;
+        opts.parent.modifyAttribute(attribute, void 0);
       });
 
       var index = lodash.findIndex(attributes, {identifier: attrbuteIdentifier});
@@ -124,4 +122,19 @@
       MongoCollections.Objects.remove(opts.object._id);
     }
   </script>
+
+  <style scoped>
+    :scope>div {
+      margin: 10px !important;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    .no-boader {
+      border: none !important;
+      box-shadow: none !important;
+    }
+  </style>
 </object-item>

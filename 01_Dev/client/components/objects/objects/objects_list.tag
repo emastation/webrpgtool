@@ -1,7 +1,19 @@
 <objects-list>
-  <object-item each={objects} object={this} object_schema={objectSchema} is_login={parent.opts.is_login}></object-item>
+  <object-item each={objects} object={this} parent={parent} object_schema={objectSchema} is_login={parent.opts.is_login}></object-item>
   <script>
   this.objects = [];
+
+  modifyAttribute(objectAttribute, objectSchemaAttribute) {
+    if (objectSchemaAttribute) {
+      objectAttribute.name = objectSchemaAttribute.name;
+      objectAttribute.type = objectSchemaAttribute.type;
+      objectAttribute.options = lodash.cloneDeep(objectSchemaAttribute.options);
+    } else {
+      delete objectAttribute.name;
+      delete objectAttribute.type;
+      delete objectAttribute.options;
+    }
+  }
 
   getObjects() {
     if(!_.isUndefined(opts.schema_id)) {
@@ -13,9 +25,7 @@
             var schemaAttrib = _.filter(this.objectSchema.attributes, (attrib)=>{
               return attrib.identifier === attribute.identifier;
             })[0];
-            attribute.name = schemaAttrib.name;
-            attribute.type = schemaAttrib.type;
-            attribute.options = lodash.cloneDeep(schemaAttrib.options);
+            this.modifyAttribute(attribute, schemaAttrib);
           });
         });
         this.update();

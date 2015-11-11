@@ -43,8 +43,8 @@
     this.contentEditableName = false;
     this.contentEditableIdentifier = false;
     this.initialAttributeValue = {
-        identifier: "新規アトリビュート名",
-        name: "new_identifier",
+        identifier: "new_identifier",
+        name: "新規アトリビュート名",
         type: "number",
         options: []
       }

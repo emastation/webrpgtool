@@ -3,6 +3,17 @@ module WrtGame {
   /**
    *  マップ上の移動を処理するクラス
    */
+
+   export class WalkResult {
+     constructor(public encounter:boolean, // エンカウントしたか
+                 public player_moving_f:boolean,
+                 public isFinishedMoveXYInstant:boolean, // X方向かY方向のいずれかに移動が完了した瞬間か
+                 public playerIntX:number,
+                 public playerIntY:number
+         ) {
+     }
+   }
+
   export class MapMovement {
     private static _instance:MapMovement;
     private _logicalMovementCommandProperty:any; // 論理移動命令のBaconJSプロパティ
@@ -182,6 +193,82 @@ module WrtGame {
       }
     }
 
+    private encount():boolean {
+        if(Math.random()<0.50) {
+//        if(Math.random()<1) {
+            console.log("エンカウント！");
+//            if ($("#checkbox_encounter").attr("checked") === "checked") {
+            if (true) {
+//                alert("エンカウント！");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private detectIntegerPosition() {
+        var directionToMove = this._directionToMove;
+
+        var player_x_center_int = this._player_x;
+        var player_y_center_int = this._player_y;
+        var player_h_center_int = this._player_h;
+
+        // （セルの移動を開始して、隣のセルの中央にまで来ると値が変化する）プレイヤーの位置座標（整数）を算出する
+        if (directionToMove === L_EAST || directionToMove === L_SOUTH) { // 位置の数値が増える場合ではfloor（床関数）で
+            player_x_center_int = Math.floor(this._player_x);
+            player_y_center_int = Math.floor(this._player_y);
+        } else if (directionToMove === L_WEST || directionToMove === L_NORTH) {                                                        // 位置の数値が減る場合ではceil（天井関数）で
+            player_x_center_int = Math.ceil(this._player_x);
+            player_y_center_int = Math.ceil(this._player_y);
+        } else if (directionToMove === L_UPPER) {
+            player_h_center_int = Math.floor(this._player_h);
+        } else if (directionToMove === L_LOWER) {
+            player_h_center_int = Math.ceil(this._player_h);
+        }
+
+        var encounter_f = false;
+        var isFinishedMoveXYInstant = false;
+        // プレイヤーのこの位置座標が、X方向Y方向いずれかに変化していた（セルを移動した）のであれば
+        if (player_x_center_int !== this._player_x_center_int || player_y_center_int !== this._player_y_center_int
+            || player_h_center_int !== this._player_h_center_int ) { //
+
+            // エンカウント判定を行う
+            encounter_f = this.encount();
+
+            if(encounter_f) {
+//                this.move_key_downed_f = false;
+                // エンカウント処理した時点で、行き過ぎてしまった位置座標を、エンカウント時点での整数座標に戻す。
+                if (directionToMove === L_EAST || directionToMove === L_SOUTH) {
+                    this._player_x = Math.floor(this._player_x);
+                    this._player_y = Math.floor(this._player_y);
+                } else if (directionToMove === L_WEST || directionToMove === L_NORTH) {
+                    this._player_x = Math.ceil(this._player_x);
+                    this._player_y = Math.ceil(this._player_y);
+                } else if (directionToMove === L_UPPER) {
+                    this._player_h = Math.floor(this._player_h);
+                } else if (directionToMove === L_LOWER) {
+                    this._player_h = Math.ceil(this._player_h);
+                }
+            }
+        }
+
+        if (player_x_center_int !== this._player_x_center_int || player_y_center_int !== this._player_y_center_int) {
+            isFinishedMoveXYInstant = true;
+        }
+
+        this._player_x_center_int = player_x_center_int;
+        this._player_y_center_int = player_y_center_int;
+        this._player_h_center_int = player_h_center_int;
+
+        var walkResult = new WalkResult(encounter_f,
+            false, // この段階では決まらないので、仮に適当にfalseとしておく。
+            isFinishedMoveXYInstant,
+            player_x_center_int, player_y_center_int);
+        return walkResult;
+    }
+
+
     /**
      * マップのセルを移動する。毎フレーム呼ばれ、各フレームで少しずつ移動する。
      * @param map マップデータ
@@ -196,6 +283,8 @@ module WrtGame {
 //      if (!this._playerIsMovable) {
         return;
       }
+
+      var walkResult:WalkResult = this.detectIntegerPosition(); // 現在のプレーヤーの整数位置を算出
 
       var gameState = WrtGame.GameState.getInstance();
 

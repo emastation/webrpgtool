@@ -8,9 +8,12 @@
       </div>
       <div class="field" each={objectSchema.attributes}>
         <label>{name}</label>
-        <input if={type==='string'} name={identifier} type="text" id="object_submit_text_{identifier}" kl_vkbd_parsed="true" />
-        <input if={type==='number'} name={identifier} type="number" id="object_submit_number_{identifier}" kl_vkbd_parsed="true" />
-        <input if={type==='boolean'} name={identifier} id="object_submit_checkbox_{identifier}" type="checkbox" />
+        <input each={type==='string' ? [true]:[]} name={identifier} type="text" id="object_submit_text_{identifier}" kl_vkbd_parsed="true" />
+        <input each={type==='number' ? [true]:[]} name={identifier} type="number" id="object_submit_number_{identifier}" kl_vkbd_parsed="true" />
+        <input each={type==='boolean' ? [true]:[]} name={identifier} id="object_submit_checkbox_{identifier}" type="checkbox" />
+        <select each={type==='select' ? [true]:[]} name={identifier} id="object_submit_select_{identifier}">
+          <option each={options} value={identifier}>{name}</option>
+        </select>
       </div>
       <input type="submit" id="object-submit" class="ui button" value="追加" />
     </form>
@@ -38,7 +41,10 @@
           var value = $("#object_submit_text_" + attribute.identifier).val();
         } else if (attribute.type === 'boolean') {
           var value = $("#object_submit_checkbox_" + attribute.identifier).prop('checked');
+        } else if (attribute.type === 'select') {
+          var value = $("#object_submit_select_" + attribute.identifier).val();;
         }
+
         submitData.attributes.push({
           identifier: attribute.identifier,
           value: value

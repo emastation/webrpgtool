@@ -10,11 +10,14 @@
         <i class="remove icon"></i>
       </button>
     </div>
-    <div class="sixteen wide column" each={opts.object.attributes}>
+    <div class="sixteen wide column" each={attribute, i in opts.object.attributes}>
       <label>{name}</label>
-      <input if={type==='string'} type="text" id="object_item_{parent.opts.object._id}_text_{identifier}" value={value} kl_vkbd_parsed="true" onchange={changeAttribute.bind(this, identifier, type)} />
-      <input if={type==='number'} type="number" id="object_item_{parent.opts.object._id}_number_{identifier}" value={value} kl_vkbd_parsed="true" onchange={changeAttribute.bind(this, identifier, type)} />
-      <input if={type==='boolean'} type="checkbox" id="object_item_{parent.opts.object._id}_checkbox_{identifier}" checked={value} onchange={changeAttribute.bind(this, identifier, type)} />
+      <input each={attribute.type==='string' ? [true]:[]} type="text" id="object_item_{parent.parent.opts.object._id}_text_{attribute.identifier}" value={attribute.value} kl_vkbd_parsed="true" onchange={changeAttribute.bind(this, attribute.identifier, attribute.type)} />
+      <input each={attribute.type==='number' ? [true]:[]} type="number" id="object_item_{parent.parent.opts.object._id}_number_{attribute.identifier}" value={attribute.value} kl_vkbd_parsed="true" onchange={changeAttribute.bind(this, attribute.identifier, attribute.type)} />
+      <input each={attribute.type==='boolean' ? [true]:[]} type="checkbox" id="object_item_{parent.parent.opts.object._id}_checkbox_{attribute.identifier}" checked={attribute.value} onchange={changeAttribute.bind(this, attribute.identifier, attribute.type)} />
+      <select each={attribute.type==='select' ? [true]:[]} id="object_item_{parent.parent.opts.object._id}_select_{attribute.identifier}" value={attribute.value} onchange={changeAttribute.bind(this, attribute.identifier, attribute.type)}>
+        <option each={parent.parent.opts.object_schema.attributes[i].options} value={identifier}>{name}</option>
+      </select>
     </div>
   </div>
 
@@ -71,7 +74,9 @@
       } else if (dataType === 'number') {
         var value = parseFloat($('#object_item_' + opts.object._id + '_number_' + attrbuteIdentifier).val());
       } else if (dataType === 'boolean') {
-        var value = $('#object_item_' + opts.object._id + '_checkbox_' + attrbuteIdentifier).prop('checked');;
+        var value = $('#object_item_' + opts.object._id + '_checkbox_' + attrbuteIdentifier).prop('checked');
+      } else if (dataType === 'select') {
+        var value = $('#object_item_' + opts.object._id + '_select_' + attrbuteIdentifier).val();
       }
 
       attributes[index] = {

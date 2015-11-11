@@ -73,6 +73,18 @@ Meteor.methods({
       }
     }
 
+    // check dupllicated identifeir of attribute.options
+    for(let k=0; k<attributes.length; k++) {
+      let options = attributes[k].options;
+      for(let i=0; i<options.length; i++) {
+        for(let j=i+1; j<options.length; j++) {
+          if (options[i].identifier === options[j].identifier) {
+            return 'duplicated Option Identifier.';
+          }
+        }
+      }
+    };
+
 
     var objectSchema = MongoCollections.ObjectSchemata.findOne(obj.objectSchemaId);
     var objects = MongoCollections.Objects.find({schema_identifier: objectSchema.identifier}).fetch();

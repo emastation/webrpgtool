@@ -42,9 +42,12 @@
   <script>
     this.contentEditableName = false;
     this.contentEditableIdentifier = false;
-    this.initialAttributeName = "新規アトリビュート名";
-    this.initialAttributeIdentifier = "new_identifier"
-
+    this.initialAttributeValue = {
+        identifier: "新規アトリビュート名",
+        name: "new_identifier",
+        type: "number",
+        options: []
+      }
     editableName() {
       this.contentEditableName = this.isLogin;
       this.update();
@@ -138,11 +141,7 @@
     pushNewAttribute(i) {
       var attributes = opts.object_schema.attributes;
       var backupAttributes = lodash.cloneDeep(attributes);
-      attributes.push({
-        identifier: this.initialAttributeIdentifier,
-        name: this.initialAttributeName,
-        type: "number",
-      });
+      attributes.push(this.initialAttributeValue);
 
       this.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
     }

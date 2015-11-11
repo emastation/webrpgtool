@@ -5,25 +5,41 @@
         <i class="plus icon"></i>
       </button>
     </div>
-    <div class="four wide column" ondblclick={editableThisAttributeIdentifier.bind(this, opts.i)}>
-      <label>識別子</label>
-      <span if={_.isUndefined(this.contentEditableAttributeIdentifiers[opts.i]) || this.contentEditableAttributeIdentifiers[opts.i] === false}>{opts.attribute.identifier}</span>
-      <input if={(!_.isUndefined(this.contentEditableAttributeIdentifiers[opts.i])) && this.contentEditableAttributeIdentifiers[opts.i] === true} type="text" value={opts.attribute.identifier} onblur={completeAttributeIdentifierEditing.bind(this, opts.i)} onkeydown={completeAttributeIdentifierEditing.bind(this, opts.i)}>
+    <div class="fourteen wide column">
+      <div class="ui grid">
+        <div class="five wide column" ondblclick={editableThisAttributeIdentifier.bind(this, opts.i)}>
+          <label>識別子</label>
+          <span if={_.isUndefined(this.contentEditableAttributeIdentifiers[opts.i]) || this.contentEditableAttributeIdentifiers[opts.i] === false}>{opts.attribute.identifier}</span>
+          <input if={(!_.isUndefined(this.contentEditableAttributeIdentifiers[opts.i])) && this.contentEditableAttributeIdentifiers[opts.i] === true} type="text" value={opts.attribute.identifier} onblur={completeAttributeIdentifierEditing.bind(this, opts.i)} onkeydown={completeAttributeIdentifierEditing.bind(this, opts.i)}>
+        </div>
+        <div class="five wide column" ondblclick={editableThisAttributeName.bind(this, opts.i)}>
+          <label>名前</label>
+          <span if={_.isUndefined(this.contentEditableAttributeNames[opts.i]) || this.contentEditableAttributeNames[opts.i] === false}>{opts.attribute.name}</span>
+          <input if={(!_.isUndefined(this.contentEditableAttributeNames[opts.i])) && this.contentEditableAttributeNames[opts.i] === true} type="text" value={opts.attribute.name} onblur={completeAttributeNameEditing.bind(this, opts.i)} onkeydown={completeAttributeNameEditing.bind(this, opts.i)}>
+        </div>
+        <div class="five wide column" ondblclick={editableThisAttributeName.bind(this, opts.i)}>
+          <label>タイプ</label>
+          <select if={opts.is_login} value={opts.attribute.type} onchange={onChangeSelectAttributeType.bind(this, opts.i)}>
+            <option value="number">数値</option>
+            <option value="string">文字列</option>
+            <option value="boolean">真偽値</option>
+            <option value="select">選択</option>
+          </select>
+        </div>
+      </div>
+      <div if={isTypeSelect(opts.i)}>
+        <h4>選択肢</h4>
+        <object-schema-item-attribute-select-item each={option, j in opts.attribute.options} option={option} is_login={parent.opts.is_login} parent={parent} object_schema={parent.opts.object_schema} attribute_idx={parent.opts.i} option_idx={j}/>
+        <div class="ui grid segment no-boader">
+          <div class="one wide column">
+            <button if={opts.is_login} type="button" class="plus circular ui icon button" onclick={pushNewOption}>
+              <i class="plus icon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="five wide column" ondblclick={editableThisAttributeName.bind(this, opts.i)}>
-      <label>名前</label>
-      <span if={_.isUndefined(this.contentEditableAttributeNames[opts.i]) || this.contentEditableAttributeNames[opts.i] === false}>{opts.attribute.name}</span>
-      <input if={(!_.isUndefined(this.contentEditableAttributeNames[opts.i])) && this.contentEditableAttributeNames[opts.i] === true} type="text" value={opts.attribute.name} onblur={completeAttributeNameEditing.bind(this, opts.i)} onkeydown={completeAttributeNameEditing.bind(this, opts.i)}>
-    </div>
-    <div class="four wide column" ondblclick={editableThisAttributeName.bind(this, opts.i)}>
-      <label>タイプ</label>
-      <select if={opts.is_login} value={opts.attribute.type} onchange={onChangeSelectAttributeType.bind(this, opts.i)}>
-        <option value="number">数値</option>
-        <option value="string">文字列</option>
-        <option value="boolean">真偽値</option>
-      </select>
-    </div>
-    <div class="two wide column">
+    <div class="one wide column">
       <button if={opts.is_login} type="button" class="close circular ui icon button" data-dismiss="alert" onclick={deleteThisAttribute.bind(this, opts.i)}>
         <i class="remove icon"></i>
       </button>
@@ -32,6 +48,18 @@
   <script>
     this.contentEditableAttributeNames = [];
     this.contentEditableAttributeIdentifiers = [];
+    this.initialOptionValue = {
+      identifier: "new_option",
+      name: "新規オプション"
+    };
+
+    isTypeSelect(i) {
+      if (opts.object_schema.attributes[i].type === 'select') {
+        return true;
+      } else {
+        return false;
+      }
+    }
 
     editableThisAttributeName(i) {
       this.contentEditableAttributeNames[i] = this.isLogin;
@@ -100,16 +128,13 @@
       attributes[i].type = evt.target.value;
 
       opts.parent.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
+
     }
 
     insertAttribute(i) {
       var attributes = opts.object_schema.attributes;
       var backupAttributes = lodash.cloneDeep(attributes);
-      attributes.splice(i, 0, {
-        identifier: opts.parent.initialAttributeIdentifier,
-        name: opts.parent.initialAttributeName,
-        type: "number",
-      });
+      attributes.splice(i, 0, opts.parent.initialAttributeValue);
 
       opts.parent.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
     }
@@ -120,6 +145,14 @@
       attributes.splice(i, 1);
 
       opts.parent.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
+    }
+
+    pushNewOption(i) {
+      var attributes = opts.object_schema.attributes;
+      var backupAttributes = lodash.cloneDeep(attributes);
+      attributes[opts.i].options.push(this.initialOptionValue);
+
+      this.saveEditedAttributesOfThisObjectSchema(attributes, backupAttributes);
     }
 
   </script>

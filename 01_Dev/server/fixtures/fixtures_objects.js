@@ -7,9 +7,41 @@ if (ObjectSchemata.find().count() === 0) {
     extends: '',
     attributes: [
       {
+        identifier: 'name',
+        name: '名前',
+        type: 'string',
+        options: []
+      },
+      {
         identifier: 'hp',
         name: 'HP',
-        type: 'number'
+        type: 'number',
+        options: []
+      },
+      {
+        identifier: 'mp',
+        name: 'MP',
+        type: 'number',
+        options: []
+      },
+      {
+        identifier: 'situation',
+        name: '立場',
+        type: 'select',
+        options: [
+          {
+            identifier: "friend",
+            name: "味方"
+          },
+          {
+            identifier: "npc",
+            name: "NPC"
+          },
+          {
+            identifier: "enemy",
+            name: "敵"
+          }
+        ]
       }
     ]
   });

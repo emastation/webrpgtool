@@ -92,7 +92,7 @@ Meteor.methods({
     if (objectSchema.attributes.length === data.attributes.length) {
       var doConvert = true;
 
-      // change the attribute identifier if you change it
+      // change the object.attribute.identifier if you change any objectSchama.attribute.identifier.
       var matchIdentifers = [];
       data.attributes.forEach(function(newAttribute){
         var resultArray = _.filter(objectSchema.attributes, function(currentAttribute){
@@ -126,7 +126,7 @@ Meteor.methods({
       }
 
       if (doConvert) {
-        // convert type if you change the type
+        // convert the object.attribute.value if you change any objectSchema.attribute.type.
         objectSchema.attributes.forEach(function(currentAttribute){
           data.attributes.forEach(function(newAttribute){
             if (currentAttribute.identifier === newAttribute.identifier) {
@@ -136,11 +136,16 @@ Meteor.methods({
                   object.attributes[index].value = object.attributes[index].value.toString(10);
                 } else if (currentAttribute.type === 'boolean' && newAttribute.type === 'number') {
                   object.attributes[index].value = Number(object.attributes[index].value);
-                } else if ((currentAttribute.type === 'number' || currentAttribute.type === 'string') && newAttribute.type === 'boolean') {
+                } else if ((currentAttribute.type === 'number' || currentAttribute.type === 'string' || currentAttribute.type === 'select')
+                            && newAttribute.type === 'boolean') {
                   object.attributes[index].value = Boolean(object.attributes[index].value);
-                } else if (currentAttribute.type === 'string' && newAttribute.type === 'number') {
+                } else if ((currentAttribute.type === 'string' || currentAttribute.type === 'select') && newAttribute.type === 'number') {
                   var convertedVal = parseInt(object.attributes[index].value, 10);
                   object.attributes[index].value = _.isNaN(convertedVal) ? 0 : convertedVal;
+                } else if (currentAttribute.type !== 'select' && newAttribute.type === 'select') {
+                  object.attributes[index].value = newAttribute.options[0] ? newAttribute.options[0].identifier : '';
+                } else if (currentAttribute.type === 'select' && newAttribute.type === 'string') {
+                  // no need to convert
                 }
 
                 var attribute = {
@@ -157,15 +162,16 @@ Meteor.methods({
         });
       }
     } else if (objectSchema.attributes.length < data.attributes.length) {
-      // if added a new attribute
-
-      var initValue = function(type) {
+      // if added a new attribute to objectSchema, add the new attribute initial value to objects.
+      var initValue = function(type, attributeOfNewObjectSchama) {
         if (type === 'string') {
           return 'foo';
         } else if (type === 'number') {
           return 0;
         } else if (type === 'boolean') {
           return true;
+        } else if (type === 'select') {
+          return attributeOfNewObjectSchama.options[0] ? attributeOfNewObjectSchama.options[0].identifier : '';
         }
       };
       data.attributes.forEach(function(newAttribute) {
@@ -176,7 +182,7 @@ Meteor.methods({
           objects.forEach(function(object) {
             object.attributes.push({
               identifier: newAttribute.identifier,
-              value: initValue(newAttribute.type)
+              value: initValue(newAttribute.type, newAttribute)
             });
 
             var attribute = {
@@ -188,7 +194,7 @@ Meteor.methods({
         }
       });
     } else if (objectSchema.attributes.length > data.attributes.length) {
-      // if removed a attribute
+      // if removed a attribute from objectSchema, remove the attribute value from objects.
       objectSchema.attributes.forEach(function(currentAttribute) {
         var resultArray = lodash.filter(data.attributes, function(newAttribute){
           return currentAttribute.identifier === newAttribute.identifier;

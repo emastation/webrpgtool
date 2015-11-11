@@ -42,7 +42,8 @@
         } else if (attribute.type === 'boolean') {
           var value = $("#object_submit_checkbox_" + attribute.identifier).prop('checked');
         } else if (attribute.type === 'select') {
-          var value = $("#object_submit_select_" + attribute.identifier).val();;
+          var value = $("#object_submit_select_" + attribute.identifier).val();
+          value = _.isNull(value) ? '' : value;
         }
 
         submitData.attributes.push({

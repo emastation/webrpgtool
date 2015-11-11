@@ -15,6 +15,7 @@
             })[0];
             attribute.name = schemaAttrib.name;
             attribute.type = schemaAttrib.type;
+            attribute.options = lodash.cloneDeep(schemaAttrib.options);
           });
         });
         this.update();

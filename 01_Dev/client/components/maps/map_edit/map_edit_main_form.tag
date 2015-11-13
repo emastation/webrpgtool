@@ -1,6 +1,6 @@
 <map-edit-main-form>
   <div class="eight wide column">
-    <form id="map-data-form" class="ui form">
+    <form id="map-data-form" class="ui form segment">
       <div class="fields">
         <div class="field">
           <label>Title</label>

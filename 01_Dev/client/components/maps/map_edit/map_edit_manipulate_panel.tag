@@ -1,5 +1,5 @@
 <map-edit-manipulate-panel>
-  <div class="eight wide column">
+  <div class="eight wide column ui segment">
     <div class="fields">
       <div class="field">
         <label>テクスチャ</label>

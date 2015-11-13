@@ -8,11 +8,13 @@
         </div>
         <div class="field">
           <label>横幅</label>
-          <input name="width" id="width" type="number" value={opts.map.width} placeholder="マップの横幅を入力してください" kl_vkbd_parsed="true" />
+          <input name="width" id="width" type="number" value={opts.map.width}
+            placeholder="マップの横幅を入力してください" kl_vkbd_parsed="true" onchange={changeMapWidth} />
         </div>
         <div class="field">
           <label>高さ</label>
-          <input name="height" id="height" type="number" value={opts.map.height} placeholder="マップの高さを入力してください" kl_vkbd_parsed="true" />
+          <input name="height" id="height" type="number" value={opts.map.height}
+            placeholder="マップの高さを入力してください" kl_vkbd_parsed="true" onchange={changeMapHeight} />
         </div>
       </div>
       <div class="fields">
@@ -95,6 +97,16 @@
 
       // 赤い四角の選択を、テクスチャ０番目に戻す
       mapEditUpdateSelectedClass($("a[id^='texture_']>div").get(0));
+    }
+
+    changeMapWidth(e) {
+      var newWidth = parseInt(e.target.value, 10);
+      WRT.map.mapManager.setMapWidth(newWidth);
+    }
+
+    changeMapHeight(e) {
+      var newHeight = parseInt(e.target.value, 10);
+      WRT.map.mapManager.setMapHeight(newHeight);
     }
 
     this.on('updated', ()=>{

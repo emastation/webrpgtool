@@ -193,20 +193,6 @@ module WrtGame {
       }
     }
 
-    private encount():boolean {
-        if(Math.random()<0.50) {
-//        if(Math.random()<1) {
-            console.log("エンカウント！");
-//            if ($("#checkbox_encounter").attr("checked") === "checked") {
-            if (true) {
-//                alert("エンカウント！");
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private detectIntegerPosition() {
         var directionToMove = this._directionToMove;
 
@@ -234,7 +220,8 @@ module WrtGame {
             || player_h_center_int !== this._player_h_center_int ) { //
 
             // エンカウント判定を行う
-            encounter_f = this.encount();
+            let gameLogic = GameLogic.getInstance();
+            encounter_f = gameLogic.onMoveOnMapCallback();
 
             if(encounter_f) {
 //                this.move_key_downed_f = false;

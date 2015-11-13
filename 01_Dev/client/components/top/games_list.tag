@@ -1,5 +1,5 @@
 <games-list>
-  <game-item each={games} game={this}></game-item>
+  <game-item each={games} game={this} is_login={parent.opts.is_login}></game-item>
 
   <script>
     this.on('mount', ()=>{

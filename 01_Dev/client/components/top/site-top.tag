@@ -1,10 +1,10 @@
 <site-top>
   <game-submit if={isLogin}></game-submit>
-  <games-list></games-list>
+  <games-list is_login={isLogin}></games-list>
 
   <script>
     Meteor.autorun(()=> {
-      self.isLogin = Meteor.user();
+      this.isLogin = Meteor.userId() ? true : false;
       this.update();
     });
   </script>

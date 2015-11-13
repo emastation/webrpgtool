@@ -12,7 +12,7 @@ Meteor.methods({
       return {
         exists: true,
         _id: gameWithSameIdentifier._id
-      }
+      };
     }
 
     var user = Meteor.user();
@@ -27,5 +27,27 @@ Meteor.methods({
     return {
       _id: gameId
     };
+  },
+  deleteGame: function(idToDelete) {
+    check(Meteor.userId(), String);
+    check(idToDelete, String);
+
+    var game = MongoCollections.Games.findOne();
+    if (game) {
+      if (game.author === Meteor.user().username) {
+        let id = MongoCollections.Games.remove(idToDelete);
+        return {
+          _id: id
+        };
+      } else {
+        return {
+          wrongUser: true
+        };
+      }
+    } else {
+      return {
+        notFound: true
+      };
+    }
   }
 });

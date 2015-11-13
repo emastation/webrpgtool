@@ -488,6 +488,8 @@ if (Games.find().count() === 0) {
 
   Games.insert({
     title: 'サンプルゲーム１',
+    identifier: 'wrt_sample_game_1',
+    author: 'wrt_admin',
     gameType: 'novel', // rpg or novel
     novelStories: [storyIds[0], storyIds[1]]
   });

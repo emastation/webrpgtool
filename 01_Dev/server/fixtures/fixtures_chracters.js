@@ -33,6 +33,10 @@ if (Characters.find().count() === 0) {
   tsubasaImages.push(CharacterImages.insert({characterId:tsubasa, useForNovel:true, pose:'怒り', portraitImageUrl: 'https://www.emastation.com/wrt/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_angry.png', iconUrl: 'https://www.emastation.com/wrt/material/chara_image/icon/official/tsubasa/tsubasa_icon_angry.jpg'}));
   tsubasaImages.push(CharacterImages.insert({characterId:tsubasa, useForNovel:true, pose:'悲しい', portraitImageUrl: 'https://www.emastation.com/wrt/material/chara_image/portrait/official/tsubasa/tsubasa_550_portrait_sad.png', iconUrl: 'https://www.emastation.com/wrt/material/chara_image/icon/official/tsubasa/tsubasa_icon_sad.jpg'}));
 
+  var urura = Characters.insert({identifier: 'Urura@Owl', name: 'ウルラ', position:'friend', useForNovel:true});
+  var ururaImages = [];
+  ururaImages.push(CharacterImages.insert({characterId:urura, useForNovel:true, pose:'通常', portraitImageUrl: 'https://www.emastation.com/wrt/material/chara_image/portrait/palette/urura/urura_600_portrait_normal.png', iconUrl: 'https://www.emastation.com/wrt/material/chara_image/icon/palette/urura/urura_icon_normal.jpg'}));
+  ururaImages.push(CharacterImages.insert({characterId:urura, useForNovel:true, pose:'笑顔', portraitImageUrl: 'https://www.emastation.com/wrt/material/chara_image/portrait/palette/urura/urura_600_portrait_smile.png', iconUrl: 'https://www.emastation.com/wrt/material/chara_image/icon/palette/urura/urura_icon_smile.jpg'}));
 
   // ここから敵キャラ
   var ork = Characters.insert({identifier: 'Ork', name: 'オーク', position:'enemy', useForNovel:false});

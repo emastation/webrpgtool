@@ -1,7 +1,7 @@
 <app>
   <router>
-    <route path="/"><site-header page="top" opts={parent.parent.routeFunc} /><site-top /></route>
-    <route path="game/:game_id"><site-header page="top" opts={parent.parent.routeFunc} /><site-top /></route>
+    <route path="/"><site-header page="top" opts={parent.parent.routeFunc} /><site-top opts={parent.parent.routeFunc} /></route>
+    <route path="game/:game_id"><site-header page="top" opts={parent.parent.routeFunc} /><site-top opts={parent.parent.routeFunc} /></route>
     <route path="game/:game_id/maps"><site-header page="maps" opts={parent.parent.routeFunc} /><maps-top opts={parent.parent.routeFunc} /></route>
     <route path="game/:game_id/map/:map_id"><site-header page="maps" opts={parent.parent.routeFunc} /><map-page opts={parent.parent.routeFunc} /></route>
     <route path="game/:game_id/map/:map_id/edit"><site-header page="maps" opts={parent.parent.routeFunc} /><map-edit opts={parent.parent.routeFunc} /></route>

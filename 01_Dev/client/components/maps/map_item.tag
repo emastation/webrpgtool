@@ -18,9 +18,9 @@
     </p>
     <p><br />
       submitted by {opts.map.author}&nbsp;
-      <a href="#game/{opts.map._id}/play">ゲームプレイ</a>&nbsp;
-      <a href="#map/{opts.map._id}/edit" if={isLogin} onclick={goToMapEdit}>編集&nbsp;</a>
-      <a href="#map/{opts.map._id}" class="discuss btn btn-default">詳細</a>
+      <a href="#game/{opts.game_id}/map/{opts.map._id}/play">ゲームプレイ</a>&nbsp;
+      <a href="#game/{opts.game_id}/map/{opts.map._id}/edit" if={isLogin} onclick={goToMapEdit}>編集&nbsp;</a>
+      <a href="#game/{opts.game_id}/map/{opts.map._id}" class="discuss btn btn-default">詳細</a>
     </p>
   </div>
 

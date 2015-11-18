@@ -10,6 +10,6 @@ _global.MongoCollections.Maps.allow({
 _global.MongoCollections.Maps.deny({
   update: function(userId, post, fieldNames) {
     // may only edit the following two fields:
-    return (_.without(fieldNames, 'title', 'width', 'height', 'type_array', 'height_array', 'script_array').length > 0);
+    return (_.without(fieldNames, 'title', 'width', 'height', 'type_array', 'height_array', 'script_array', 'game_id').length > 0);
   }
 });

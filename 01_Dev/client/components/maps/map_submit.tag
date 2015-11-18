@@ -36,7 +36,8 @@
         "0,0,0,0,0\n" +
         "0,0,0,0,0\n" +
         "0,0,0,0,0\n" +
-        "0,0,0,0,0\n"
+        "0,0,0,0,0\n",
+        game_id: opts.game_id
       };
 
       Meteor.call('createMap', map, function(error, result) { // display the error to the user and abort

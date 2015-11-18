@@ -7,7 +7,8 @@ Meteor.methods({
       height: Number,
       type_array: String,
       height_array: String,
-      script_array: String
+      script_array: String,
+      game_id: String
     });
 
     var Maps = MongoCollections.Maps;

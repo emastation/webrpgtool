@@ -62,7 +62,7 @@
           // display the error to the user
           alert(error.reason);
         } else {
-          window.location = '#map/'+currentMapId;
+          window.location = '#game/' + opts.game_id + '/map/' + currentMapId;
         }
       });
     }
@@ -72,7 +72,7 @@
 
       var currentMapId = opts.map._id;
       MongoCollections.Maps.remove(currentMapId);
-      window.location = '#maps';
+      window.location = '#game/' + opts.game_id + '/maps';
     }
 
     reloadCurrentMapDataFromMapManager() {

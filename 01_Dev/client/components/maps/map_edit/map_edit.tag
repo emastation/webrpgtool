@@ -1,6 +1,6 @@
 <map-edit>
   <div class="ui grid">
-    <map-edit-main-form map={map}></map-edit-main-form>
+    <map-edit-main-form map={map} game_id={gameId}></map-edit-main-form>
     <map-edit-manipulate-panel map={map} map_textures={mapTextures} map_tile_types={mapTileTypes}
                             height_tile_div_style_str_array={heightTileDivStyleStrArray}></map-edit-manipulate-panel>
     <div class="eight wide column"></div>
@@ -127,6 +127,7 @@
     });
 
     this.on('update', ()=>{
+      this.gameId = (opts.game_id) ? opts.game_id : this.gameId;
       this.getMap();
       this.getMapTextures();
       this.getMapTileTypes();

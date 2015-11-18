@@ -49,6 +49,7 @@
           alert('This title has already been posted');
 
         this.title.value = ''
+        Session.set('MapItem_changed', Date.now());
       });
 
     }

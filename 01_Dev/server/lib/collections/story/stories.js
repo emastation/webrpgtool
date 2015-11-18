@@ -5,6 +5,7 @@ Meteor.methods({
     check(Meteor.userId(), String);
     check(storyAttributes, {
       title: String,
+      game_id: String,
       order: Number
     });
 

@@ -3,7 +3,7 @@
     <a class={item: true, active: isTop} id="header-navlink-top" href="#">WebRPGTool</a>
     <a class={item: true, active: isMaps, disable-link:!gameId} id="header-navlink-maps" href="#game/{gameId}/maps">マップ</a>
     <a class={item: true, active: isCodes, disable-link:!gameId} id="header-navlink-scripts" href="#game/{gameId}/codes">スクリプト</a>
-    <a class={item: true, active: isStories, disable-link:!gameId} id="header-navlink-stories" href="#stories">ストーリー</a>
+    <a class={item: true, active: isStories, disable-link:!gameId} id="header-navlink-stories" href="#game/{gameId}/stories">ストーリー</a>
     <a class={item: true, active: isObjects, disable-link:!gameId} id="header-navlink-stories" href="#schemata">オブジェクト</a>
     <div class="item" id="loginButtonsDiv"></div>
   </div>

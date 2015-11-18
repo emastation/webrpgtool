@@ -1,5 +1,5 @@
 <stories-list id="stories-list">
-  <div each={stories} data-id={_id} data-order={order}><story-item story={this} /></div>
+  <div each={stories} data-id={_id} data-order={order}><story-item story={this} game_id={parent.opts.game_id} /></div>
 
   <script>
     this.mixin('sortable');
@@ -13,12 +13,27 @@
     // Sortable Settings [end]
 
     this.on('mount', ()=>{
-      Meteor.subscribe('stories');
+      Meteor.subscribe('stories', {
+        onReady: ()=>{
+          this.getStories();
+        }
+      });
     });
 
-    Meteor.autorun(()=> {
-      this.stories = MongoCollections.Stories.find({}, {sort: { order: 1 }}).fetch();
+    getStories() {
+      this.stories = MongoCollections.Stories.find({game_id: opts.game_id}, {sort: { order: 1 }}).fetch();
       this.update();
+    }
+
+
+    Meteor.autorun(()=> {
+      Session.get('StoryItem_changed');
+      this.getStories();
     });
+
+    this.on('update', ()=>{
+      this.getStories();
+    });
+
   </script>
 </stories-list>

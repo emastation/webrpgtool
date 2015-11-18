@@ -181,18 +181,31 @@ if (Characters.find().count() === 0) {
 
 }
 
+var Games = MongoCollections.Games;
+var gameIds = [];
+if (Games.find().count() === 0) {
+  gameIds.push(
+    Games.insert({
+      title: 'サンプルゲーム１',
+      identifier: 'wrt_sample_game_1',
+      author: 'wrt_admin',
+      gameType: 'novel' // rpg or novel
+//      novelStories: [storyIds[0], storyIds[1]]
+    })
+  );
+}
+
 
 var Stories = MongoCollections.Stories;
 var storyIds = [];
 if (Stories.find().count() === 0) {
   [
     {title: 'Story_1'},
-    {title: 'Story_2'},
-    {title: 'Story_3'},
-    {title: 'Story_4'}
+    {title: 'Story_2'}
   ].forEach(function (attribute, i) {
         storyIds.push(Stories.insert({
           title: attribute.title,
+          game_id: gameIds[0],
           order: i
         }));
       }
@@ -482,17 +495,6 @@ if (SoundEffectAudios.find().count() === 0) {
         }));
       }
   );
-}
-var Games = MongoCollections.Games;
-if (Games.find().count() === 0) {
-
-  Games.insert({
-    title: 'サンプルゲーム１',
-    identifier: 'wrt_sample_game_1',
-    author: 'wrt_admin',
-    gameType: 'novel', // rpg or novel
-    novelStories: [storyIds[0], storyIds[1]]
-  });
 }
 
 wrt_fixtureLoadedCount = (typeof wrt_fixtureLoadedCount !== "undefined") ? wrt_fixtureLoadedCount++ : 0;

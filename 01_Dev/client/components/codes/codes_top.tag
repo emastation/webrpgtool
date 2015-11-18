@@ -6,6 +6,11 @@
 
   <script>
     this.mixin('ikki'); // THIS LINE IS NEEDED TO USE IKKI'S FEATURES
+
+    this.on('mount', ()=> {
+      this.gameId = (opts.game_id) ? opts.game_id : this.gameId;
+    });
+
     this.on('update', ()=> {
       this.gameId = (opts.game_id) ? opts.game_id : this.gameId;
     });

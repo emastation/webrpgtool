@@ -15,6 +15,7 @@
 
       var story = {
         title: this.title.value,
+        game_id: opts.game_id,
         order: -1
       };
 
@@ -28,6 +29,7 @@
       });
 
       this.title.value = '';
+      Session.set('StoryItem_changed', Date.now());
     }
     Meteor.autorun(()=> {
       this.isLogin = Meteor.userId() ? true : false

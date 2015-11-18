@@ -51,12 +51,12 @@
       </div>
     </div>
     <div class="three wide column">
-      <a href="#story_play/{opts.story_id}/scene/{opts.story_scene._id}">
+      <a href="#game/{opts.game_id}/story/{opts.story_id}/scene/{opts.story_scene._id}/play">
         <button type="button" class="edit circular ui icon button">
           <i class="play icon"></i>
         </button>
       </a>
-      <a href="#story/{opts.story_id}/scene/{opts.story_scene._id}">
+      <a href="#game/{opts.game_id}/story/{opts.story_id}/scene/{opts.story_scene._id}">
         <button if={isLogin} type="button" class="edit circular ui icon button">
           <i class="edit icon"></i>
         </button>

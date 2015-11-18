@@ -2,7 +2,11 @@
   <map-item each={maps} map={this} game_id={parent.opts.game_id}></map-item>
   <script>
     this.on('mount', ()=>{
-      Meteor.subscribe('maps');
+      Meteor.subscribe('maps', {
+        onReady: ()=>{
+          this.getMaps();
+        }
+      });
     });
 
     getMaps() {
@@ -13,6 +17,7 @@
     }
 
     this.on('update', ()=>{
+      Session.get('MapItem_changed');
       this.getMaps();
     });
 

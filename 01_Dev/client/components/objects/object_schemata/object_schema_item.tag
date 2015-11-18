@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="two wide column">
-      <a href="#schema/{opts.object_schema._id}">
+      <a href="#game/{opts.game_id}/schema/{opts.object_schema._id}">
         <button if={isLogin} type="button" class="close circular ui icon button" data-dismiss="alert">
           <i class="edit icon"></i>
         </button>
@@ -148,6 +148,7 @@
 
     deleteObjectSchema() {
       MongoCollections.ObjectSchemata.remove(opts.object_schema._id);
+      Session.set('ObjectSchemaItem_changed', Date.now());
     }
 
     Meteor.autorun(()=> {

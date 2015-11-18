@@ -17,11 +17,11 @@
     }
 
     this.on('update', ()=>{
-      Session.get('MapItem_changed');
       this.getMaps();
     });
 
     Meteor.autorun(()=> {
+      Session.get('MapItem_changed');
       this.getMaps();
     });
   </script>

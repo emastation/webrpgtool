@@ -4,6 +4,7 @@ Meteor.methods({
     check(attribute, {
       identifier: String,
       schema_identifier: String,
+      game_id: String,
       attributes: Array
     });
 

@@ -30,6 +30,7 @@
 
       var submitData = {
         identifier: this.identifier.value,
+        game_id: opts.game_id,
         schema_identifier: this.objectSchema.identifier,
         attributes: []
       };

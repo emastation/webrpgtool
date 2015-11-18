@@ -16,10 +16,14 @@
   }
 
   getObjects() {
+
+
     if(!_.isUndefined(opts.schema_id)) {
       this.objectSchema = MongoCollections.ObjectSchemata.findOne({_id: opts.schema_id});
       if (this.objectSchema) {
-        this.objects = MongoCollections.Objects.find({schema_identifier: this.objectSchema.identifier}).fetch();
+        this.objects = MongoCollections.Objects.find(
+          {'$and' : [{schema_identifier: this.objectSchema.identifier}, {'$or' : [{'game_id': ''}, {'game_id': opts.game_id}]}]}
+        ).fetch();
         this.objects.forEach((object)=> {
           object.attributes.forEach((attribute)=> {
             var schemaAttrib = _.filter(this.objectSchema.attributes, (attrib)=>{

@@ -4,6 +4,7 @@ if (ObjectSchemata.find().count() === 0) {
   ObjectSchemata.insert({
     name: 'ゲームキャラクター',
     identifier: 'wrt_game_character',
+    game_id: '',
     extends: '',
     attributes: [
       {
@@ -59,6 +60,7 @@ if (Objects.find().count() === 0) {
   Objects.insert({
     identifier: 'Mika@Rabbit',
     schema_identifier: 'wrt_game_character',
+    game_id: '',
     attributes: [
       {
         identifier: 'name',
@@ -86,6 +88,7 @@ if (Objects.find().count() === 0) {
   Objects.insert({
     identifier: 'Ayumi@Tartle',
     schema_identifier: 'wrt_game_character',
+    game_id: '',
     attributes: [
       {
         identifier: 'name',
@@ -113,6 +116,7 @@ if (Objects.find().count() === 0) {
   Objects.insert({
     identifier: 'ork',
     schema_identifier: 'wrt_game_character',
+    game_id: '',
     attributes: [
       {
         identifier: 'name',
@@ -140,6 +144,7 @@ if (Objects.find().count() === 0) {
   Objects.insert({
     identifier: 'greenDragon',
     schema_identifier: 'wrt_game_character',
+    game_id: '',
     attributes: [
       {
         identifier: 'name',

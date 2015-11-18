@@ -30,6 +30,7 @@
       var attribute = {
         name: this.name.value,
         identifier: this.identifier.value,
+        game_id: opts.game_id,
         extends: '',
         attributes: []
       };
@@ -43,6 +44,8 @@
           alert('すでに登録されている識別子です。');
 
         this.name.value = ''
+        Session.set('ObjectSchemaItem_changed', Date.now());
+
       });
 
     }

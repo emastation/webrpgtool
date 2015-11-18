@@ -26,7 +26,8 @@
       var code = {
         name: this.name.value,
         identifier: this.identifier.value,
-        javascript: this.javascript.value
+        javascript: this.javascript.value,
+        game_id: this.gameId
       };
 
       Meteor.call('createCode', code, function(error, result) {
@@ -36,7 +37,7 @@
         if (result.codeExists) {
           alert('This title has already been posted');
         }
-        window.location.href = "#/code/" + result._id + "/edit";
+        window.location.href = "#game/" + this.gameId + "/code/" + result._id + "/edit";
       });
     }
 
@@ -84,6 +85,7 @@
     });
 
     this.on('update', ()=>{
+      this.gameId = (opts.game_id) ? opts.game_id : this.gameId;
       this.getCode();
     });
   </script>

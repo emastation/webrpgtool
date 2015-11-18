@@ -4,7 +4,8 @@ Meteor.methods({ // クライアントから呼ばれるサーバーコード。
     check(codeAttributes, {
       name: String,
       identifier: String,
-      javascript: String
+      javascript: String,
+      game_id: String
     });
 
     var Codes = MongoCollections.Codes;

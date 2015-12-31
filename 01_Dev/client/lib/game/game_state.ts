@@ -69,6 +69,8 @@ module WrtGame {
 
   export var flyMode_f = true;
 
+  export var LG_ENCOUNTER = "LG_ENCOUNTER";
+
   /**
    *  ゲームの状態を保持するクラス
    */

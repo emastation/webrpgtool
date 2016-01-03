@@ -159,18 +159,18 @@
         deferMapTextures.promise(),
         deferMapTileTypes.promise(),
         deferCharacterImages.promise(),
-        deferStories.resolve(),
-        deferStoryScenes.resolve(),
-        deferStoryItems.resolve(),
-        deferSentences.resolve(),
-        deferCharacters.resolve(),
-        deferBackgrounds.resolve(),
-        deferBackgroundImages.resolve(),
-        deferBgms.resolve(),
-        deferBgmAudios.resolve(),
-        deferSoundEffects.resolve(),
-        deferSoundEffectAudios.resolve(),
-        deferCodes.resolve()
+        deferStories.promise(),
+        deferStoryScenes.promise(),
+        deferStoryItems.promise(),
+        deferSentences.promise(),
+        deferCharacters.promise(),
+        deferBackgrounds.promise(),
+        deferBackgroundImages.promise(),
+        deferBgms.promise(),
+        deferBgmAudios.promise(),
+        deferSoundEffects.promise(),
+        deferSoundEffectAudios.promise(),
+        deferCodes.promise()
       ).done(()=> {
         var game = WrtGame.Game.getInstance();
         game.init(this.data);

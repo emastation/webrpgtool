@@ -97,7 +97,8 @@ module WrtGame {
     private moveInner(delta:number, time:number, breakTime:number, sprite:any, fps:number) {
       this._timeLeft += 1 / fps;
 
-      var newHeight = sprite.position.y + delta * this._direction;
+      //var newHeight = sprite.position.y + delta * this._direction;
+      var newHeight = sprite.translate.y + delta * this._direction;
       if (newHeight > this.levels[1]) {
         newHeight = this.levels[1];
         this.currentLevel = this.levels[1];
@@ -106,7 +107,8 @@ module WrtGame {
         newHeight = this.levels[0];
         this.currentLevel = this.levels[0];
       }
-      sprite.position = new BABYLON.Vector3(sprite.position.x, newHeight, sprite.position.z);
+      //sprite.position = new BABYLON.Vector3(sprite.position.x, newHeight, sprite.position.z);
+      sprite.translate = new GLBoost.Vector3(sprite.translate.x, newHeight, sprite.translate.z);
 
       // もし、プレーヤーがこのプラットフォームに乗っているなら、プレーヤーの高さを更新する
       var mapMovement = MapMovement.getInstance();
@@ -120,7 +122,8 @@ module WrtGame {
         }
       }
 
-      this.heightMap[this.y_onMap][this.x_onMap][0] = sprite.position.y;
+      //this.heightMap[this.y_onMap][this.x_onMap][0] = sprite.position.y;
+      this.heightMap[this.y_onMap][this.x_onMap][0] = sprite.translate.y;
 
       if(this._timeLeft > time+breakTime) { // 動かし終わったら、次に動かすまでbreakTime時間だけ休む
         if(this._remainLoopN !== 0) { // -1か正の数であれば
@@ -135,7 +138,7 @@ module WrtGame {
       }
     }
 
-    public setupMesh(scene:BABYLON.Scene, mapPlatformTitle:string, floorHeight:number, ceilingHeight:number, imageUrl:string) :void {
+    public setupMesh(scene:BABYLON.Scene, mapPlatformTitle:string, floorHeight:number, ceilingHeight:number, imageUrl:string, canvasId:string) :void {
 
     }
 

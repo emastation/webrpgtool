@@ -22,5 +22,9 @@ module WrtGame {
 
       return false;
     }
+
+    getGameLogicalEvent() {
+      return this._logicalEvent.shift();
+    }
   }
 }

@@ -35,17 +35,18 @@ module WrtGame {
       var novelPlayer = WrtGame.NovelPlayer.getInstance();
       novelPlayer.init();
 
-      if (!onlyNovel) {
-        var mapMovement = this.initEvents();
-      }
-
       if (onlyNovel) {
         this.initTmlib(callbackWhenOnlyNovel);
       } else {
         this.initTmlib(()=>{
+          this.initEvents();
+
+          let glboostCtx = GLBoostContext.getInstance();
+          glboostCtx.init('#renderCanvas');
 
           let sm:SceneManager = SceneManager.getInstance();
-          sm.addScene('dungeon', new DungeonScene(data, mapMovement));
+          sm.addScene('battle', new BattleScene());
+          sm.addScene('dungeon', new DungeonScene(data));
 
           this.initUserFunctions();
 
@@ -60,10 +61,28 @@ module WrtGame {
 
     }
 
+    private _handleGameLogicalEvent(event) {
+      if (typeof event === 'undefined') {
+        return;
+      }
+
+      if (event === LG_ENCOUNTER) {
+        let sm:SceneManager = SceneManager.getInstance();
+        sm.switchScene('battle');
+      }
+    }
+
     private _gameLoop() {
-      let sm:SceneManager = SceneManager.getInstance();
-      let dungeonScene:Scene = sm.getScene('dungeon');
-      dungeonScene.sceneLoop();
+
+      var gameLogic:GameLogic = GameLogic.getInstance();
+      var event = gameLogic.getGameLogicalEvent();
+      this._handleGameLogicalEvent(event);
+
+      var sm:SceneManager = SceneManager.getInstance();
+      var scene:Scene = sm.getCurrentScene();
+
+
+      scene.sceneLoop();
 
       requestAnimationFrame(()=>{
         this._gameLoop();
@@ -72,23 +91,17 @@ module WrtGame {
 
     private initEvents() {
       // 物理イベントのプロパティ初期化
-      var physicalMapMovementEventProperty:any = WrtGame.initMapMovementEventHandler();
       var physicalUiEventProperty:any = WrtGame.initUiEventHandler();
 
       var gameState = WrtGame.GameState.getInstance();
-      // 論理移動コマンドプロパティ初期化
-      var logicalMovementCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalMapMovementEventProperty);
+
       // 論理UIコマンドプロパティ初期化
       var logicalUiCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalUiCommandProperty(physicalUiEventProperty);
 
-      // マップ移動クラスの初期化
-      var mapMovement = WrtGame.MapMovement.getInstance();
-      mapMovement.init(logicalMovementCommandProperty);
-
+      // UiOperation初期化
       var uiOperation = WrtGame.UiOperation.getInstance();
       uiOperation.init(logicalUiCommandProperty);
 
-      return mapMovement;
     }
 
     private initTmlib(callback:Function) {

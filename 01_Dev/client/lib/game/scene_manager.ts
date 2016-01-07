@@ -5,6 +5,7 @@ module WrtGame {
   export class SceneManager {
     private static _instance:SceneManager;
     private _scenes:any = {};
+    private _currentSceneName = null;
     public static getInstance():SceneManager
     {
       if(SceneManager._instance == null) {
@@ -16,12 +17,23 @@ module WrtGame {
 
     }
 
-    addScene(key:string, scene:Scene) {
+    addScene(key:string, scene:Scene, switchScene:boolean = true) {
       this._scenes[key] = scene;
+      if (switchScene) {
+        this._currentSceneName = key;
+      }
     }
 
     getScene(key:string) {
       return this._scenes[key];
+    }
+
+    switchScene(key) {
+      this._currentSceneName = key;
+    }
+
+    getCurrentScene() {
+      return this._scenes[this._currentSceneName];
     }
   }
 }

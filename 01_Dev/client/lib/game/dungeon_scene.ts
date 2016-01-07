@@ -10,18 +10,31 @@ module WrtGame {
     private _camera:any = null;
     private _scene:any = null;
     private _renderer:any = null;
-    constructor(data:any, mapMovement:WrtGame.MapMovement) {
+    constructor(data:any) {
       super();
-      this._mapMovement = mapMovement;
-      this.initGLBoost(data);
+      //this._mapMovement = mapMovement;
+      this._initEvent();
+      this._initGLBoost(data);
     }
 
-    private initGLBoost(data:any) {
-      var canvasId = '#renderCanvas';
-      var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.querySelector(canvasId);
+    private _initEvent() {
+      // 物理イベントのプロパティ初期化
+      var physicalMapMovementEventProperty:any = WrtGame.initMapMovementEventHandler();
 
-      var renderer:any = new GLBoost.Renderer({ canvas: canvas, clearColor: {red:0.5, green:0.5, blue:0.5, alpha:1}});
+      var gameState = WrtGame.GameState.getInstance();
+      // 論理移動コマンドプロパティ初期化
+      var logicalMovementCommandProperty:any = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalMapMovementEventProperty);
 
+      // マップ移動クラスの初期化
+      this._mapMovement = WrtGame.MapMovement.getInstance();
+      this._mapMovement.init(logicalMovementCommandProperty);
+    }
+
+    private _initGLBoost(data:any) {
+      var glboostCtx = GLBoostContext.getInstance();
+      var renderer:any = glboostCtx.getRenderer();
+      var canvasId:string = glboostCtx.getCanvasId();
+      var canvas:any = glboostCtx.getCanvas();
       var scene = new GLBoost.Scene();
 
       var aspect = canvas.width / canvas.height;

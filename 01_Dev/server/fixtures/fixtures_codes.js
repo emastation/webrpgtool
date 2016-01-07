@@ -17,6 +17,14 @@ if (Codes.find().count() === 0) {
      result = yield callEngineMethod('playNovelNext', 'Story_2');
      */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1]
   });
+  Codes.insert({
+    name: 'ダンジョンに戻る',
+    identifier: 'switchToDungeon',
+    game_id: '',
+    javascript: (function () {/*
+     var result = yield callEngineMethod('switchScene', 'dungeon');
+     */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1]
+  });
 }
 
 wrt_fixtureLoadedCount = (typeof wrt_fixtureLoadedCount !== "undefined") ? wrt_fixtureLoadedCount++ : 0;

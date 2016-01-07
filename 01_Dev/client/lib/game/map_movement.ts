@@ -271,8 +271,6 @@ module WrtGame {
         return;
       }
 
-      var walkResult:WalkResult = this.detectIntegerPosition(); // 現在のプレーヤーの整数位置を算出
-
       var gameState = WrtGame.GameState.getInstance();
 
       // 移動キー（回転キーは除く）を押していた場合
@@ -459,6 +457,8 @@ module WrtGame {
 
       this._positionUpdatedOnMoveKeyDown = false;
       this._positionUpdatedOnMoveKeyUp = false;
+
+      var walkResult:WalkResult = this.detectIntegerPosition(); // 現在のプレーヤーの整数位置を算出
     }
 
     /**

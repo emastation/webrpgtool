@@ -65,6 +65,14 @@ if (UiTables.find().count() === 0) {
       {
         columns:[
           {
+            title: 'ダンジョンに戻る',
+            functionName: 'switchToDungeon'
+          }
+        ]
+      },
+      {
+        columns:[
+          {
             title: 'ステータスをみる',
             nextUiTable: 'system-characters'
           }

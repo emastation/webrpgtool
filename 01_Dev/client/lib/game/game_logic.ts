@@ -17,10 +17,13 @@ module WrtGame {
       //        if(Math.random()<1) {
           console.log("エンカウント！！" + LG_ENCOUNTER);
       //            if ($("#checkbox_encounter").attr("checked") === "checked") {
-        this._logicalEvent.push(LG_ENCOUNTER)
+        this._logicalEvent.push(LG_ENCOUNTER);
+
+        return true;
+      } else {
+        return false;
       }
 
-      return false;
     }
 
     getGameLogicalEvent() {

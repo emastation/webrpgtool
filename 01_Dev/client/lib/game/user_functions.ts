@@ -130,6 +130,10 @@ module WrtGame {
         tellPluginCodeFinished:(value)=> {
           that._acceptableFromUI = true;
           this._jailedPlugin.disconnect();
+        },
+        switchScene:(value)=> {
+          var sm:SceneManager = SceneManager.getInstance();
+          sm.switchScene(value);
         }
       };
 
@@ -142,7 +146,6 @@ module WrtGame {
       }
 
       var mapMovement = MapMovement.getInstance();
-      mapMovement.playerIsMovable = false;
       this.loadSandboxCode(functionName);
       this._jailedPlugin.whenConnected( ()=> {
         this._jailedPlugin.remote.doSandboxFunc(1);

@@ -205,6 +205,7 @@
       position: absolute;
       top: 0px;
       z-index: 100;
+      background-color: black;
     }
 
     canvas#tmlibCanvas {

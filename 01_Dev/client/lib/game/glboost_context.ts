@@ -23,7 +23,7 @@ module WrtGame {
       this._canvasId = canvasId;
       this._canvas = <HTMLCanvasElement>document.querySelector(canvasId);
 
-      this._renderer = new GLBoost.Renderer({ canvas: this._canvas, clearColor: {red:0.5, green:0.5, blue:0.5, alpha:1}});
+      this._renderer = new GLBoost.Renderer({ canvas: this._canvas, clearColor: {red:0.0, green:0.0, blue:0.0, alpha:1}});
     }
 
     getRenderer() {

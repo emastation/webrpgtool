@@ -59,7 +59,10 @@ module WrtGame {
           .to( { volume: 0 }, that.crossfadeTime )
           .easing( TWEEN.Easing.Linear.None )
           .onUpdate( function () {
-              tm.asset.Manager.get(that.fadeoutTween.bgmurl).volume = this.volume;
+            var bgm = tm.asset.Manager.get(that.fadeoutTween.bgmurl);
+            if (bgm) {
+              bgm.volume = this.volume;
+            }
           });
 
       this.fadeinTween = new TWEEN.Tween( { volume: 0.0 } );
@@ -68,7 +71,10 @@ module WrtGame {
           .to( { volume: 1 }, that.crossfadeTime )
           .easing( TWEEN.Easing.Linear.None )
           .onUpdate( function () {
-              tm.asset.Manager.get(that.fadeinTween.bgmurl).volume = this.volume;
+            var bgm = tm.asset.Manager.get(that.fadeinTween.bgmurl);
+            if (bgm) {
+              bgm.volume = this.volume;
+            }
           });
 
       this.fadeoutTween.setFlag("CrossFadeToBGM1");
@@ -207,7 +213,6 @@ module WrtGame {
 
     public loop(){
       TWEEN.update();
-
     }
   }
 }

@@ -1,4 +1,5 @@
 declare var GLBoost:any;
+declare var TWEEN:any;
 
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
@@ -10,6 +11,7 @@ module WrtGame {
     private _camera:any = null;
     private _scene:any = null;
     private _renderer:any = null;
+    private _fadeTween:any = null;
     constructor(data:any) {
       super();
       //this._mapMovement = mapMovement;
@@ -109,7 +111,14 @@ module WrtGame {
 
       this._renderer.clearCanvas();
       this._renderer.draw(this._scene);
+      //console.log("this.opacity:" + this._scene.opacity);
 
+      /*
+      if (this._fadeTween) {
+        this._fadeTween.update();
+      }
+      */
+      TWEEN.update();
     }
 
     /**
@@ -143,5 +152,28 @@ module WrtGame {
       };
     }
 
+    public fadeIn(callback) {
+      this._fadeTween = new TWEEN.Tween( this._scene );
+      this._fadeTween
+        .to( { opacity: 1.0 }, 1500.0)
+        .easing( TWEEN.Easing.Quartic.In);
+      if (callback) {
+        this._fadeTween.onComplete(callback).start();
+      } else {
+        this._fadeTween.start();
+      }
+    }
+
+    public fadeOut(callback) {
+      this._fadeTween = new TWEEN.Tween( this._scene );
+      this._fadeTween
+        .to( { opacity: 0.0 }, 1500.0)
+        .easing( TWEEN.Easing.Quartic.Out);
+      if (callback) {
+        this._fadeTween.onComplete(callback).start();
+      } else {
+        this._fadeTween.start();
+      }
+    }
   }
 }

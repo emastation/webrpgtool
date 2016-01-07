@@ -133,7 +133,15 @@ module WrtGame {
         },
         switchScene:(value)=> {
           var sm:SceneManager = SceneManager.getInstance();
-          sm.switchScene(value);
+          if (value === 'dungeon') {
+            var dungeonScene = sm.getScene('dungeon');
+            sm.switchScene(value);
+            dungeonScene.fadeIn();
+            var mapMovement = MapMovement.getInstance();
+            mapMovement.playerIsMovable = true;
+          } else {
+            sm.switchScene(value);
+          }
         }
       };
 

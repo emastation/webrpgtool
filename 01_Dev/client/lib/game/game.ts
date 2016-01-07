@@ -1,5 +1,6 @@
 declare var MongoCollections:any;
 declare var GLBoost:any;
+declare var TWEEN:any;
 
 interface Window {
   MainScene: any;
@@ -67,8 +68,13 @@ module WrtGame {
       }
 
       if (event === LG_ENCOUNTER) {
+        var mapMovement = MapMovement.getInstance();
+        mapMovement.playerIsMovable = false;
         let sm:SceneManager = SceneManager.getInstance();
-        sm.switchScene('battle');
+        var dungeonScene = sm.getScene('dungeon');
+        dungeonScene.fadeOut(()=>{
+          sm.switchScene('battle');
+        });
       }
     }
 

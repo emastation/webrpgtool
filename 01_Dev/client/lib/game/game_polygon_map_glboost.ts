@@ -48,7 +48,7 @@ module WrtGame {
         var texName = texture.game_model_url.split('/').last.split('.').first;
 
         // Floor
-        var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_floor.obj', canvasId);
+        var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_floor.obj');
         promise.then(((deferIndex)=>{
           return (mesh)=> {
             console.log(mesh);
@@ -75,7 +75,7 @@ module WrtGame {
         }})(texIndex));
 
         // Ceiling
-        var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_ceiling.obj', canvasId);
+        var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_ceiling.obj');
         promise.then(((deferIndex)=>{
           return (mesh)=> {
             console.log(mesh);
@@ -102,7 +102,7 @@ module WrtGame {
           }})(texIndex));
 
         // Wall
-        var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_wall.obj', canvasId);
+        var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_wall.obj');
         promise.then(((deferIndex)=>{
           return (mesh)=> {
             console.log(mesh);
@@ -117,7 +117,7 @@ module WrtGame {
 
 // 東の壁
                   var wallGroupEast = new GLBoost.Group();
-                  wallGroupEast.rotate = new GLBoost.Vector3(0, -Math.PI / 2, 0);
+                  wallGroupEast.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(-Math.PI / 2), 0);
                   wallGroupEast.translate = new GLBoost.Vector3(1, 0, 0);
                   cellGroup.addChild(wallGroupEast);
                   for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
@@ -134,7 +134,7 @@ module WrtGame {
                   // 南の壁
                   var wallGroupSouth = new GLBoost.Group();
                   cellGroup.addChild(wallGroupSouth);
-                  wallGroupSouth.rotate = new GLBoost.Vector3(0, Math.PI, 0);
+                  wallGroupSouth.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(Math.PI), 0);
                   wallGroupSouth.translate = new GLBoost.Vector3(1, 0, 1);
                   for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
                     if (!doesThisTypeExist(typeMapData[y + 1][x], 'W')) {
@@ -150,7 +150,7 @@ module WrtGame {
                   // 西の壁
                   var wallGroupWest = new GLBoost.Group();
                   cellGroup.addChild(wallGroupWest);
-                  wallGroupWest.rotate = new GLBoost.Vector3(0, Math.PI / 2, 0);
+                  wallGroupWest.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(Math.PI / 2), 0);
                   wallGroupWest.translate = new GLBoost.Vector3(0, 0, 1);
                   for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
                     if (!doesThisTypeExist(typeMapData[y][x - 1], 'W')) {

@@ -21,7 +21,7 @@ module WrtGame {
       /// 床
       var defers_floor = $.Deferred();
       var floorRootGroup = new GLBoost.Group();
-      var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_floor.obj', canvasId);
+      var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_floor.obj');
       promise.then((mesh)=>{
         var cellGroup = new GLBoost.Group();
         cellGroup.translate = new BABYLON.Vector3(x, 0, y);
@@ -42,7 +42,7 @@ module WrtGame {
       /// 天井
       var defers_ceiling = $.Deferred();
       var ceilingRootGroup = new GLBoost.Group();
-      var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_ceiling.obj', canvasId);
+      var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_ceiling.obj');
       promise.then((mesh)=>{
         var cellGroup = new GLBoost.Group();
         cellGroup.translate = new BABYLON.Vector3(x, 0, y);
@@ -63,7 +63,7 @@ module WrtGame {
 
       /// 壁
       var defers_wall = $.Deferred();
-      var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_wall.obj', canvasId);
+      var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_wall.obj');
       promise.then((mesh)=>{
         {
           /// 床側の壁
@@ -74,7 +74,7 @@ module WrtGame {
           // 東向きの壁
           let wallGroupEast = new GLBoost.Group();
           cellGroup.addChild(wallGroupEast);
-          wallGroupEast.rotate = new GLBoost.Vector3(0, Math.PI / 2, 0);
+          wallGroupEast.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(Math.PI / 2), 0);
           wallGroupEast.translate = new GLBoost.Vector3(1, 0, 1);
           for (let j = this.minFloorHeight; j < 0; j++) {
             let newInstanceEast = new GLBoost.Mesh(mesh.geometry, null, canvasId);
@@ -96,7 +96,7 @@ module WrtGame {
           // 西向きの壁
           let wallGroupWest = new GLBoost.Group();
           cellGroup.addChild(wallGroupWest);
-          wallGroupWest.rotate = new GLBoost.Vector3(0, -Math.PI / 2, 0);
+          wallGroupWest.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(-Math.PI / 2), 0);
           for (let j = this.minFloorHeight; j < 0; j++) {
             let newInstanceWEST = new GLBoost.Mesh(mesh.geometry, null, canvasId);
             newInstanceWEST.translate = new GLBoost.Vector3(0, j, 0);
@@ -105,7 +105,7 @@ module WrtGame {
 
           // 北向きの壁
           let wallGroupNorth = new GLBoost.Group();
-          wallGroupNorth.rotate = new GLBoost.Vector3(0, Math.PI, 0);
+          wallGroupNorth.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(Math.PI), 0);
           wallGroupNorth.translate = new GLBoost.Vector3(1, 0, 0);
           cellGroup.addChild(wallGroupNorth);
           for (let j = this.minFloorHeight; j < 0; j++) {
@@ -123,7 +123,7 @@ module WrtGame {
           // 東向きの壁
           let wallGroupEast = new GLBoost.Group();
           cellGroup.addChild(wallGroupEast);
-          wallGroupEast.rotate = new GLBoost.Vector3(0, Math.PI / 2, 0);
+          wallGroupEast.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(Math.PI / 2), 0);
           wallGroupEast.translate = new GLBoost.Vector3(1, 0, 1);
           for (let j=0; j<this.maxCeilingHeight; j++) {
             let newInstanceEast = new GLBoost.Mesh(mesh.geometry, null, canvasId);
@@ -145,7 +145,7 @@ module WrtGame {
           // 西向きの壁
           let wallGroupWest = new GLBoost.Group();
           cellGroup.addChild(wallGroupWest);
-          wallGroupWest.rotate = new GLBoost.Vector3(0, -Math.PI / 2, 0);
+          wallGroupWest.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(-Math.PI / 2), 0);
           for (let j=0; j<this.maxCeilingHeight; j++) {
             let newInstanceWEST = new GLBoost.Mesh(mesh.geometry, null, canvasId);
             newInstanceWEST.translate = new GLBoost.Vector3(0, j, 0);
@@ -154,7 +154,7 @@ module WrtGame {
 
           // 北向きの壁
           let wallGroupNorth = new GLBoost.Group();
-          wallGroupNorth.rotate = new GLBoost.Vector3(0, Math.PI, 0);
+          wallGroupNorth.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(Math.PI), 0);
           wallGroupNorth.translate = new GLBoost.Vector3(1, 0, 0);
           cellGroup.addChild(wallGroupNorth);
           for (let j=0; j<this.maxCeilingHeight; j++) {

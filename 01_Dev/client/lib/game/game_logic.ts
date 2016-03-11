@@ -13,7 +13,7 @@ module WrtGame {
 
     public onMoveOnMapCallback() {
       // TODO: Use Bacon.js. add an 'Encount' Logical event to the EventStream.
-      if(Math.random()<0.50) {
+      if(Math.random()<0.05) {
       //        if(Math.random()<1) {
           console.log("エンカウント！！" + LG_ENCOUNTER);
       //            if ($("#checkbox_encounter").attr("checked") === "checked") {

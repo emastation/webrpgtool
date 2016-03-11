@@ -131,8 +131,8 @@ module WrtGame {
     private convertGLBoostPlayerPosition(x:number, h:number, y:number, angle:number, playerElevationAngle:number):any {
 
       // プレーヤーが0.5後ろに下がって、背中が後ろのマスの壁にひっつくようにするためのオフセット座標
-      var rotateMtx = GLBoost.Matrix44.rotateY(-angle);
-      var rotateElevationMtx = GLBoost.Matrix44.rotateX(playerElevationAngle);
+      var rotateMtx = GLBoost.Matrix44.rotateY(GLBoost.MathUtil.radianToDegree(-angle));
+      var rotateElevationMtx = GLBoost.Matrix44.rotateX(GLBoost.MathUtil.radianToDegree(playerElevationAngle));
       var viewPosOffset = new GLBoost.Vector4(0, 0, 0.5, 1);
       var centerPosOffset = new GLBoost.Vector4(0, 0, -0.5, 1);
 

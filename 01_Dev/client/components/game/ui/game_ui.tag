@@ -24,11 +24,11 @@
     this.update();
   });
   </script>
-  <script scoped>
+  <style scoped>
     :scope {
       pointer-events: none;
     }
-  </script>
+  </style>
 
   </script>
 </game-ui>

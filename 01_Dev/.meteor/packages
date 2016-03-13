@@ -20,7 +20,7 @@ semantic:ui-css
 accounts-password
 accounts-ui
 check
-baysao:riotjs
+baysao:riotjs@2.3.11-0
 meteortypescript:compiler
 meteortypescript:typescript-libs
 rubaxa:sortable
@@ -29,3 +29,6 @@ meteorhacks:npm
 
 
 npm-container
+
+
+baysao:riotjs-preprocessor-init

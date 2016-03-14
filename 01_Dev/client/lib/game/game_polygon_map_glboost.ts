@@ -52,23 +52,31 @@ module WrtGame {
         promise.then(((deferIndex)=>{
           return (mesh)=> {
             console.log(mesh);
-
+            var mergedMesh = new GLBoost.Mesh(mesh.geometry, null);
+            mergedMesh.translate = new GLBoost.Vector3(0,-1000, 0);
+            var meshes = [];
             for (let y = 1; y < mapHeight + 1; y++) {
               for (let x = 1; x < mapWidth + 1; x++) {
                 if (texMapData[y][x] === texIndex + 1) {
 
                   var cellGroup = new GLBoost.Group();
                   cellGroup.translate = new GLBoost.Vector3(x, 0, y);
-                  texGroup.addChild(cellGroup);
+                  //texGroup.addChild(cellGroup);
 
                   if (!doesThisTypeExist(typeMapData[y][x], 'P') && !doesThisTypeExist(typeMapData[y][x], 'W')) {
-                    var newInstance = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    let geom = lodash.cloneDeep(mesh.geometry);
+                    geom._instanceName + '_' + y + '_' + x;
+                    var newInstance = new GLBoost.Mesh(geom, null, canvasId);
                     newInstance.translate = new GLBoost.Vector3(0, heightMapData[y][x][0], 0);
                     cellGroup.addChild(newInstance);
+                    meshes.push(newInstance);
                   }
                 }
               }
             }
+
+            mergedMesh.mergeHarder(meshes);
+            texGroup.addChild(mergedMesh);
 //          self.prepareForRender();
             defers_floor[deferIndex].resolve();
 
@@ -80,22 +88,31 @@ module WrtGame {
           return (mesh)=> {
             console.log(mesh);
 
+            var mergedMesh = new GLBoost.Mesh(mesh.geometry, null);
+            mergedMesh.translate = new GLBoost.Vector3(0,-1000, 0);
+            var meshes = [];
             for (let y = 1; y < mapHeight + 1; y++) {
               for (let x = 1; x < mapWidth + 1; x++) {
                 if (texMapData[y][x] === texIndex + 1) {
 
                   var cellGroup = new GLBoost.Group();
                   cellGroup.translate = new GLBoost.Vector3(x, 0, y);
-                  texGroup.addChild(cellGroup);
+                  //texGroup.addChild(cellGroup);
 
                   if (!doesThisTypeExist(typeMapData[y][x], 'P') && !doesThisTypeExist(typeMapData[y][x], 'W')) {
-                    var newInstance = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    let geom = lodash.cloneDeep(mesh.geometry);
+                    geom._instanceName + '_' + y + '_' + x;
+                    var newInstance = new GLBoost.Mesh(geom, null, canvasId);
                     newInstance.translate = new GLBoost.Vector3(0, heightMapData[y][x][1]-1, 0); // ポリゴンモデルの時点で床より１ユニット高いため、-1している
                     cellGroup.addChild(newInstance);
+                    meshes.push(newInstance);
                   }
                 }
               }
             }
+            mergedMesh.mergeHarder(meshes);
+            texGroup.addChild(mergedMesh);
+
 //          self.prepareForRender();
             defers_ceiling[deferIndex].resolve();
 
@@ -107,15 +124,25 @@ module WrtGame {
           return (mesh)=> {
             console.log(mesh);
 
+            for (let i=0; i<mesh.geometry._vertices.normal.length; i++) {
+              let vec = mesh.geometry._vertices.normal[i];
+              if (vec.x === 0 && vec.y === 0 && vec.z === 0) {
+                mesh.geometry._vertices.normal[i] = new GLBoost.Vector3(1, 0, 0);
+              }
+            }
+
+            var mergedMesh = new GLBoost.Mesh(mesh.geometry, null);
+            mergedMesh.translate = new GLBoost.Vector3(0,-1000, 0);
+            var meshes = [];
             for (let y = 1; y < mapHeight + 1; y++) {
               for (let x = 1; x < mapWidth + 1; x++) {
                 if (texMapData[y][x] === texIndex + 1) {
 
                   var cellGroup = new GLBoost.Group();
                   cellGroup.translate = new GLBoost.Vector3(x, 0, y);
-                  texGroup.addChild(cellGroup);
+                  //texGroup.addChild(cellGroup);
 
-// 東の壁
+                  // 東の壁
                   var wallGroupEast = new GLBoost.Group();
                   wallGroupEast.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(-Math.PI / 2), 0);
                   wallGroupEast.translate = new GLBoost.Vector3(1, 0, 0);
@@ -126,9 +153,14 @@ module WrtGame {
                         continue;
                       }
                     }
-                    var newInstanceEast = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    let geom = lodash.cloneDeep(mesh.geometry);
+                    geom._instanceName + '_' + y + '_' + x + 'East';
+                    //var newInstanceEast = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    var newInstanceEast = new GLBoost.Mesh(geom, null, canvasId);
                     newInstanceEast.translate = new GLBoost.Vector3(0, j, 0);
                     wallGroupEast.addChild(newInstanceEast);
+                    meshes.push(newInstanceEast);
+
                   }
 
                   // 南の壁
@@ -142,9 +174,13 @@ module WrtGame {
                         continue;
                       }
                     }
-                    var newInstanceSouth = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    let geom = lodash.cloneDeep(mesh.geometry);
+                    geom._instanceName + '_' + y + '_' + x + 'South';
+                    //var newInstanceSouth = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    var newInstanceSouth = new GLBoost.Mesh(geom, null, canvasId);
                     newInstanceSouth.translate = new GLBoost.Vector3(0, j, 0);
                     wallGroupSouth.addChild(newInstanceSouth);
+                    meshes.push(newInstanceSouth);
                   }
 
                   // 西の壁
@@ -158,9 +194,13 @@ module WrtGame {
                         continue;
                       }
                     }
-                    var newInstanceWEST =new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    let geom = lodash.cloneDeep(mesh.geometry);
+                    geom._instanceName + '_' + y + '_' + x + 'West';
+                    //var newInstanceWEST = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    var newInstanceWEST = new GLBoost.Mesh(geom, null, canvasId);
                     newInstanceWEST.translate = new GLBoost.Vector3(0, j, 0);
                     wallGroupWest.addChild(newInstanceWEST);
+                    meshes.push(newInstanceWEST);
                   }
 
                   // 北の壁
@@ -172,14 +212,22 @@ module WrtGame {
                         continue;
                       }
                     }
-                    var newInstanceNORTH = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    let geom = lodash.cloneDeep(mesh.geometry);
+                    geom._instanceName + '_' + y + '_' + x + 'North';
+                    //var newInstanceNORTH = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+                    var newInstanceNORTH = new GLBoost.Mesh(geom, null, canvasId);
                     newInstanceNORTH.translate = new GLBoost.Vector3(0, j, 0);
                     wallGroupNorth.addChild(newInstanceNORTH);
+                    meshes.push(newInstanceNORTH);
                   }
 
                 }
               }
             }
+
+            mergedMesh.mergeHarder(meshes);
+            texGroup.addChild(mergedMesh);
+
 //          self.prepareForRender();
             defers_wall[deferIndex].resolve();
 

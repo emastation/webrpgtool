@@ -124,6 +124,7 @@ module WrtGame {
           return (mesh)=> {
             console.log(mesh);
 
+            // if there is zero normal (0,0,0), overwrite with (1,0,0).
             for (let i=0; i<mesh.geometry._vertices.normal.length; i++) {
               let vec = mesh.geometry._vertices.normal[i];
               if (vec.x === 0 && vec.y === 0 && vec.z === 0) {

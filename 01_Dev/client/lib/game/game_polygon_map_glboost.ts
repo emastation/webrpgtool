@@ -252,7 +252,7 @@ module WrtGame {
         for (var x = 0; x < mapWidth + 2; x++) {
           if(doesThisTypeExist(typeMapData[y][x], 'P')) {
             var platform = new MapPolygonPlatformGLBoost(x, y, heightMapData_, getTypeParameter(typeMapData[y][x], 'P'));
-            let dp = platform.setupMesh(this._scene, basePath, heightMapData[y][x][0], heightMapData[y][x][1], this.textures[texMapData[y][x]-1].game_model_url, canvasId);
+            let dp = platform.setupMesh(this._scene, basePath, heightMapData[y][x][0], heightMapData[y][x][1], this.textures[texMapData[y][x]-1].game_model_url, typeMapData, canvasId);
             this._platforms.push(platform);
 
             deferPromises.concat(dp);

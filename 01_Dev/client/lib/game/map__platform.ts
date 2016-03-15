@@ -1,7 +1,7 @@
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
   export class MapPlatform {
-    private heightMap:any;
+    protected heightMap:any;
     protected x_onMap:number;
     protected y_onMap:number;
     private platformMode:string;
@@ -138,7 +138,7 @@ module WrtGame {
       }
     }
 
-    public setupMesh(scene:BABYLON.Scene, mapPlatformTitle:string, floorHeight:number, ceilingHeight:number, imageUrl:string, canvasId:string) :void {
+    public setupMesh(scene:BABYLON.Scene, mapPlatformTitle:string, floorHeight:number, ceilingHeight:number, imageUrl:string, typeMapData:any, canvasId:string) :void {
 
     }
 

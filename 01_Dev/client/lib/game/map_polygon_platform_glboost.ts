@@ -9,7 +9,7 @@ module WrtGame {
       super(x, y, heightMap, parameter);
     }
 
-    public setupMesh(scene:any, basePath:string, floorHeight:number, ceilingHeight:number, imageUrl:string, canvasId:string) :any {
+    public setupMesh(scene:any, basePath:string, floorHeight:number, ceilingHeight:number, imageUrl:string, typeMapData:any, canvasId:string) :any {
 
       var x = this.x_onMap;
       var y = this.y_onMap;
@@ -226,7 +226,125 @@ module WrtGame {
       });
 
 
-      return [defers_floor.promise(), defers_ceiling.promise(), defers_floorWall.promise(), defers_ceilingWall.promise()];
+
+
+      // Internal Wall
+      var heightMapData = lodash.cloneDeep(this.heightMap)  ;
+      var internalWallGroup = new GLBoost.Group();
+      internalWallGroup.translate = new GLBoost.Vector3(-1, 0, -1);
+      var defer_wall = $.Deferred();
+      var promise = objLoader.loadObj(basePath + texName + '/' + texName + '_wall.obj');
+      promise.then(
+        (mesh)=> {
+          console.log(mesh);
+
+          // if there is zero normal (0,0,0), overwrite with (1,0,0).
+          for (let i=0; i<mesh.geometry._vertices.normal.length; i++) {
+            let vec = mesh.geometry._vertices.normal[i];
+            if (vec.x === 0 && vec.y === 0 && vec.z === 0) {
+              mesh.geometry._vertices.normal[i] = new GLBoost.Vector3(1, 0, 0);
+            }
+          }
+
+          var mergedMesh = new GLBoost.Mesh(mesh.geometry, null);
+          mergedMesh.translate = new GLBoost.Vector3(0,-1000, 0);
+          var meshes = [];
+
+          var cellGroup = new GLBoost.Group();
+          cellGroup.translate = new GLBoost.Vector3(x, 0, y);
+          //texGroup.addChild(cellGroup);
+
+          // 東の壁
+          var wallGroupEast = new GLBoost.Group();
+          wallGroupEast.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(-Math.PI / 2), 0);
+          wallGroupEast.translate = new GLBoost.Vector3(1, 0, 0);
+          cellGroup.addChild(wallGroupEast);
+          for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
+            if (!doesThisTypeExist(typeMapData[y][x + 1], 'W')) {
+              if (doesThisTypeExist(typeMapData[y][x + 1], 'P') || heightMapData[y][x + 1][0] <= j && j < (heightMapData[y][x + 1][1])) {
+                continue;
+              }
+            }
+            let geom = lodash.cloneDeep(mesh.geometry);
+            geom._instanceName + '_' + y + '_' + x + 'East';
+            //var newInstanceEast = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+            var newInstanceEast = new GLBoost.Mesh(geom, null, canvasId);
+            newInstanceEast.translate = new GLBoost.Vector3(0, j, 0);
+            wallGroupEast.addChild(newInstanceEast);
+            meshes.push(newInstanceEast);
+
+          }
+
+          // 南の壁
+          var wallGroupSouth = new GLBoost.Group();
+          cellGroup.addChild(wallGroupSouth);
+          wallGroupSouth.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(Math.PI), 0);
+          wallGroupSouth.translate = new GLBoost.Vector3(1, 0, 1);
+          for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
+            if (!doesThisTypeExist(typeMapData[y + 1][x], 'W')) {
+              if (doesThisTypeExist(typeMapData[y + 1][x], 'P') || heightMapData[y + 1][x][0] <= j && j < (heightMapData[y + 1][x][1])) {
+                continue;
+              }
+            }
+            let geom = lodash.cloneDeep(mesh.geometry);
+            geom._instanceName + '_' + y + '_' + x + 'South';
+            //var newInstanceSouth = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+            var newInstanceSouth = new GLBoost.Mesh(geom, null, canvasId);
+            newInstanceSouth.translate = new GLBoost.Vector3(0, j, 0);
+            wallGroupSouth.addChild(newInstanceSouth);
+            meshes.push(newInstanceSouth);
+          }
+
+          // 西の壁
+          var wallGroupWest = new GLBoost.Group();
+          cellGroup.addChild(wallGroupWest);
+          wallGroupWest.rotate = new GLBoost.Vector3(0, GLBoost.MathUtil.radianToDegree(Math.PI / 2), 0);
+          wallGroupWest.translate = new GLBoost.Vector3(0, 0, 1);
+          for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
+            if (!doesThisTypeExist(typeMapData[y][x - 1], 'W')) {
+              if (doesThisTypeExist(typeMapData[y][x - 1], 'P') || heightMapData[y][x - 1][0] <= j && j < (heightMapData[y][x - 1][1])) {
+                continue;
+              }
+            }
+            let geom = lodash.cloneDeep(mesh.geometry);
+            geom._instanceName + '_' + y + '_' + x + 'West';
+            //var newInstanceWEST = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+            var newInstanceWEST = new GLBoost.Mesh(geom, null, canvasId);
+            newInstanceWEST.translate = new GLBoost.Vector3(0, j, 0);
+            wallGroupWest.addChild(newInstanceWEST);
+            meshes.push(newInstanceWEST);
+          }
+
+          // 北の壁
+          var wallGroupNorth = new GLBoost.Group();
+          cellGroup.addChild(wallGroupNorth);
+          for (var j=heightMapData[y][x][0]; j<heightMapData[y][x][1]; j++) {
+            if (!doesThisTypeExist(typeMapData[y - 1][x], 'W')) {
+              if (doesThisTypeExist(typeMapData[y - 1][x], 'P') || heightMapData[y - 1][x][0] <= j && j < (heightMapData[y - 1][x][1])) {
+                continue;
+              }
+            }
+            let geom = lodash.cloneDeep(mesh.geometry);
+            geom._instanceName + '_' + y + '_' + x + 'North';
+            //var newInstanceNORTH = new GLBoost.Mesh(mesh.geometry, null, canvasId);
+            var newInstanceNORTH = new GLBoost.Mesh(geom, null, canvasId);
+            newInstanceNORTH.translate = new GLBoost.Vector3(0, j, 0);
+            wallGroupNorth.addChild(newInstanceNORTH);
+            meshes.push(newInstanceNORTH);
+          }
+
+          mergedMesh.mergeHarder(meshes);
+          internalWallGroup.addChild(mergedMesh);
+
+//          self.prepareForRender();
+          defer_wall.resolve();
+
+        });
+      scene.add(internalWallGroup);
+
+
+
+      return [defers_floor.promise(), defers_ceiling.promise(), defers_floorWall.promise(), defers_ceilingWall.promise(), defer_wall.promise()];
     }
   }
 }

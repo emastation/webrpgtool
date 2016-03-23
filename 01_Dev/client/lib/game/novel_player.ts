@@ -156,31 +156,31 @@ module WrtGame {
 
     private getCharacterHorizontalPosition(position) {
       switch(position) {
-        case 'RightEdge': return Game.SCREEN_WIDTH * 4.5/5; break;
-        case 'Right': return Game.SCREEN_WIDTH * 3.5/5; break;
-        case 'Center': return Game.SCREEN_WIDTH * 2.5/5; break;
-        case 'Left': return Game.SCREEN_WIDTH * 1.5/5; break;
-        case 'LeftEdge': return Game.SCREEN_WIDTH * 0.5/5; break;
+        case 'RightEdge': return Game.SCREEN_WIDTH * 4.5/5;
+        case 'Right': return Game.SCREEN_WIDTH * 3.5/5;
+        case 'Center': return Game.SCREEN_WIDTH * 2.5/5;
+        case 'Left': return Game.SCREEN_WIDTH * 1.5/5;
+        case 'LeftEdge': return Game.SCREEN_WIDTH * 0.5/5;
       }
     }
 
     private getCharacterHorizontalFlip(position) {
       switch(position) {
-        case 'RightEdge': return 1; break;
-        case 'Right': return 1; break;
-        case 'Center': return 1; break;
-        case 'Left': return -1; break;
-        case 'LeftEdge': return -1; break;
+        case 'RightEdge': return 1;
+        case 'Right': return 1;
+        case 'Center': return 1;
+        case 'Left': return -1;
+        case 'LeftEdge': return -1;
       }
     }
 
     private getCharacterPositionIndex(position) {
       switch(position) {
-        case 'RightEdge': return 0; break;
-        case 'Right': return 1; break;
-        case 'Center': return 2; break;
-        case 'Left': return 3; break;
-        case 'LeftEdge': return 4; break;
+        case 'RightEdge': return 0;
+        case 'Right': return 1;
+        case 'Center': return 2;
+        case 'Left': return 3;
+        case 'LeftEdge': return 4;
       }
     }
 

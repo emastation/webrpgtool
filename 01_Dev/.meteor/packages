@@ -21,8 +21,6 @@ accounts-password
 accounts-ui
 check
 baysao:riotjs@2.3.11-0
-meteortypescript:compiler
-meteortypescript:typescript-libs
 rubaxa:sortable
 stevezhu:lodash
 meteorhacks:npm

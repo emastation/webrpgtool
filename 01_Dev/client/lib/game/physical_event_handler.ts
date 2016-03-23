@@ -1,3 +1,8 @@
+
+interface JQuery {
+  asEventStream: any;
+}
+
 /**
  * 物理的なイベントを処理する関数群
  */

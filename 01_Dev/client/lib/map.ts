@@ -1,3 +1,5 @@
+/// <reference path="../../typings/browser.d.ts" />
+
 declare var WRT:any;
 declare var tm:any;
 

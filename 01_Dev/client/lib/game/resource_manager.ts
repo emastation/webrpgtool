@@ -16,8 +16,12 @@ module WrtGame {
 
     }
 
-    setEnemies(enemies:Array<Enemy>) {
+    public setEnemies(enemies:Array<Enemy>) {
       this._enemies = enemies;
+    }
+
+    public getEnemies() {
+      return this._enemies;
     }
   }
 }

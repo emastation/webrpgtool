@@ -10,12 +10,18 @@ module WrtGame {
     constructor() {
     }
 
-    init(imageUrl:string) {
+    public init(imageUrl:string) {
       this._material = new GLBoost.ClassicMaterial();
       this._texture = new GLBoost.Texture(imageUrl);
       this._material.diffuseTexture = this._texture;
-      this._geometry = new GLBoost.Plane(10, 10, 1, 1, null);
+      this._geometry = new GLBoost.Plane(1, 1, 1, 1, null);
       this._mesh = new GLBoost.Mesh(this._geometry, this._material);
+      this._mesh.rotate = new GLBoost.Vector3(-90, 0, 0);
     }
+
+    public getMesh() {
+      return this._mesh;
+    }
+
   }
 }

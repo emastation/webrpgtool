@@ -1,7 +1,6 @@
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
 
-
   export class SceneManager {
     private static _instance:SceneManager;
     private _scenes:any = {};
@@ -29,11 +28,14 @@ module WrtGame {
     }
 
     switchScene(key) {
+      this._scenes[this._currentSceneName].tearDown();
       this._currentSceneName = key;
+      this._scenes[this._currentSceneName].setUp();
     }
 
     getCurrentScene() {
       return this._scenes[this._currentSceneName];
     }
   }
+
 }

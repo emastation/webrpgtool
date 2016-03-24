@@ -666,75 +666,6 @@ var MapManager = (function () {
     return MapManager;
 }());
 window.MapManager = MapManager;
-// WrtGameモジュールの作成
-var WrtGame;
-(function (WrtGame) {
-    var foooooooo = (function () {
-        function foooooooo() {
-        }
-        return foooooooo;
-    }());
-    WrtGame.foooooooo = foooooooo;
-})(WrtGame || (WrtGame = {}));
-window.WrtGame = WrtGame;
-var WrtGame;
-(function (WrtGame) {
-    eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
-    var Scene = (function () {
-        function Scene() {
-        }
-        Scene.prototype.sceneLoop = function () { };
-        Scene.prototype.setUp = function () { };
-        Scene.prototype.tearDown = function () { };
-        return Scene;
-    }());
-    WrtGame.Scene = Scene;
-})(WrtGame || (WrtGame = {}));
-var WrtGame;
-(function (WrtGame) {
-    eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
-    var BattleScene = (function (_super) {
-        __extends(BattleScene, _super);
-        function BattleScene() {
-            _super.call(this);
-            this._renderer = null;
-            this._scene = null;
-            this._initGLBoost();
-        }
-        BattleScene.prototype._initGLBoost = function () {
-            var glboostCtx = WrtGame.GLBoostContext.getInstance();
-            this._renderer = glboostCtx.getRenderer();
-            this._scene = new GLBoost.Scene();
-            var characters = MongoCollections.Objects.find({ schema_identifier: 'wrt_game_character' }).fetch();
-            var enemiesMongo = _.filter(characters, function (character) {
-                var result = false;
-                for (var i = 0; i < character.attributes.length; i++) {
-                    if (character.attributes[i].identifier === 'situation' && character.attributes[i].value === 'enemy') {
-                        result = true;
-                    }
-                }
-                return result;
-            });
-            console.log(enemiesMongo);
-            var enemies = new Array();
-            enemiesMongo.forEach(function (enemyMongo) {
-                var enemy = new WrtGame.Enemy(enemyMongo);
-                enemy.initDisplay();
-                enemies.push(enemy);
-            });
-            var resourceManager = WrtGame.ResourceManager.getInstance();
-            resourceManager.setEnemies(enemies);
-        };
-        BattleScene.prototype.sceneLoop = function () {
-            this._renderer.clearCanvas();
-            this._renderer.draw(this._scene);
-        };
-        BattleScene.prototype.setUp = function () { };
-        BattleScene.prototype.tearDown = function () { };
-        return BattleScene;
-    }(WrtGame.Scene));
-    WrtGame.BattleScene = BattleScene;
-})(WrtGame || (WrtGame = {}));
 var WrtGame;
 (function (WrtGame) {
     eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
@@ -914,163 +845,6 @@ var WrtGame;
         return BgmPlayer;
     }());
     WrtGame.BgmPlayer = BgmPlayer;
-})(WrtGame || (WrtGame = {}));
-/// <reference path="../../../typings/browser.d.ts" />
-var WrtGame;
-(function (WrtGame) {
-    eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
-    var DungeonScene = (function (_super) {
-        __extends(DungeonScene, _super);
-        function DungeonScene(data) {
-            _super.call(this);
-            this._mapMovement = null;
-            this._map = null;
-            this._camera = null;
-            this._scene = null;
-            this._renderer = null;
-            this._fadeTween = null;
-            //this._mapMovement = mapMovement;
-            this._initEvent();
-            this._initGLBoost(data);
-        }
-        DungeonScene.prototype._initEvent = function () {
-            // 物理イベントのプロパティ初期化
-            var physicalMapMovementEventProperty = WrtGame.initMapMovementEventHandler();
-            var gameState = WrtGame.GameState.getInstance();
-            // 論理移動コマンドプロパティ初期化
-            var logicalMovementCommandProperty = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalMapMovementEventProperty);
-            // マップ移動クラスの初期化
-            this._mapMovement = WrtGame.MapMovement.getInstance();
-            this._mapMovement.init(logicalMovementCommandProperty);
-        };
-        DungeonScene.prototype._initGLBoost = function (data) {
-            var glboostCtx = WrtGame.GLBoostContext.getInstance();
-            var renderer = glboostCtx.getRenderer();
-            var canvasId = glboostCtx.getCanvasId();
-            var canvas = glboostCtx.getCanvas();
-            var scene = new GLBoost.Scene();
-            var aspect = canvas.width / canvas.height;
-            var camera = new GLBoost.Camera({
-                eye: new GLBoost.Vector3(0, 0, 0),
-                center: new GLBoost.Vector3(0.0, 0.0, 1.0),
-                up: new GLBoost.Vector3(0.0, 1.0, 0.0)
-            }, {
-                fovy: 50.0,
-                aspect: aspect,
-                zNear: 0.1,
-                zFar: 300.0
-            });
-            scene.add(camera);
-            var directionalLight_1 = new GLBoost.DirectionalLight(new GLBoost.Vector3(1, 1, 1), new GLBoost.Vector3(-1, -1, 0), canvasId);
-            var directionalLight_2 = new GLBoost.DirectionalLight(new GLBoost.Vector3(1, 1, 1), new GLBoost.Vector3(1, 1, 0), canvasId);
-            var directionalLight_3 = new GLBoost.DirectionalLight(new GLBoost.Vector3(1, 1, 1), new GLBoost.Vector3(0, 1, 1), canvasId);
-            var directionalLight_4 = new GLBoost.DirectionalLight(new GLBoost.Vector3(0.5, 0.5, 0.5), new GLBoost.Vector3(0, 0, -1), canvasId);
-            scene.add(directionalLight_1);
-            scene.add(directionalLight_2);
-            scene.add(directionalLight_3);
-            scene.add(directionalLight_4);
-            this._map = new WrtGame.PolygonMapGLBoost(scene, data.map, data.mapTextures, canvasId);
-            // Windowのリサイズ対応
-            window.addEventListener("resize", function (e) {
-                var windowAspect = $(e.target).width() / $(e.target).height();
-                if (windowAspect > aspect) {
-                    var width = $(e.target).height() * aspect;
-                    var height = $(e.target).height();
-                    $(canvas).css('width', width);
-                    $(canvas).css('height', height);
-                    renderer.resize(width, height);
-                }
-                else {
-                    var width = $(e.target).width();
-                    var height = $(e.target).width() * 1 / aspect;
-                    $(canvas).css('width', width);
-                    $(canvas).css('height', height);
-                    renderer.resize(width, height);
-                }
-            });
-            this._scene = scene;
-            this._camera = camera;
-            this._renderer = renderer;
-        };
-        DungeonScene.prototype.sceneLoop = function () {
-            var mapMovement = this._mapMovement;
-            // 平行移動する
-            var moveDelta = 1.0 / 60 * 3;
-            mapMovement.move(this._map, moveDelta);
-            // 水平方向の向きを変える
-            mapMovement.rotate(60 * 0.8);
-            // 垂直方向の向きを変える
-            mapMovement.faceUpOrLow(1 / 60 * 0.5);
-            this._map.movePlatforms();
-            // カメラの位置・回転をセット
-            var cameraPos = this.convertGLBoostPlayerPosition(mapMovement.playerX, mapMovement.playerH, mapMovement.playerY, mapMovement.playerAngle, mapMovement.playerElevationAngle);
-            this._camera.eye = cameraPos.viewPos;
-            this._camera.center = cameraPos.centerPos;
-            this._renderer.clearCanvas();
-            this._renderer.draw(this._scene);
-            //console.log("this.opacity:" + this._scene.opacity);
-            /*
-            if (this._fadeTween) {
-              this._fadeTween.update();
-            }
-            */
-            TWEEN.update();
-        };
-        /**
-         * MapMovementクラスが返すプレーヤー座標を、GLBoostでの表示仕様を満たす座標に変換する
-         * @param x
-         * @param h
-         * @param y
-         * @returns {BABYLON.Vector3}
-         */
-        DungeonScene.prototype.convertGLBoostPlayerPosition = function (x, h, y, angle, playerElevationAngle) {
-            // プレーヤーが0.5後ろに下がって、背中が後ろのマスの壁にひっつくようにするためのオフセット座標
-            var rotateMtx = GLBoost.Matrix44.rotateY(GLBoost.MathUtil.radianToDegree(-angle));
-            var rotateElevationMtx = GLBoost.Matrix44.rotateX(GLBoost.MathUtil.radianToDegree(playerElevationAngle));
-            var viewPosOffset = new GLBoost.Vector4(0, 0, 0.5, 1);
-            var centerPosOffset = new GLBoost.Vector4(0, 0, -0.5, 1);
-            // そのオフセット座標を、プレーヤーの向きに合わせて回転する
-            viewPosOffset = rotateMtx.multiplyVector(viewPosOffset);
-            centerPosOffset = rotateElevationMtx.multiplyVector(centerPosOffset);
-            centerPosOffset = rotateMtx.multiplyVector(centerPosOffset);
-            // プレーヤーのBabylonJSにおける位置座標
-            var viewPos = new GLBoost.Vector3(x - 0.5, h + 0.5, y - 0.5);
-            //var viewPos = new GLBoost.Vector3(x, h + 1, y);
-            // オフセットを考慮するために足す
-            return {
-                viewPos: GLBoost.Vector3.add(viewPos, new GLBoost.Vector3(viewPosOffset.x, viewPosOffset.y, viewPosOffset.z)),
-                centerPos: GLBoost.Vector3.add(viewPos, new GLBoost.Vector3(centerPosOffset.x, centerPosOffset.y, centerPosOffset.z))
-            };
-        };
-        DungeonScene.prototype.fadeIn = function (callback) {
-            this._fadeTween = new TWEEN.Tween(this._scene);
-            this._fadeTween
-                .to({ opacity: 1.0 }, 1500.0)
-                .easing(TWEEN.Easing.Quartic.In);
-            if (callback) {
-                this._fadeTween.onComplete(callback).start();
-            }
-            else {
-                this._fadeTween.start();
-            }
-        };
-        DungeonScene.prototype.fadeOut = function (callback) {
-            this._fadeTween = new TWEEN.Tween(this._scene);
-            this._fadeTween
-                .to({ opacity: 0.0 }, 1500.0)
-                .easing(TWEEN.Easing.Quartic.Out);
-            if (callback) {
-                this._fadeTween.onComplete(callback).start();
-            }
-            else {
-                this._fadeTween.start();
-            }
-        };
-        DungeonScene.prototype.setUp = function () { };
-        DungeonScene.prototype.tearDown = function () { };
-        return DungeonScene;
-    }(WrtGame.Scene));
-    WrtGame.DungeonScene = DungeonScene;
 })(WrtGame || (WrtGame = {}));
 var WrtGame;
 (function (WrtGame) {
@@ -4694,43 +4468,12 @@ var WrtGame;
         ResourceManager.prototype.setEnemies = function (enemies) {
             this._enemies = enemies;
         };
+        ResourceManager.prototype.getEnemies = function () {
+            return this._enemies;
+        };
         return ResourceManager;
     }());
     WrtGame.ResourceManager = ResourceManager;
-})(WrtGame || (WrtGame = {}));
-var WrtGame;
-(function (WrtGame) {
-    eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
-    var SceneManager = (function () {
-        function SceneManager() {
-            this._scenes = {};
-            this._currentSceneName = null;
-        }
-        SceneManager.getInstance = function () {
-            if (SceneManager._instance == null) {
-                SceneManager._instance = new SceneManager();
-            }
-            return SceneManager._instance;
-        };
-        SceneManager.prototype.addScene = function (key, scene, switchScene) {
-            if (switchScene === void 0) { switchScene = true; }
-            this._scenes[key] = scene;
-            if (switchScene) {
-                this._currentSceneName = key;
-            }
-        };
-        SceneManager.prototype.getScene = function (key) {
-            return this._scenes[key];
-        };
-        SceneManager.prototype.switchScene = function (key) {
-            this._currentSceneName = key;
-        };
-        SceneManager.prototype.getCurrentScene = function () {
-            return this._scenes[this._currentSceneName];
-        };
-        return SceneManager;
-    }());
-    WrtGame.SceneManager = SceneManager;
 })(WrtGame || (WrtGame = {}));
 var WrtGame;
 (function (WrtGame) {
@@ -4877,6 +4620,17 @@ var WrtGame;
     }());
     WrtGame.UserFunctionsManager = UserFunctionsManager;
 })(WrtGame || (WrtGame = {}));
+// WrtGameモジュールの作成
+var WrtGame;
+(function (WrtGame) {
+    var foooooooo = (function () {
+        function foooooooo() {
+        }
+        return foooooooo;
+    }());
+    WrtGame.foooooooo = foooooooo;
+})(WrtGame || (WrtGame = {}));
+window.WrtGame = WrtGame;
 var WrtGame;
 (function (WrtGame) {
     eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
@@ -4904,6 +4658,9 @@ var WrtGame;
         Enemy.prototype.initDisplay = function () {
             this._displayObj.init(this._data['battleEnemyImageUrl']);
         };
+        Enemy.prototype.getMesh = function () {
+            return this._displayObj.getMesh();
+        };
         return Enemy;
     }(WrtGame.Character));
     WrtGame.Enemy = Enemy;
@@ -4918,10 +4675,285 @@ var WrtGame;
             this._material = new GLBoost.ClassicMaterial();
             this._texture = new GLBoost.Texture(imageUrl);
             this._material.diffuseTexture = this._texture;
-            this._geometry = new GLBoost.Plane(10, 10, 1, 1, null);
+            this._geometry = new GLBoost.Plane(1, 1, 1, 1, null);
             this._mesh = new GLBoost.Mesh(this._geometry, this._material);
+            this._mesh.rotate = new GLBoost.Vector3(-90, 0, 0);
+        };
+        EnemyDisplay.prototype.getMesh = function () {
+            return this._mesh;
         };
         return EnemyDisplay;
     }());
     WrtGame.EnemyDisplay = EnemyDisplay;
+})(WrtGame || (WrtGame = {}));
+var WrtGame;
+(function (WrtGame) {
+    eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
+    var Scene = (function () {
+        function Scene() {
+        }
+        Scene.prototype.sceneLoop = function () { };
+        Scene.prototype.setUp = function () { };
+        Scene.prototype.tearDown = function () { };
+        return Scene;
+    }());
+    WrtGame.Scene = Scene;
+})(WrtGame || (WrtGame = {}));
+var WrtGame;
+(function (WrtGame) {
+    eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
+    var BattleScene = (function (_super) {
+        __extends(BattleScene, _super);
+        function BattleScene() {
+            _super.call(this);
+            this._renderer = null;
+            this._scene = null;
+            this._camera = null;
+            this._initGLBoost();
+        }
+        BattleScene.prototype._initGLBoost = function () {
+            var glboostCtx = WrtGame.GLBoostContext.getInstance();
+            this._renderer = glboostCtx.getRenderer();
+            this._scene = new GLBoost.Scene();
+            this._camera = new GLBoost.Camera({
+                eye: new GLBoost.Vector3(0.0, 0, 4.0),
+                center: new GLBoost.Vector3(0.0, 0.0, 0.0),
+                up: new GLBoost.Vector3(0.0, 1.0, 0.0)
+            }, {
+                fovy: 45.0,
+                aspect: 1.0,
+                zNear: 0.1,
+                zFar: 300.0
+            });
+            this._scene.add(this._camera);
+            var characters = MongoCollections.Objects.find({ schema_identifier: 'wrt_game_character' }).fetch();
+            var enemiesMongo = _.filter(characters, function (character) {
+                var result = false;
+                for (var i = 0; i < character.attributes.length; i++) {
+                    if (character.attributes[i].identifier === 'situation' && character.attributes[i].value === 'enemy') {
+                        result = true;
+                    }
+                }
+                return result;
+            });
+            console.log(enemiesMongo);
+            var enemies = new Array();
+            enemiesMongo.forEach(function (enemyMongo) {
+                var enemy = new WrtGame.Enemy(enemyMongo);
+                enemy.initDisplay();
+                enemies.push(enemy);
+            });
+            var resourceManager = WrtGame.ResourceManager.getInstance();
+            resourceManager.setEnemies(enemies);
+        };
+        BattleScene.prototype.sceneLoop = function () {
+            this._renderer.clearCanvas();
+            this._renderer.draw(this._scene);
+        };
+        BattleScene.prototype.setUp = function () {
+            var _this = this;
+            var resourceManager = WrtGame.ResourceManager.getInstance();
+            var enemies = resourceManager.getEnemies();
+            enemies.forEach(function (enemy) {
+                _this._scene.add(enemy.getMesh());
+            });
+            this._scene.prepareForRender();
+        };
+        BattleScene.prototype.tearDown = function () { };
+        return BattleScene;
+    }(WrtGame.Scene));
+    WrtGame.BattleScene = BattleScene;
+})(WrtGame || (WrtGame = {}));
+/// <reference path="../../../../typings/browser.d.ts" />
+var WrtGame;
+(function (WrtGame) {
+    eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
+    var DungeonScene = (function (_super) {
+        __extends(DungeonScene, _super);
+        function DungeonScene(data) {
+            _super.call(this);
+            this._mapMovement = null;
+            this._map = null;
+            this._camera = null;
+            this._scene = null;
+            this._renderer = null;
+            this._fadeTween = null;
+            //this._mapMovement = mapMovement;
+            this._initEvent();
+            this._initGLBoost(data);
+        }
+        DungeonScene.prototype._initEvent = function () {
+            // 物理イベントのプロパティ初期化
+            var physicalMapMovementEventProperty = WrtGame.initMapMovementEventHandler();
+            var gameState = WrtGame.GameState.getInstance();
+            // 論理移動コマンドプロパティ初期化
+            var logicalMovementCommandProperty = gameState.mapPhysicalEventPropertyToLogicalMovementCommandProperty(physicalMapMovementEventProperty);
+            // マップ移動クラスの初期化
+            this._mapMovement = WrtGame.MapMovement.getInstance();
+            this._mapMovement.init(logicalMovementCommandProperty);
+        };
+        DungeonScene.prototype._initGLBoost = function (data) {
+            var glboostCtx = WrtGame.GLBoostContext.getInstance();
+            var renderer = glboostCtx.getRenderer();
+            var canvasId = glboostCtx.getCanvasId();
+            var canvas = glboostCtx.getCanvas();
+            var scene = new GLBoost.Scene();
+            var aspect = canvas.width / canvas.height;
+            var camera = new GLBoost.Camera({
+                eye: new GLBoost.Vector3(0, 0, 0),
+                center: new GLBoost.Vector3(0.0, 0.0, 1.0),
+                up: new GLBoost.Vector3(0.0, 1.0, 0.0)
+            }, {
+                fovy: 50.0,
+                aspect: aspect,
+                zNear: 0.1,
+                zFar: 300.0
+            });
+            scene.add(camera);
+            var directionalLight_1 = new GLBoost.DirectionalLight(new GLBoost.Vector3(1, 1, 1), new GLBoost.Vector3(-1, -1, 0), canvasId);
+            var directionalLight_2 = new GLBoost.DirectionalLight(new GLBoost.Vector3(1, 1, 1), new GLBoost.Vector3(1, 1, 0), canvasId);
+            var directionalLight_3 = new GLBoost.DirectionalLight(new GLBoost.Vector3(1, 1, 1), new GLBoost.Vector3(0, 1, 1), canvasId);
+            var directionalLight_4 = new GLBoost.DirectionalLight(new GLBoost.Vector3(0.5, 0.5, 0.5), new GLBoost.Vector3(0, 0, -1), canvasId);
+            scene.add(directionalLight_1);
+            scene.add(directionalLight_2);
+            scene.add(directionalLight_3);
+            scene.add(directionalLight_4);
+            this._map = new WrtGame.PolygonMapGLBoost(scene, data.map, data.mapTextures, canvasId);
+            // Windowのリサイズ対応
+            window.addEventListener("resize", function (e) {
+                var windowAspect = $(e.target).width() / $(e.target).height();
+                if (windowAspect > aspect) {
+                    var width = $(e.target).height() * aspect;
+                    var height = $(e.target).height();
+                    $(canvas).css('width', width);
+                    $(canvas).css('height', height);
+                    renderer.resize(width, height);
+                }
+                else {
+                    var width = $(e.target).width();
+                    var height = $(e.target).width() * 1 / aspect;
+                    $(canvas).css('width', width);
+                    $(canvas).css('height', height);
+                    renderer.resize(width, height);
+                }
+            });
+            this._scene = scene;
+            this._camera = camera;
+            this._renderer = renderer;
+        };
+        DungeonScene.prototype.sceneLoop = function () {
+            var mapMovement = this._mapMovement;
+            // 平行移動する
+            var moveDelta = 1.0 / 60 * 3;
+            mapMovement.move(this._map, moveDelta);
+            // 水平方向の向きを変える
+            mapMovement.rotate(60 * 0.8);
+            // 垂直方向の向きを変える
+            mapMovement.faceUpOrLow(1 / 60 * 0.5);
+            this._map.movePlatforms();
+            // カメラの位置・回転をセット
+            var cameraPos = this.convertGLBoostPlayerPosition(mapMovement.playerX, mapMovement.playerH, mapMovement.playerY, mapMovement.playerAngle, mapMovement.playerElevationAngle);
+            this._camera.eye = cameraPos.viewPos;
+            this._camera.center = cameraPos.centerPos;
+            this._renderer.clearCanvas();
+            this._renderer.draw(this._scene);
+            //console.log("this.opacity:" + this._scene.opacity);
+            /*
+            if (this._fadeTween) {
+              this._fadeTween.update();
+            }
+            */
+            TWEEN.update();
+        };
+        /**
+         * MapMovementクラスが返すプレーヤー座標を、GLBoostでの表示仕様を満たす座標に変換する
+         * @param x
+         * @param h
+         * @param y
+         * @returns {BABYLON.Vector3}
+         */
+        DungeonScene.prototype.convertGLBoostPlayerPosition = function (x, h, y, angle, playerElevationAngle) {
+            // プレーヤーが0.5後ろに下がって、背中が後ろのマスの壁にひっつくようにするためのオフセット座標
+            var rotateMtx = GLBoost.Matrix44.rotateY(GLBoost.MathUtil.radianToDegree(-angle));
+            var rotateElevationMtx = GLBoost.Matrix44.rotateX(GLBoost.MathUtil.radianToDegree(playerElevationAngle));
+            var viewPosOffset = new GLBoost.Vector4(0, 0, 0.5, 1);
+            var centerPosOffset = new GLBoost.Vector4(0, 0, -0.5, 1);
+            // そのオフセット座標を、プレーヤーの向きに合わせて回転する
+            viewPosOffset = rotateMtx.multiplyVector(viewPosOffset);
+            centerPosOffset = rotateElevationMtx.multiplyVector(centerPosOffset);
+            centerPosOffset = rotateMtx.multiplyVector(centerPosOffset);
+            // プレーヤーのBabylonJSにおける位置座標
+            var viewPos = new GLBoost.Vector3(x - 0.5, h + 0.5, y - 0.5);
+            //var viewPos = new GLBoost.Vector3(x, h + 1, y);
+            // オフセットを考慮するために足す
+            return {
+                viewPos: GLBoost.Vector3.add(viewPos, new GLBoost.Vector3(viewPosOffset.x, viewPosOffset.y, viewPosOffset.z)),
+                centerPos: GLBoost.Vector3.add(viewPos, new GLBoost.Vector3(centerPosOffset.x, centerPosOffset.y, centerPosOffset.z))
+            };
+        };
+        DungeonScene.prototype.fadeIn = function (callback) {
+            this._fadeTween = new TWEEN.Tween(this._scene);
+            this._fadeTween
+                .to({ opacity: 1.0 }, 1500.0)
+                .easing(TWEEN.Easing.Quartic.In);
+            if (callback) {
+                this._fadeTween.onComplete(callback).start();
+            }
+            else {
+                this._fadeTween.start();
+            }
+        };
+        DungeonScene.prototype.fadeOut = function (callback) {
+            this._fadeTween = new TWEEN.Tween(this._scene);
+            this._fadeTween
+                .to({ opacity: 0.0 }, 1500.0)
+                .easing(TWEEN.Easing.Quartic.Out);
+            if (callback) {
+                this._fadeTween.onComplete(callback).start();
+            }
+            else {
+                this._fadeTween.start();
+            }
+        };
+        DungeonScene.prototype.setUp = function () { };
+        DungeonScene.prototype.tearDown = function () { };
+        return DungeonScene;
+    }(WrtGame.Scene));
+    WrtGame.DungeonScene = DungeonScene;
+})(WrtGame || (WrtGame = {}));
+var WrtGame;
+(function (WrtGame) {
+    eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
+    var SceneManager = (function () {
+        function SceneManager() {
+            this._scenes = {};
+            this._currentSceneName = null;
+        }
+        SceneManager.getInstance = function () {
+            if (SceneManager._instance == null) {
+                SceneManager._instance = new SceneManager();
+            }
+            return SceneManager._instance;
+        };
+        SceneManager.prototype.addScene = function (key, scene, switchScene) {
+            if (switchScene === void 0) { switchScene = true; }
+            this._scenes[key] = scene;
+            if (switchScene) {
+                this._currentSceneName = key;
+            }
+        };
+        SceneManager.prototype.getScene = function (key) {
+            return this._scenes[key];
+        };
+        SceneManager.prototype.switchScene = function (key) {
+            this._scenes[this._currentSceneName].tearDown();
+            this._currentSceneName = key;
+            this._scenes[this._currentSceneName].setUp();
+        };
+        SceneManager.prototype.getCurrentScene = function () {
+            return this._scenes[this._currentSceneName];
+        };
+        return SceneManager;
+    }());
+    WrtGame.SceneManager = SceneManager;
 })(WrtGame || (WrtGame = {}));

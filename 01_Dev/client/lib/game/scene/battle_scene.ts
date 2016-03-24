@@ -8,6 +8,7 @@ module WrtGame {
   export class BattleScene extends Scene {
     private _renderer:any = null;
     private _scene:any = null;
+    private _camera:any = null;
     constructor() {
       super();
 
@@ -18,6 +19,27 @@ module WrtGame {
       var glboostCtx = GLBoostContext.getInstance();
       this._renderer = glboostCtx.getRenderer();
       this._scene = new GLBoost.Scene();
+      this._camera = new GLBoost.Camera(
+        {
+          eye: new GLBoost.Vector3(0.0, 0, 4.0),
+          center: new GLBoost.Vector3(0.0, 0.0, 0.0),
+          up: new GLBoost.Vector3(0.0, 1.0, 0.0)
+        },
+        {
+          fovy: 45.0,
+          aspect: 1.0,
+          zNear: 0.1,
+          zFar: 300.0
+        }
+      );
+      this._scene.add( this._camera );
+
+
+
+
+
+
+
 
       var characters:any = MongoCollections.Objects.find({schema_identifier:'wrt_game_character'}).fetch();
       var enemiesMongo = _.filter(characters, (character:any)=>{
@@ -49,7 +71,14 @@ module WrtGame {
     }
 
     public setUp() {
+      let resourceManager:ResourceManager = ResourceManager.getInstance();
+      var enemies = resourceManager.getEnemies();
 
+      enemies.forEach((enemy)=>{
+        this._scene.add(enemy.getMesh());
+      });
+
+      this._scene.prepareForRender();
     }
 
     public tearDown(){}

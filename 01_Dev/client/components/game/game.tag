@@ -180,7 +180,7 @@
       ).done(()=> {
         var game = WrtGame.Game.getInstance();
         game.init(this.data);
-		  });
+      });
 
       WrtGame.preventDefaultArrowKey();
 

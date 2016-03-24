@@ -16,8 +16,12 @@ module WrtGame {
       }
     }
 
-    initDisplay() {
+    public initDisplay() {
       this._displayObj.init(this._data['battleEnemyImageUrl']);
+    }
+
+    public getMesh() {
+      return this._displayObj.getMesh();
     }
   }
 }

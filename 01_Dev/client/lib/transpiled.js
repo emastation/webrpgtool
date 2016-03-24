@@ -4716,7 +4716,7 @@ var WrtGame;
             this._renderer = glboostCtx.getRenderer();
             this._scene = new GLBoost.Scene();
             this._camera = new GLBoost.Camera({
-                eye: new GLBoost.Vector3(0.0, 0, 4.0),
+                eye: new GLBoost.Vector3(0.0, 0, 6.0),
                 center: new GLBoost.Vector3(0.0, 0.0, 0.0),
                 up: new GLBoost.Vector3(0.0, 1.0, 0.0)
             }, {
@@ -4725,7 +4725,6 @@ var WrtGame;
                 zNear: 0.1,
                 zFar: 300.0
             });
-            this._scene.add(this._camera);
             var characters = MongoCollections.Objects.find({ schema_identifier: 'wrt_game_character' }).fetch();
             var enemiesMongo = _.filter(characters, function (character) {
                 var result = false;
@@ -4754,12 +4753,22 @@ var WrtGame;
             var _this = this;
             var resourceManager = WrtGame.ResourceManager.getInstance();
             var enemies = resourceManager.getEnemies();
+            var enemiesDisplayed = [];
             enemies.forEach(function (enemy) {
-                _this._scene.add(enemy.getMesh());
+                if (Math.random() < 0.5) {
+                    _this._scene.add(enemy.getMesh());
+                    enemiesDisplayed.push(enemy.getMesh());
+                }
             });
+            for (var i = 0; i < enemiesDisplayed.length; i++) {
+                enemiesDisplayed[i].translate = new GLBoost.Vector3((1.2 * (i - enemiesDisplayed.length / 2.0)), 0, 0);
+            }
+            this._scene.add(this._camera);
             this._scene.prepareForRender();
         };
-        BattleScene.prototype.tearDown = function () { };
+        BattleScene.prototype.tearDown = function () {
+            this._scene.removeAll();
+        };
         return BattleScene;
     }(WrtGame.Scene));
     WrtGame.BattleScene = BattleScene;

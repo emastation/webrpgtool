@@ -21,7 +21,7 @@ module WrtGame {
       this._scene = new GLBoost.Scene();
       this._camera = new GLBoost.Camera(
         {
-          eye: new GLBoost.Vector3(0.0, 0, 4.0),
+          eye: new GLBoost.Vector3(0.0, 0, 6.0),
           center: new GLBoost.Vector3(0.0, 0.0, 0.0),
           up: new GLBoost.Vector3(0.0, 1.0, 0.0)
         },
@@ -32,14 +32,6 @@ module WrtGame {
           zFar: 300.0
         }
       );
-      this._scene.add( this._camera );
-
-
-
-
-
-
-
 
       var characters:any = MongoCollections.Objects.find({schema_identifier:'wrt_game_character'}).fetch();
       var enemiesMongo = _.filter(characters, (character:any)=>{
@@ -74,13 +66,25 @@ module WrtGame {
       let resourceManager:ResourceManager = ResourceManager.getInstance();
       var enemies = resourceManager.getEnemies();
 
+      var enemiesDisplayed = [];
       enemies.forEach((enemy)=>{
-        this._scene.add(enemy.getMesh());
+        if (Math.random() < 0.5) {
+          this._scene.add(enemy.getMesh());
+          enemiesDisplayed.push(enemy.getMesh());
+        }
       });
+
+      for (let i=0; i<enemiesDisplayed.length; i++) {
+        enemiesDisplayed[i].translate = new GLBoost.Vector3((1.2 * (i - enemiesDisplayed.length/2.0)), 0, 0);
+      }
+
+      this._scene.add( this._camera );
 
       this._scene.prepareForRender();
     }
 
-    public tearDown(){}
+    public tearDown(){
+      this._scene.removeAll();
+    }
   }
 }

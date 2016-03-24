@@ -38,6 +38,17 @@ var WrtGame;
         BattleScene.prototype.initGLBoost = function () {
             var glboostCtx = WrtGame.GLBoostContext.getInstance();
             this._renderer = glboostCtx.getRenderer();
+            var characters = MongoCollections.Objects.find({ schema_identifier: 'wrt_game_character' }).fetch();
+            var enemies = _.filter(characters, function (character) {
+                var result = false;
+                for (var i = 0; i < character.attributes.length; i++) {
+                    if (character.attributes[i].identifier === 'situation' && character.attributes[i].value === 'enemy') {
+                        result = true;
+                    }
+                }
+                return result;
+            });
+            console.log(enemies);
         };
         BattleScene.prototype.sceneLoop = function () {
         };
@@ -1324,7 +1335,7 @@ var WrtGame;
         };
         GameLogic.prototype.onMoveOnMapCallback = function () {
             // TODO: Use Bacon.js. add an 'Encount' Logical event to the EventStream.
-            if (Math.random() < 0.00) {
+            if (Math.random() < 0.10) {
                 //        if(Math.random()<1) {
                 console.log("エンカウント！！" + WrtGame.LG_ENCOUNTER);
                 //            if ($("#checkbox_encounter").attr("checked") === "checked") {

@@ -151,7 +151,12 @@
           deferCodes.resolve();
         }
       });
-
+      var deferObjects = $.Deferred();
+      Meteor.subscribe('objects', {
+        onReady: ()=>{
+          deferObjects.resolve();
+        }
+      });
 
       // Game class initialization after all assets load complite
       $.when(
@@ -170,7 +175,8 @@
         deferBgmAudios.promise(),
         deferSoundEffects.promise(),
         deferSoundEffectAudios.promise(),
-        deferCodes.promise()
+        deferCodes.promise(),
+        deferObjects.promise()
       ).done(()=> {
         var game = WrtGame.Game.getInstance();
         game.init(this.data);

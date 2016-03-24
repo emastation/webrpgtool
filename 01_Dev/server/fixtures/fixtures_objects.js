@@ -366,34 +366,6 @@ if (Objects.find().count() === 0) {
   });
 
   Objects.insert({
-    identifier: 'mimic',
-    schema_identifier: 'wrt_game_character',
-    game_id: '',
-    attributes: [
-      {
-        identifier: 'name',
-        value: 'ミミック'
-      },
-      {
-        identifier: 'hp',
-        value: 100
-      },
-      {
-        identifier: 'mp',
-        value: 90
-      },
-      {
-        identifier: 'situation',
-        value: 'enemy'
-      },
-      {
-        identifier: 'battleEnemyImageUrl',
-        value: 'https://www.emastation.com/wrt/material/enemyImage/lud.sakura.ne.jp/battler00/solid02.png'
-      }
-    ]
-  });
-
-  Objects.insert({
     identifier: 'bigWaterCreature',
     schema_identifier: 'wrt_game_character',
     game_id: '',

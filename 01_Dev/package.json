@@ -8,7 +8,7 @@
     "typings": "^0.7.9"
   },
   "scripts": {
-    "tsc": "./node_modules/.bin/tsc client/lib/*.ts --out client/lib/transpiled.js -target ES5 && ./node_modules/.bin/tsc client/lib/game/*.ts --out client/lib/game/transpiled.js -target ES5",
+    "tsc": "./node_modules/.bin/tsc client/lib/*.ts client/lib/game/*.ts client/lib/game/**/*.ts --out client/lib/transpiled.js -target ES5",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "emadurandal"

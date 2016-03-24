@@ -92,7 +92,7 @@ module WrtGame {
       this._renderer = renderer;
     }
 
-    sceneLoop() {
+    public sceneLoop() {
       var mapMovement = this._mapMovement;
       // 平行移動する
       var moveDelta = 1.0/60*3;
@@ -177,5 +177,9 @@ module WrtGame {
         this._fadeTween.start();
       }
     }
+
+    public setUp(){}
+
+    public tearDown(){}
   }
 }

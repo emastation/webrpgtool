@@ -7,15 +7,17 @@ module WrtGame {
 
   export class BattleScene extends Scene {
     private _renderer:any = null;
+    private _scene:any = null;
     constructor() {
       super();
 
-      this.initGLBoost();
+      this._initGLBoost();
     }
 
-    initGLBoost() {
+    private _initGLBoost() {
       var glboostCtx = GLBoostContext.getInstance();
       this._renderer = glboostCtx.getRenderer();
+      this._scene = new GLBoost.Scene();
 
       var characters:any = MongoCollections.Objects.find({schema_identifier:'wrt_game_character'}).fetch();
       var enemiesMongo = _.filter(characters, (character:any)=>{
@@ -31,14 +33,25 @@ module WrtGame {
       console.log(enemiesMongo);
 
       let enemies:Array<Enemy> = new Array<Enemy>();
-      enemiesMongo.forEach((enemy)=>{
-        enemies.push(new Enemy(enemy));
+      enemiesMongo.forEach((enemyMongo)=>{
+        var enemy = new Enemy(enemyMongo);
+        enemy.initDisplay();
+        enemies.push(enemy);
       });
+
+      let resourceManager:ResourceManager = ResourceManager.getInstance();
+      resourceManager.setEnemies(enemies);
     }
 
-    sceneLoop() {
+    public sceneLoop() {
+      this._renderer.clearCanvas();
+      this._renderer.draw(this._scene);
+    }
 
+    public setUp() {
 
     }
+
+    public tearDown(){}
   }
 }

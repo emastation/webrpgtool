@@ -7,6 +7,10 @@ module WrtGame {
 
     }
 
-    sceneLoop(){}
+    public sceneLoop(){}
+
+    public setUp(){}
+
+    public tearDown(){}
   }
 }

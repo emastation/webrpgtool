@@ -5,13 +5,19 @@ module WrtGame {
   export class Enemy extends Character {
     private _data:any = {};
     private _typeIdentifier:string;
+    private _displayObj:EnemyDisplay = new EnemyDisplay();
 
     constructor(enemyData:any) {
+      super();
       this._typeIdentifier = enemyData.identifier;
 
       for (var i=0; i<enemyData.attributes.length; i++) {
         this._data[enemyData.attributes[i].identifier] = enemyData.attributes[i].value;
       }
+    }
+
+    initDisplay() {
+      this._displayObj.init(this._data['battleEnemyImageUrl']);
     }
   }
 }

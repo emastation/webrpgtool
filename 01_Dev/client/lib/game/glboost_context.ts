@@ -19,9 +19,10 @@ module WrtGame {
     constructor() {
     }
 
-    init(canvasId:string) {
-      this._canvasId = canvasId;
-      this._canvas = <HTMLCanvasElement>document.querySelector(canvasId);
+    init(glBoostLayer:any) {
+      this._canvasId = '#' + glBoostLayer.canvas.id;
+      this._canvas = <HTMLCanvasElement>glBoostLayer.canvas;
+      glBoostLayer.scene = null;
 
       this._renderer = new GLBoost.Renderer({ canvas: this._canvas, clearColor: {red:0.0, green:0.0, blue:0.0, alpha:1}});
     }

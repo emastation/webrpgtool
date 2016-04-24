@@ -1,6 +1,8 @@
 declare var MongoCollections:any;
 declare var GLBoost:any;
 declare var TWEEN:any;
+declare var phina:any;
+declare var GameApp:any;
 
 interface Window {
   MainScene: any;
@@ -33,17 +35,18 @@ module WrtGame {
     }
 
     public init(data:any, onlyNovel = false, callbackWhenOnlyNovel:Function = null) {
+      phina.globalize();
       var novelPlayer = WrtGame.NovelPlayer.getInstance();
-      novelPlayer.init();
 
       if (onlyNovel) {
-        this.initTmlib(callbackWhenOnlyNovel);
+        novelPlayer.init(callbackWhenOnlyNovel);
+        this.initPhina();
       } else {
-        this.initTmlib(()=>{
+        novelPlayer.init((glBoostLayer)=>{
           this.initEvents();
 
           let glboostCtx = GLBoostContext.getInstance();
-          glboostCtx.init('#renderCanvas');
+          glboostCtx.init(glBoostLayer);
 
           let sm:SceneManager = SceneManager.getInstance();
           sm.addScene('battle', new BattleScene());
@@ -58,6 +61,7 @@ module WrtGame {
           e.initUIEvent('resize', true, true, window, 0);
           window.dispatchEvent(e);
         });
+        this.initPhina();
       }
 
     }
@@ -110,21 +114,23 @@ module WrtGame {
 
     }
 
-    private initTmlib(callback:Function) {
+    private initPhina() {
 
       var ASSETS = {
+        sound: {},
+        image: {}
       };
 
       var characterImages = MongoCollections.CharacterImages.find({useForNovel:true}).fetch();
       var backgroundImages = MongoCollections.BackgroundImages.find().fetch();
       for(var key in characterImages) {
         if ("" !== characterImages[key].portraitImageUrl) {
-          ASSETS[characterImages[key].portraitImageUrl] = characterImages[key].portraitImageUrl;
+          ASSETS.image[characterImages[key].portraitImageUrl] = characterImages[key].portraitImageUrl;
         }
       }
       for(var key in backgroundImages) {
         if ("" !== backgroundImages[key].imageUrl) {
-          ASSETS[backgroundImages[key].imageUrl] = backgroundImages[key].imageUrl;
+          ASSETS.image[backgroundImages[key].imageUrl] = backgroundImages[key].imageUrl;
         }
       }
       var bgmAudios = MongoCollections.BgmAudios.find().fetch();
@@ -132,15 +138,36 @@ module WrtGame {
         if (bgmAudio.identifier === 'none') {
           return;
         }
-        ASSETS[bgmAudio.identifier] = bgmAudio.audioUrl;
+        ASSETS.sound[bgmAudio.identifier] = bgmAudio.audioUrl;
       });
       var soundEffectAudios = MongoCollections.SoundEffectAudios.find().fetch();
       soundEffectAudios.forEach((soundEffectAudio)=>{
         if (soundEffectAudio.identifier === 'none') {
           return;
         }
-        ASSETS[soundEffectAudio.identifier] = soundEffectAudio.audioUrl;
+        ASSETS.sound[soundEffectAudio.identifier] = soundEffectAudio.audioUrl;
       });
+
+
+
+      phina.main(function() {
+        // アプリケーションを生成
+        var app = GameApp({
+          startLabel: 'main',   // MainScene から開始
+          width: Game.SCREEN_WIDTH,  // 画面幅
+          height: Game.SCREEN_HEIGHT,// 画面高さ
+          assets: ASSETS,       // アセット読み込み
+        });
+
+        app.enableStats();
+
+        // 実行
+        app.fps = 60;
+        app.run();
+      });
+
+      /*
+
       // main
       tm.main(function() {
         // キャンバスアプリケーションを生成
@@ -201,16 +228,19 @@ module WrtGame {
       });
 
 
+       if (document.readyState == "complete") {
+       if (!document.createEvent) {
+       window.fireEvent('onload');
+       } else {
+       var event = document.createEvent('HTMLEvents');
+       event.initEvent ("load", false, true);
+       window.dispatchEvent(event);
+       }
+       }
+      */
 
-      if (document.readyState == "complete") {
-        if (!document.createEvent) {
-          window.fireEvent('onload');
-        } else {
-          var event = document.createEvent('HTMLEvents');
-          event.initEvent ("load", false, true)
-          window.dispatchEvent(event);
-        }
-      }
+
+
 
     }
 

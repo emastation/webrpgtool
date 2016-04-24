@@ -23,5 +23,9 @@ module WrtGame {
     public getMesh() {
       return this._displayObj.getMesh();
     }
+
+    public adjustAspectRatio() {
+      this._displayObj.adjustAspectRatio();
+    }
   }
 }

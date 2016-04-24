@@ -23,5 +23,17 @@ module WrtGame {
       return this._mesh;
     }
 
+    public adjustAspectRatio() {
+      var width = this._texture.width;
+      var height = this._texture.height;
+
+      //var ratio = height / width;
+
+      var ratio = width / height;
+
+      this._mesh.scale = new GLBoost.Vector3(ratio, 1, 1);
+
+    }
+
   }
 }

@@ -18,6 +18,8 @@ module WrtGame {
     private _initGLBoost() {
       var glboostCtx = GLBoostContext.getInstance();
       this._renderer = glboostCtx.getRenderer();
+      var canvas:any = glboostCtx.getCanvas();
+      var aspect = canvas.width / canvas.height;
       this._scene = new GLBoost.Scene();
       this._camera = new GLBoost.Camera(
         {
@@ -27,7 +29,7 @@ module WrtGame {
         },
         {
           fovy: 45.0,
-          aspect: 1.0,
+          aspect: aspect,
           zNear: 0.1,
           zFar: 300.0
         }
@@ -71,11 +73,12 @@ module WrtGame {
         if (Math.random() < 0.5) {
           this._scene.add(enemy.getMesh());
           enemiesDisplayed.push(enemy.getMesh());
+          enemy.adjustAspectRatio();
         }
       });
 
       for (let i=0; i<enemiesDisplayed.length; i++) {
-        enemiesDisplayed[i].translate = new GLBoost.Vector3((1.2 * (i - enemiesDisplayed.length/2.0)), 0, 0);
+        enemiesDisplayed[i].translate = new GLBoost.Vector3((1.25 * (i+0.5 - enemiesDisplayed.length/2.0)), 0, 0);
       }
 
       this._scene.add( this._camera );

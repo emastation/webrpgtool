@@ -4661,6 +4661,9 @@ var WrtGame;
         Enemy.prototype.getMesh = function () {
             return this._displayObj.getMesh();
         };
+        Enemy.prototype.adjustAspectRatio = function () {
+            this._displayObj.adjustAspectRatio();
+        };
         return Enemy;
     }(WrtGame.Character));
     WrtGame.Enemy = Enemy;
@@ -4681,6 +4684,13 @@ var WrtGame;
         };
         EnemyDisplay.prototype.getMesh = function () {
             return this._mesh;
+        };
+        EnemyDisplay.prototype.adjustAspectRatio = function () {
+            var width = this._texture.width;
+            var height = this._texture.height;
+            //var ratio = height / width;
+            var ratio = width / height;
+            this._mesh.scale = new GLBoost.Vector3(ratio, 1, 1);
         };
         return EnemyDisplay;
     }());
@@ -4714,6 +4724,8 @@ var WrtGame;
         BattleScene.prototype._initGLBoost = function () {
             var glboostCtx = WrtGame.GLBoostContext.getInstance();
             this._renderer = glboostCtx.getRenderer();
+            var canvas = glboostCtx.getCanvas();
+            var aspect = canvas.width / canvas.height;
             this._scene = new GLBoost.Scene();
             this._camera = new GLBoost.Camera({
                 eye: new GLBoost.Vector3(0.0, 0, 6.0),
@@ -4721,7 +4733,7 @@ var WrtGame;
                 up: new GLBoost.Vector3(0.0, 1.0, 0.0)
             }, {
                 fovy: 45.0,
-                aspect: 1.0,
+                aspect: aspect,
                 zNear: 0.1,
                 zFar: 300.0
             });
@@ -4758,10 +4770,11 @@ var WrtGame;
                 if (Math.random() < 0.5) {
                     _this._scene.add(enemy.getMesh());
                     enemiesDisplayed.push(enemy.getMesh());
+                    enemy.adjustAspectRatio();
                 }
             });
             for (var i = 0; i < enemiesDisplayed.length; i++) {
-                enemiesDisplayed[i].translate = new GLBoost.Vector3((1.2 * (i - enemiesDisplayed.length / 2.0)), 0, 0);
+                enemiesDisplayed[i].translate = new GLBoost.Vector3((1.25 * (i + 0.5 - enemiesDisplayed.length / 2.0)), 0, 0);
             }
             this._scene.add(this._camera);
             this._scene.prepareForRender();

@@ -278,7 +278,7 @@ module WrtGame {
 
       var soundEffectAudio = MongoCollections.SoundEffectAudios.findOne({_id: currentStoryItem.content.soundEffectAudioId});
 
-      var soundEffect = tm.asset.Manager.get(soundEffectAudio.identifier);
+      var soundEffect = phina.asset.AssetManager.get("sound", soundEffectAudio.identifier);
       soundEffect.stop();
       soundEffect.volume = currentStoryItem.content.volume;
       soundEffect.play();

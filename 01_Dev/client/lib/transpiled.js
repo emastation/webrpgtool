@@ -4763,6 +4763,8 @@ var WrtGame;
         };
         BattleScene.prototype.setUp = function () {
             var _this = this;
+            var bgmPlayer = WrtGame.BgmPlayer.getInstance();
+            bgmPlayer.play('hitokiri_b5');
             var resourceManager = WrtGame.ResourceManager.getInstance();
             var enemies = resourceManager.getEnemies();
             var enemiesDisplayed = [];
@@ -4937,7 +4939,11 @@ var WrtGame;
                 this._fadeTween.start();
             }
         };
-        DungeonScene.prototype.setUp = function () { };
+        DungeonScene.prototype.setUp = function () {
+            var bgmPlayer = WrtGame.BgmPlayer.getInstance();
+            bgmPlayer.stop();
+            bgmPlayer.play('hitokiri_water');
+        };
         DungeonScene.prototype.tearDown = function () { };
         return DungeonScene;
     }(WrtGame.Scene));
@@ -4961,14 +4967,16 @@ var WrtGame;
             if (switchScene === void 0) { switchScene = true; }
             this._scenes[key] = scene;
             if (switchScene) {
-                this._currentSceneName = key;
+                this.switchScene(key);
             }
         };
         SceneManager.prototype.getScene = function (key) {
             return this._scenes[key];
         };
         SceneManager.prototype.switchScene = function (key) {
-            this._scenes[this._currentSceneName].tearDown();
+            if (this._currentSceneName) {
+                this._scenes[this._currentSceneName].tearDown();
+            }
             this._currentSceneName = key;
             this._scenes[this._currentSceneName].setUp();
         };

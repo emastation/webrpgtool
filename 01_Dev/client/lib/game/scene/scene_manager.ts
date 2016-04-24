@@ -19,7 +19,7 @@ module WrtGame {
     addScene(key:string, scene:Scene, switchScene:boolean = true) {
       this._scenes[key] = scene;
       if (switchScene) {
-        this._currentSceneName = key;
+        this.switchScene(key);
       }
     }
 
@@ -28,7 +28,9 @@ module WrtGame {
     }
 
     switchScene(key) {
-      this._scenes[this._currentSceneName].tearDown();
+      if (this._currentSceneName) {
+        this._scenes[this._currentSceneName].tearDown();
+      }
       this._currentSceneName = key;
       this._scenes[this._currentSceneName].setUp();
     }

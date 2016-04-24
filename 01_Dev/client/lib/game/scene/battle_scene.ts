@@ -65,6 +65,9 @@ module WrtGame {
     }
 
     public setUp() {
+      const bgmPlayer = BgmPlayer.getInstance();
+      bgmPlayer.play('hitokiri_b5');
+
       let resourceManager:ResourceManager = ResourceManager.getInstance();
       var enemies = resourceManager.getEnemies();
 

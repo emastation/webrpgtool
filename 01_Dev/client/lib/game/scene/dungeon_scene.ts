@@ -178,7 +178,10 @@ module WrtGame {
       }
     }
 
-    public setUp(){}
+    public setUp(){
+      const bgmPlayer = BgmPlayer.getInstance();
+      bgmPlayer.play('hitokiri_water');
+    }
 
     public tearDown(){}
   }

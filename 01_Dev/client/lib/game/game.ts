@@ -40,7 +40,7 @@ module WrtGame {
 
       if (onlyNovel) {
         novelPlayer.init(callbackWhenOnlyNovel);
-        this.initPhina(null);
+        this.initPhina();
       } else {
         novelPlayer.init((glBoostLayer)=>{
           this.initEvents();
@@ -61,7 +61,7 @@ module WrtGame {
           e.initUIEvent('resize', true, true, window, 0);
           window.dispatchEvent(e);
         });
-        this.initPhina(null);
+        this.initPhina();
       }
 
     }
@@ -114,7 +114,7 @@ module WrtGame {
 
     }
 
-    private initPhina(callback:Function) {
+    private initPhina() {
 
       var ASSETS = {
         sound: {},
@@ -164,10 +164,6 @@ module WrtGame {
         // 実行
         app.fps = 60;
         app.run();
-
-        if (callback) {
-          callback();
-        }
       });
 
       /*
@@ -232,18 +228,18 @@ module WrtGame {
       });
 
 
+       if (document.readyState == "complete") {
+       if (!document.createEvent) {
+       window.fireEvent('onload');
+       } else {
+       var event = document.createEvent('HTMLEvents');
+       event.initEvent ("load", false, true);
+       window.dispatchEvent(event);
+       }
+       }
       */
 
 
-      if (document.readyState == "complete") {
-        if (!document.createEvent) {
-          window.fireEvent('onload');
-        } else {
-          var event = document.createEvent('HTMLEvents');
-          event.initEvent ("load", false, true);
-          window.dispatchEvent(event);
-        }
-      }
 
 
     }

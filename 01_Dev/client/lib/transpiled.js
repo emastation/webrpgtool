@@ -714,7 +714,7 @@ var WrtGame;
             var novelPlayer = WrtGame.NovelPlayer.getInstance();
             if (onlyNovel) {
                 novelPlayer.init(callbackWhenOnlyNovel);
-                this.initPhina(null);
+                this.initPhina();
             }
             else {
                 novelPlayer.init(function (glBoostLayer) {
@@ -731,7 +731,7 @@ var WrtGame;
                     e.initUIEvent('resize', true, true, window, 0);
                     window.dispatchEvent(e);
                 });
-                this.initPhina(null);
+                this.initPhina();
             }
         };
         Game.prototype._handleGameLogicalEvent = function (event) {
@@ -770,7 +770,7 @@ var WrtGame;
             var uiOperation = WrtGame.UiOperation.getInstance();
             uiOperation.init(logicalUiCommandProperty);
         };
-        Game.prototype.initPhina = function (callback) {
+        Game.prototype.initPhina = function () {
             var ASSETS = {
                 sound: {},
                 image: {}
@@ -813,9 +813,6 @@ var WrtGame;
                 // 実行
                 app.fps = 60;
                 app.run();
-                if (callback) {
-                    callback();
-                }
             });
             /*
       
@@ -879,17 +876,16 @@ var WrtGame;
             });
       
       
+             if (document.readyState == "complete") {
+             if (!document.createEvent) {
+             window.fireEvent('onload');
+             } else {
+             var event = document.createEvent('HTMLEvents');
+             event.initEvent ("load", false, true);
+             window.dispatchEvent(event);
+             }
+             }
             */
-            if (document.readyState == "complete") {
-                if (!document.createEvent) {
-                    window.fireEvent('onload');
-                }
-                else {
-                    var event = document.createEvent('HTMLEvents');
-                    event.initEvent("load", false, true);
-                    window.dispatchEvent(event);
-                }
-            }
         };
         Game.prototype.initUserFunctions = function () {
             var userFunctionManager = WrtGame.UserFunctionsManager.getInstance();

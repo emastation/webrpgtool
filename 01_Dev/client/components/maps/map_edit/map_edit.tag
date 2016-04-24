@@ -38,7 +38,7 @@
       this.update();
     }
 
-    var initTmlib = function() {
+    var initPhina = function() {
       var ASSETS = {};
 
       //    WRT.map.previousMap = _.clone(that.data.map);

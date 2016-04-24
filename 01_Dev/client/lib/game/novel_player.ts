@@ -1,13 +1,17 @@
 declare var WRT:any;
 declare var tm:any;
 declare var MongoCollections:any;
+declare var RectangleShape:any;
+declare var Label:any;
+declare var LabelArea:any;
+declare var Sprite:any;
 
 module WrtGame {
   eval('WrtGame = _.isUndefined(window.WrtGame) ? WrtGame : window.WrtGame;'); // 内部モジュールを複数ファイルで共有するためのハック
 
   export class NovelPlayer {
     private static _instance:NovelPlayer;
-    private _tmMainScene:any;
+    private _phinaScene:any;
     private _currentPlayingStoryName:string = null;
     private _isPlaying:boolean = false;
     private _novelWasFinished = true;
@@ -24,30 +28,37 @@ module WrtGame {
       return NovelPlayer._instance;
     }
 
-    public init() {
+    public init(callback:any) {
       var novelPlayerThis:NovelPlayer = this;
+      /*
       this._bgmPlayer = BgmPlayer.getInstance();
       this._bgmPlayer.preloadBGMs(null, null);
-
+        */
       // シーンを定義
-      tm.define("MainScene", {
-        superClass: "tm.app.Scene",
+      phina.define("MainScene", {
+        // 継承
+        superClass: 'DisplayScene',
 
         init: function () {
-          var this_:any = this;
-          this_.superInit();
-          novelPlayerThis._tmMainScene = this;
+          this.superInit({
+            width: Game.SCREEN_WIDTH,  // 画面幅
+            height: Game.SCREEN_HEIGHT,// 画面高さ
+          });
 
-          var canvas = tm.dom.Element("#tmlibCanvas");
+          novelPlayerThis._phinaScene = this;
 
           // MessageWindow
-          var imgMessageWindow = tm.display.RoundRectangleShape(Game.SCREEN_WIDTH - 40, 250, {
-            fillStyle: "#333377",
-            strokeStyle: "#003300",
-            lineWidth: 3
-          });
-          imgMessageWindow.setPosition(imgMessageWindow.width/2 + 20, Game.SCREEN_HEIGHT - imgMessageWindow.height/2 - 20);//);
-          imgMessageWindow.alpha= 0.5;
+          var imgMessageWindow = RectangleShape({
+            fill: "#333377",
+            stroke: "#003300",
+            strokeWidth: 3,
+            cornerRadius: 4
+          }).addChildTo(this);
+          imgMessageWindow.width = this.gridX.span(15);
+          imgMessageWindow.height = this.gridY.span(6);
+          //imgMessageWindow.setPosition(imgMessageWindow.width/2 + 20, Game.SCREEN_HEIGHT - imgMessageWindow.height/2 - 20);//);
+          imgMessageWindow.setPosition(this.gridX.center(), this.gridY.span(12));
+          imgMessageWindow.alpha = 0.5;
 
           imgMessageWindow.onclick = function(e){
             imgMessageWindow.visible = !imgMessageWindow.visible;
@@ -55,12 +66,12 @@ module WrtGame {
           this.imgMessageWindow = imgMessageWindow;
 
           // MessageArea in the MessageWindow
-          var lblMessage = tm.ui.LabelArea( "" ).addChildTo(imgMessageWindow);
-          lblMessage.setPosition(20, 20);
-          lblMessage.setFillStyle("#ffffff");
+          var lblMessage = LabelArea( "" ).addChildTo(imgMessageWindow);
+          lblMessage.setPosition(0, 0);
+          lblMessage.fill = "#ffffff";
           lblMessage.fontSize = 48;
-          lblMessage.setWidth( imgMessageWindow.width - 10 );
-          lblMessage.setHeight( imgMessageWindow.height - 10 );
+          lblMessage.width = imgMessageWindow.width - 20;
+          lblMessage.height = imgMessageWindow.height - 20;
 
           this.lblMessage = lblMessage;
 
@@ -68,7 +79,7 @@ module WrtGame {
           this.storyItemIndex = 0;
           var that = this;
 
-          canvas.event.pointstart(function(e) {
+          this.on('pointend', function(e) {
             if (novelPlayerThis._isPlaying) {
               novelPlayerThis.playNext();
             }
@@ -76,20 +87,21 @@ module WrtGame {
 
           this.characters = [];
 
-          this.imgMessageWindow.visible = false;
-          this.lblMessage.visible = false;
+//          this.imgMessageWindow.visible = false;
+//          this.lblMessage.visible = false;
 
+          callback();
         },
 
         update: function (app) {
-          novelPlayerThis._bgmPlayer.loop();
+        //  novelPlayerThis._bgmPlayer.loop();
         }
 
       });
     }
 
     public clear() {
-      var that = this._tmMainScene;
+      var that = this._phinaScene;
       that.removeChildren();
     }
 
@@ -98,14 +110,16 @@ module WrtGame {
         return false;
       }
 
-      var that = this._tmMainScene;
-      that.storyItemIndex = 0;
-      that.imgMessageWindow.visible = true;
-      that.lblMessage.visible = true;
-      that.lblMessage.text = '';
+      var that = this._phinaScene;
+      if(typeof that !== 'undefined') {
+        that.storyItemIndex = 0;
+        that.imgMessageWindow.visible = true;
+        that.lblMessage.visible = true;
+        that.lblMessage.text = '';
+      }
 
       this._currentPlayingStoryName = StoryName;
-      var that = this._tmMainScene;
+      var that = this._phinaScene;
       var story = MongoCollections.Stories.find({title: StoryName}).fetch();
 
       if (_.isUndefined(story[0])) {
@@ -148,7 +162,7 @@ module WrtGame {
     }
 
     public offPlayer() {
-      var that = this._tmMainScene;
+      var that = this._phinaScene;
       that.imgMessageWindow.visible = false;
       that.lblMessage.visible = false;
       this._isPlaying = false;
@@ -186,7 +200,7 @@ module WrtGame {
 
 
     private nextSentence(currentStoryItem) {
-      var that = this._tmMainScene;
+      var that = this._phinaScene;
 
       var characterImage = MongoCollections.CharacterImages.findOne({_id: currentStoryItem.content.characterImageId});
       var sentence = currentStoryItem.content;
@@ -211,7 +225,7 @@ module WrtGame {
 
       // display the new character.
       if(characterImage.portraitImageUrl !== '') {
-        that.characters[characterPosIndex] = tm.display.Sprite(characterImage.portraitImageUrl);
+        that.characters[characterPosIndex] = Sprite(characterImage.portraitImageUrl);
         that.characters[characterPosIndex].characterId = sentence.characterId;
         that.addChildAt(that.characters[characterPosIndex], 10);
         var characterScale = 1.15;
@@ -226,7 +240,7 @@ module WrtGame {
     }
 
     private nextBackground(currentStoryItem) {
-      var that = this._tmMainScene;
+      var that = this._phinaScene;
 
       var backgroundImage = MongoCollections.BackgroundImages.findOne({_id: currentStoryItem.content.backgroundImageId});
 
@@ -241,7 +255,7 @@ module WrtGame {
         ).start();
       }
 
-      that.imgBackGround = tm.display.Sprite(backgroundImage.imageUrl, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
+      that.imgBackGround = Sprite(backgroundImage.imageUrl, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
       that.imgBackGround.setPosition(Game.SCREEN_WIDTH/2, Game.SCREEN_HEIGHT/2);
       that.addChildAt(that.imgBackGround, 0);
       tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 0.0}, {alpha: 1.0}, 500, null).start();
@@ -249,7 +263,7 @@ module WrtGame {
     }
 
     private nextBgm(currentStoryItem) {
-      var that = this._tmMainScene;
+      var that = this._phinaScene;
 
       var bgmAudio = MongoCollections.BgmAudios.findOne({_id: currentStoryItem.content.bgmAudioId});
 
@@ -262,7 +276,7 @@ module WrtGame {
     }
 
     private nextSoundEffect(currentStoryItem) {
-      var that = this._tmMainScene;
+      var that = this._phinaScene;
 
       var soundEffectAudio = MongoCollections.SoundEffectAudios.findOne({_id: currentStoryItem.content.soundEffectAudioId});
 
@@ -296,7 +310,7 @@ module WrtGame {
         return;
       }
 
-      var that = this._tmMainScene;
+      var that = this._phinaScene;
 
 
       var currentScene = this.nextScene();
@@ -347,16 +361,15 @@ module WrtGame {
 
           that.choiceLabelButtons = [];
           currentScene.choices.forEach((choice, i, choices)=>{
-            var choiceLabelButton = tm.ui.LabelButton( choice.sentence );
-            choiceLabelButton.setFontSize(48);
-            choiceLabelButton.setAlpha(1);
-            choiceLabelButton.setShadowColor('black');
-            choiceLabelButton.setShadowOffset(3, 3);
-            choiceLabelButton.setShadowBlur(5);
-            choiceLabelButton.x = Game.SCREEN_WIDTH / 2;
-            choiceLabelButton.y = Game.SCREEN_HEIGHT / 2 + ((i-(choices.length-1)/2) * 100);
+            var choiceLabelButton = Label( choice.sentence );
+            choiceLabelButton.fill = 'white';
+            choiceLabelButton.stroke = 'black';
+            choiceLabelButton.fontSize = 48;
+            choiceLabelButton.alpha = 1;
+            choiceLabelButton.x = that.gridX.center();
+            choiceLabelButton.y = that.gridY.center() + ((i-(choices.length-1)/2) * 100);
             choiceLabelButton.setInteractive(true);
-            choiceLabelButton.addEventListener("touchend", ((index)=>{
+            choiceLabelButton.on("pointend", ((index)=>{
               return (e)=> {
                 console.log(""+index + ": " + currentScene.choices[index].goTo);
                 this._nextSceneId = currentScene.choices[index].goTo;
@@ -406,7 +419,7 @@ module WrtGame {
     }
 
     private clearAllElements() {
-      var that = this._tmMainScene;
+      var that = this._phinaScene;
 
       // clear characters
       that.characters.forEach(function(character, index, characters){
@@ -419,7 +432,9 @@ module WrtGame {
 
       // clear background
       if(that.imgBackGround) {
-        tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 1.0}, {alpha: 0.0}, 500, null).on("finish",
+        that.imgBackGround.tweener.set({
+          alpha:1
+        }).to({alpha: 0.0}, 500, 'linear').call(
           (function(self, background){
             return function (e) {
               that.removeChild(background)

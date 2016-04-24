@@ -862,13 +862,14 @@ var WrtGame;
             var _this = this;
             if (onlyNovel === void 0) { onlyNovel = false; }
             if (callbackWhenOnlyNovel === void 0) { callbackWhenOnlyNovel = null; }
+            phina.globalize();
             var novelPlayer = WrtGame.NovelPlayer.getInstance();
-            novelPlayer.init();
+            novelPlayer.init(callbackWhenOnlyNovel);
             if (onlyNovel) {
-                this.initTmlib(callbackWhenOnlyNovel);
+                this.initPhina(null);
             }
             else {
-                this.initTmlib(function () {
+                this.initPhina(function () {
                     _this.initEvents();
                     var glboostCtx = WrtGame.GLBoostContext.getInstance();
                     glboostCtx.init('#renderCanvas');
@@ -920,18 +921,21 @@ var WrtGame;
             var uiOperation = WrtGame.UiOperation.getInstance();
             uiOperation.init(logicalUiCommandProperty);
         };
-        Game.prototype.initTmlib = function (callback) {
-            var ASSETS = {};
+        Game.prototype.initPhina = function (callback) {
+            var ASSETS = {
+                sound: {},
+                image: {}
+            };
             var characterImages = MongoCollections.CharacterImages.find({ useForNovel: true }).fetch();
             var backgroundImages = MongoCollections.BackgroundImages.find().fetch();
             for (var key in characterImages) {
                 if ("" !== characterImages[key].portraitImageUrl) {
-                    ASSETS[characterImages[key].portraitImageUrl] = characterImages[key].portraitImageUrl;
+                    ASSETS.image[characterImages[key].portraitImageUrl] = characterImages[key].portraitImageUrl;
                 }
             }
             for (var key in backgroundImages) {
                 if ("" !== backgroundImages[key].imageUrl) {
-                    ASSETS[backgroundImages[key].imageUrl] = backgroundImages[key].imageUrl;
+                    ASSETS.image[backgroundImages[key].imageUrl] = backgroundImages[key].imageUrl;
                 }
             }
             var bgmAudios = MongoCollections.BgmAudios.find().fetch();
@@ -939,62 +943,93 @@ var WrtGame;
                 if (bgmAudio.identifier === 'none') {
                     return;
                 }
-                ASSETS[bgmAudio.identifier] = bgmAudio.audioUrl;
+                ASSETS.sound[bgmAudio.identifier] = bgmAudio.audioUrl;
             });
             var soundEffectAudios = MongoCollections.SoundEffectAudios.find().fetch();
             soundEffectAudios.forEach(function (soundEffectAudio) {
                 if (soundEffectAudio.identifier === 'none') {
                     return;
                 }
-                ASSETS[soundEffectAudio.identifier] = soundEffectAudio.audioUrl;
+                ASSETS.sound[soundEffectAudio.identifier] = soundEffectAudio.audioUrl;
             });
-            // main
-            tm.main(function () {
-                // キャンバスアプリケーションを生成
-                var app = tm.display.CanvasApp("#tmlibCanvas");
-                app.background = 'rgba(0,0,0,0)';
-                // リサイズ
-                app.resize(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
-                // ウィンドウにフィットさせる
-                //        app.fitWindow();
-                // ローダーでアセットを読み込む
-                var loading = tm.game.LoadingScene({
-                    assets: ASSETS,
+            phina.main(function () {
+                // アプリケーションを生成
+                var app = GameApp({
+                    startLabel: 'main',
                     width: Game.SCREEN_WIDTH,
                     height: Game.SCREEN_HEIGHT,
+                    assets: ASSETS,
                 });
-                // 読み込み完了後に呼ばれるメソッドを登録
-                loading.onload = function () {
-                    // メインシーンに入れ替える
-                    var scene = window.MainScene();
-                    app.replaceScene(scene);
-                    callback();
-                };
-                // ローディングシーンに入れ替える
-                app.replaceScene(loading);
+                app.enableStats();
                 // 実行
                 app.run();
-                var aspect = Game.SCREEN_WIDTH / Game.SCREEN_HEIGHT;
-                window.addEventListener("resize", function (e) {
-                    var windowAspect = $(e.target).width() / $(e.target).height();
-                    if (windowAspect > aspect) {
-                        var newWidth = $(e.target).height() * aspect;
-                        var newHeight = $(e.target).height();
-                    }
-                    else {
-                        var newWidth = $(e.target).width();
-                        var newHeight = $(e.target).width() * 1 / aspect;
-                    }
-                    var scale = newWidth / Game.SCREEN_WIDTH;
-                    var translateX = Game.SCREEN_WIDTH * (1 - scale) / 2;
-                    var translateY = Game.SCREEN_HEIGHT * (1 - scale) / 2;
-                    var value = 'translateX(' + -translateX + 'px) ' +
-                        'translateY(' + -translateY + 'px)' +
-                        'scale(' + scale + ', ' + scale + ') ';
-                    $('#tmlibCanvas').css('transform', value);
-                    $('#game-ui-body').css('transform', value);
-                });
+                if (callback) {
+                    callback();
+                }
             });
+            /*
+      
+            // main
+            tm.main(function() {
+              // キャンバスアプリケーションを生成
+              var app = tm.display.CanvasApp("#tmlibCanvas");
+              app.background = 'rgba(0,0,0,0)';
+              // リサイズ
+              app.resize(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
+              // ウィンドウにフィットさせる
+      //        app.fitWindow();
+      
+              // ローダーでアセットを読み込む
+              var loading = tm.game.LoadingScene({
+                assets: ASSETS,
+                width: Game.SCREEN_WIDTH,
+                height: Game.SCREEN_HEIGHT,
+              });
+      
+              // 読み込み完了後に呼ばれるメソッドを登録
+              loading.onload = function() {
+                // メインシーンに入れ替える
+                var scene = window.MainScene();
+                app.replaceScene(scene);
+                callback();
+              };
+              // ローディングシーンに入れ替える
+              app.replaceScene(loading);
+      
+              // 実行
+              app.run();
+      
+              var aspect = Game.SCREEN_WIDTH / Game.SCREEN_HEIGHT;
+      
+              window.addEventListener("resize", function(e) {
+                var windowAspect = $(e.target).width() / $(e.target).height();
+      
+                if (windowAspect > aspect) {
+                  var newWidth:number = $(e.target).height() * aspect;
+                  var newHeight:number = <number>$(e.target).height();
+                } else {
+                  var newWidth:number = <number>$(e.target).width();
+                  var newHeight:number = $(e.target).width() * 1/aspect;
+                }
+      
+                var scale = newWidth / Game.SCREEN_WIDTH;
+      
+                var translateX = Game.SCREEN_WIDTH * (1-scale) / 2;
+      
+                var translateY = Game.SCREEN_HEIGHT * (1-scale) / 2;
+      
+                var value =
+                    'translateX(' + -translateX + 'px) ' +
+                    'translateY(' + -translateY + 'px)' +
+                    'scale(' + scale + ', ' + scale + ') ';
+                $('#tmlibCanvas').css('transform', value);
+                $('#game-ui-body').css('transform', value);
+      
+              });
+            });
+      
+      
+            */
             if (document.readyState == "complete") {
                 if (!document.createEvent) {
                     window.fireEvent('onload');
@@ -4028,69 +4063,80 @@ var WrtGame;
             }
             return NovelPlayer._instance;
         };
-        NovelPlayer.prototype.init = function () {
+        NovelPlayer.prototype.init = function (callback) {
             var novelPlayerThis = this;
-            this._bgmPlayer = WrtGame.BgmPlayer.getInstance();
+            /*
+            this._bgmPlayer = BgmPlayer.getInstance();
             this._bgmPlayer.preloadBGMs(null, null);
+              */
             // シーンを定義
-            tm.define("MainScene", {
-                superClass: "tm.app.Scene",
+            phina.define("MainScene", {
+                // 継承
+                superClass: 'DisplayScene',
                 init: function () {
-                    var this_ = this;
-                    this_.superInit();
-                    novelPlayerThis._tmMainScene = this;
-                    var canvas = tm.dom.Element("#tmlibCanvas");
-                    // MessageWindow
-                    var imgMessageWindow = tm.display.RoundRectangleShape(WrtGame.Game.SCREEN_WIDTH - 40, 250, {
-                        fillStyle: "#333377",
-                        strokeStyle: "#003300",
-                        lineWidth: 3
+                    this.superInit({
+                        width: WrtGame.Game.SCREEN_WIDTH,
+                        height: WrtGame.Game.SCREEN_HEIGHT,
                     });
-                    imgMessageWindow.setPosition(imgMessageWindow.width / 2 + 20, WrtGame.Game.SCREEN_HEIGHT - imgMessageWindow.height / 2 - 20); //);
+                    novelPlayerThis._phinaScene = this;
+                    // MessageWindow
+                    var imgMessageWindow = RectangleShape({
+                        fill: "#333377",
+                        stroke: "#003300",
+                        strokeWidth: 3,
+                        cornerRadius: 4
+                    }).addChildTo(this);
+                    imgMessageWindow.width = this.gridX.span(15);
+                    imgMessageWindow.height = this.gridY.span(6);
+                    //imgMessageWindow.setPosition(imgMessageWindow.width/2 + 20, Game.SCREEN_HEIGHT - imgMessageWindow.height/2 - 20);//);
+                    imgMessageWindow.setPosition(this.gridX.center(), this.gridY.span(12));
                     imgMessageWindow.alpha = 0.5;
                     imgMessageWindow.onclick = function (e) {
                         imgMessageWindow.visible = !imgMessageWindow.visible;
                     };
                     this.imgMessageWindow = imgMessageWindow;
                     // MessageArea in the MessageWindow
-                    var lblMessage = tm.ui.LabelArea("").addChildTo(imgMessageWindow);
-                    lblMessage.setPosition(20, 20);
-                    lblMessage.setFillStyle("#ffffff");
+                    var lblMessage = LabelArea("").addChildTo(imgMessageWindow);
+                    lblMessage.setPosition(0, 0);
+                    lblMessage.fill = "#ffffff";
                     lblMessage.fontSize = 48;
-                    lblMessage.setWidth(imgMessageWindow.width - 10);
-                    lblMessage.setHeight(imgMessageWindow.height - 10);
+                    lblMessage.width = imgMessageWindow.width - 20;
+                    lblMessage.height = imgMessageWindow.height - 20;
                     this.lblMessage = lblMessage;
                     this.storyItemIndex = 0;
                     var that = this;
-                    canvas.event.pointstart(function (e) {
+                    this.on('pointend', function (e) {
                         if (novelPlayerThis._isPlaying) {
                             novelPlayerThis.playNext();
                         }
                     });
                     this.characters = [];
-                    this.imgMessageWindow.visible = false;
-                    this.lblMessage.visible = false;
+                    //          this.imgMessageWindow.visible = false;
+                    //          this.lblMessage.visible = false;
+                    callback();
                 },
                 update: function (app) {
-                    novelPlayerThis._bgmPlayer.loop();
+                    //  novelPlayerThis._bgmPlayer.loop();
                 }
             });
         };
         NovelPlayer.prototype.clear = function () {
-            var that = this._tmMainScene;
+            var that = this._phinaScene;
             that.removeChildren();
         };
         NovelPlayer.prototype.loadStory = function (StoryName, startSceneId) {
             if (!this._novelWasFinished) {
                 return false;
             }
-            var that = this._tmMainScene;
-            that.storyItemIndex = 0;
-            that.imgMessageWindow.visible = true;
-            that.lblMessage.visible = true;
-            that.lblMessage.text = '';
+            var that = this._phinaScene;
+            if (typeof that !== 'undefined') {
+                that.storyItemIndex = 0;
+                that.imgMessageWindow.visible = true;
+                that.lblMessage.visible = true;
+                that.lblMessage.text = '';
+            }
             this._currentPlayingStoryName = StoryName;
-            var that = this._tmMainScene;
+            var that = this._phinaScene;
             var story = MongoCollections.Stories.find({ title: StoryName }).fetch();
             if (_.isUndefined(story[0])) {
                 return false;
@@ -4134,7 +4180,7 @@ var WrtGame;
             configurable: true
         });
         NovelPlayer.prototype.offPlayer = function () {
-            var that = this._tmMainScene;
+            var that = this._phinaScene;
             that.imgMessageWindow.visible = false;
             that.lblMessage.visible = false;
             this._isPlaying = false;
@@ -4167,7 +4213,7 @@ var WrtGame;
             }
         };
         NovelPlayer.prototype.nextSentence = function (currentStoryItem) {
-            var that = this._tmMainScene;
+            var that = this._phinaScene;
             var characterImage = MongoCollections.CharacterImages.findOne({ _id: currentStoryItem.content.characterImageId });
             var sentence = currentStoryItem.content;
             var characterPosIndex = this.getCharacterPositionIndex(sentence.position);
@@ -4188,7 +4234,7 @@ var WrtGame;
             });
             // display the new character.
             if (characterImage.portraitImageUrl !== '') {
-                that.characters[characterPosIndex] = tm.display.Sprite(characterImage.portraitImageUrl);
+                that.characters[characterPosIndex] = Sprite(characterImage.portraitImageUrl);
                 that.characters[characterPosIndex].characterId = sentence.characterId;
                 that.addChildAt(that.characters[characterPosIndex], 10);
                 var characterScale = 1.15;
@@ -4200,7 +4246,7 @@ var WrtGame;
             that.lblMessage.text = sentence.text;
         };
         NovelPlayer.prototype.nextBackground = function (currentStoryItem) {
-            var that = this._tmMainScene;
+            var that = this._phinaScene;
             var backgroundImage = MongoCollections.BackgroundImages.findOne({ _id: currentStoryItem.content.backgroundImageId });
             if (that.imgBackGround) {
                 tm.anim.Tween().fromTo(that.imgBackGround, { alpha: 1.0 }, { alpha: 0.0 }, 500, null).on("finish", (function (self, background) {
@@ -4210,13 +4256,13 @@ var WrtGame;
                     };
                 })(that, that.imgBackGround)).start();
             }
-            that.imgBackGround = tm.display.Sprite(backgroundImage.imageUrl, WrtGame.Game.SCREEN_WIDTH, WrtGame.Game.SCREEN_HEIGHT);
+            that.imgBackGround = Sprite(backgroundImage.imageUrl, WrtGame.Game.SCREEN_WIDTH, WrtGame.Game.SCREEN_HEIGHT);
             that.imgBackGround.setPosition(WrtGame.Game.SCREEN_WIDTH / 2, WrtGame.Game.SCREEN_HEIGHT / 2);
             that.addChildAt(that.imgBackGround, 0);
             tm.anim.Tween().fromTo(that.imgBackGround, { alpha: 0.0 }, { alpha: 1.0 }, 500, null).start();
         };
         NovelPlayer.prototype.nextBgm = function (currentStoryItem) {
-            var that = this._tmMainScene;
+            var that = this._phinaScene;
             var bgmAudio = MongoCollections.BgmAudios.findOne({ _id: currentStoryItem.content.bgmAudioId });
             if (bgmAudio.identifier === 'none') {
                 this._bgmPlayer.stop();
@@ -4227,7 +4273,7 @@ var WrtGame;
             }
         };
         NovelPlayer.prototype.nextSoundEffect = function (currentStoryItem) {
-            var that = this._tmMainScene;
+            var that = this._phinaScene;
             var soundEffectAudio = MongoCollections.SoundEffectAudios.findOne({ _id: currentStoryItem.content.soundEffectAudioId });
             var soundEffect = tm.asset.Manager.get(soundEffectAudio.identifier);
             soundEffect.stop();
@@ -4255,7 +4301,7 @@ var WrtGame;
             if (this._isWaitingChoice) {
                 return;
             }
-            var that = this._tmMainScene;
+            var that = this._phinaScene;
             var currentScene = this.nextScene();
             if (!currentScene) {
                 return;
@@ -4298,16 +4344,15 @@ var WrtGame;
                     }
                     that.choiceLabelButtons = [];
                     currentScene.choices.forEach(function (choice, i, choices) {
-                        var choiceLabelButton = tm.ui.LabelButton(choice.sentence);
-                        choiceLabelButton.setFontSize(48);
-                        choiceLabelButton.setAlpha(1);
-                        choiceLabelButton.setShadowColor('black');
-                        choiceLabelButton.setShadowOffset(3, 3);
-                        choiceLabelButton.setShadowBlur(5);
-                        choiceLabelButton.x = WrtGame.Game.SCREEN_WIDTH / 2;
-                        choiceLabelButton.y = WrtGame.Game.SCREEN_HEIGHT / 2 + ((i - (choices.length - 1) / 2) * 100);
+                        var choiceLabelButton = Label(choice.sentence);
+                        choiceLabelButton.fill = 'white';
+                        choiceLabelButton.stroke = 'black';
+                        choiceLabelButton.fontSize = 48;
+                        choiceLabelButton.alpha = 1;
+                        choiceLabelButton.x = that.gridX.center();
+                        choiceLabelButton.y = that.gridY.center() + ((i - (choices.length - 1) / 2) * 100);
                         choiceLabelButton.setInteractive(true);
-                        choiceLabelButton.addEventListener("touchend", (function (index) {
+                        choiceLabelButton.on("pointend", (function (index) {
                             return function (e) {
                                 console.log("" + index + ": " + currentScene.choices[index].goTo);
                                 _this._nextSceneId = currentScene.choices[index].goTo;
@@ -4351,7 +4396,7 @@ var WrtGame;
             }
         };
         NovelPlayer.prototype.clearAllElements = function () {
-            var that = this._tmMainScene;
+            var that = this._phinaScene;
             // clear characters
             that.characters.forEach(function (character, index, characters) {
                 if (_.isUndefined(characters[index])) {
@@ -4362,7 +4407,9 @@ var WrtGame;
             });
             // clear background
             if (that.imgBackGround) {
-                tm.anim.Tween().fromTo(that.imgBackGround, { alpha: 1.0 }, { alpha: 0.0 }, 500, null).on("finish", (function (self, background) {
+                that.imgBackGround.tweener.set({
+                    alpha: 1
+                }).to({ alpha: 0.0 }, 500, 'linear').call((function (self, background) {
                     return function (e) {
                         that.removeChild(background);
                         //                delete self.background;
@@ -4941,7 +4988,6 @@ var WrtGame;
         };
         DungeonScene.prototype.setUp = function () {
             var bgmPlayer = WrtGame.BgmPlayer.getInstance();
-            bgmPlayer.stop();
             bgmPlayer.play('hitokiri_water');
         };
         DungeonScene.prototype.tearDown = function () { };

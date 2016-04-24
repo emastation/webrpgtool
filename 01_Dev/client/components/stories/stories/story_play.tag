@@ -1,6 +1,5 @@
 <story-play>
   <div id="canvasWrapper">
-    <canvas id="tmlibCanvas"></canvas>
   </div>
 
   <script>

@@ -1,8 +1,6 @@
 <game>
   <div id="canvasWrapper">
     <p>Game! {data.map.title}</p>
-    <canvas id="renderCanvas"></canvas>
-    <canvas id="tmlibCanvas"></canvas>
     <game-ui id="game-ui"></game-ui>
   </div>
 

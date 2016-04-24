@@ -30,10 +30,8 @@ module WrtGame {
 
     public init(callback:any) {
       var novelPlayerThis:NovelPlayer = this;
-      /*
+
       this._bgmPlayer = BgmPlayer.getInstance();
-      this._bgmPlayer.preloadBGMs(null, null);
-        */
       // シーンを定義
       phina.define("MainScene", {
         // 継承

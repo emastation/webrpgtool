@@ -68,6 +68,7 @@ module WrtGame {
 
       this._map = new WrtGame.PolygonMapGLBoost(scene, data.map, data.mapTextures, canvasId);
 
+      /*
       // Windowのリサイズ対応
       window.addEventListener("resize", function(e) {
         var windowAspect = $(e.target).width() / $(e.target).height();
@@ -86,6 +87,7 @@ module WrtGame {
           renderer.resize(width, height);
         }
       });
+      */
 
       this._scene = scene;
       this._camera = camera;

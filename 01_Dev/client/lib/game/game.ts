@@ -37,16 +37,16 @@ module WrtGame {
     public init(data:any, onlyNovel = false, callbackWhenOnlyNovel:Function = null) {
       phina.globalize();
       var novelPlayer = WrtGame.NovelPlayer.getInstance();
-      novelPlayer.init(callbackWhenOnlyNovel);
 
       if (onlyNovel) {
+        novelPlayer.init(callbackWhenOnlyNovel);
         this.initPhina(null);
       } else {
-        this.initPhina(()=>{
+        novelPlayer.init((glBoostLayer)=>{
           this.initEvents();
 
           let glboostCtx = GLBoostContext.getInstance();
-          glboostCtx.init('#renderCanvas');
+          glboostCtx.init(glBoostLayer);
 
           let sm:SceneManager = SceneManager.getInstance();
           sm.addScene('battle', new BattleScene());
@@ -61,6 +61,7 @@ module WrtGame {
           e.initUIEvent('resize', true, true, window, 0);
           window.dispatchEvent(e);
         });
+        this.initPhina(null);
       }
 
     }
@@ -161,6 +162,7 @@ module WrtGame {
         app.enableStats();
 
         // 実行
+        app.fps = 60;
         app.run();
 
         if (callback) {

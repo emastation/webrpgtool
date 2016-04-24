@@ -712,15 +712,15 @@ var WrtGame;
             if (callbackWhenOnlyNovel === void 0) { callbackWhenOnlyNovel = null; }
             phina.globalize();
             var novelPlayer = WrtGame.NovelPlayer.getInstance();
-            novelPlayer.init(callbackWhenOnlyNovel);
             if (onlyNovel) {
+                novelPlayer.init(callbackWhenOnlyNovel);
                 this.initPhina(null);
             }
             else {
-                this.initPhina(function () {
+                novelPlayer.init(function (glBoostLayer) {
                     _this.initEvents();
                     var glboostCtx = WrtGame.GLBoostContext.getInstance();
-                    glboostCtx.init('#renderCanvas');
+                    glboostCtx.init(glBoostLayer);
                     var sm = WrtGame.SceneManager.getInstance();
                     sm.addScene('battle', new WrtGame.BattleScene());
                     sm.addScene('dungeon', new WrtGame.DungeonScene(data));
@@ -731,6 +731,7 @@ var WrtGame;
                     e.initUIEvent('resize', true, true, window, 0);
                     window.dispatchEvent(e);
                 });
+                this.initPhina(null);
             }
         };
         Game.prototype._handleGameLogicalEvent = function (event) {
@@ -810,6 +811,7 @@ var WrtGame;
                 });
                 app.enableStats();
                 // 実行
+                app.fps = 60;
                 app.run();
                 if (callback) {
                     callback();
@@ -2350,9 +2352,10 @@ var WrtGame;
             }
             return GLBoostContext._instance;
         };
-        GLBoostContext.prototype.init = function (canvasId) {
-            this._canvasId = canvasId;
-            this._canvas = document.querySelector(canvasId);
+        GLBoostContext.prototype.init = function (glBoostLayer) {
+            this._canvasId = '#' + glBoostLayer.canvas.id;
+            this._canvas = glBoostLayer.canvas;
+            glBoostLayer.scene = null;
             this._renderer = new GLBoost.Renderer({ canvas: this._canvas, clearColor: { red: 0.0, green: 0.0, blue: 0.0, alpha: 1 } });
         };
         GLBoostContext.prototype.getRenderer = function () {
@@ -3923,6 +3926,10 @@ var WrtGame;
                         width: WrtGame.Game.SCREEN_WIDTH,
                         height: WrtGame.Game.SCREEN_HEIGHT,
                     });
+                    var layer = phina.display.GLBoostLayer({
+                        width: WrtGame.Game.SCREEN_WIDTH,
+                        height: WrtGame.Game.SCREEN_HEIGHT,
+                    }).addChildTo(this);
                     novelPlayerThis._phinaScene = this;
                     // MessageWindow
                     var imgMessageWindow = RectangleShape({
@@ -3949,19 +3956,17 @@ var WrtGame;
                     lblMessage.height = imgMessageWindow.height - 20;
                     this.lblMessage = lblMessage;
                     this.storyItemIndex = 0;
-                    var that = this;
                     this.on('pointend', function (e) {
                         if (novelPlayerThis._isPlaying) {
                             novelPlayerThis.playNext();
                         }
                     });
                     this.characters = [];
-                    //          this.imgMessageWindow.visible = false;
-                    //          this.lblMessage.visible = false;
-                    callback();
+                    this.imgMessageWindow.visible = false;
+                    this.lblMessage.visible = false;
+                    callback(layer);
                 },
                 update: function (app) {
-                    //  novelPlayerThis._bgmPlayer.loop();
                 }
             });
         };
@@ -4094,17 +4099,17 @@ var WrtGame;
             var that = this._phinaScene;
             var backgroundImage = MongoCollections.BackgroundImages.findOne({ _id: currentStoryItem.content.backgroundImageId });
             if (that.imgBackGround) {
-                tm.anim.Tween().fromTo(that.imgBackGround, { alpha: 1.0 }, { alpha: 0.0 }, 500, null).on("finish", (function (self, background) {
-                    return function (e) {
-                        that.removeChild(background);
+                that.imgBackGround.tweener.clear().set({ alpha: 1.0 }).to({ alpha: 0.0 }, 500, 'linear').call((function (self, background) {
+                    return function () {
+                        self.removeChild(background);
                         //                delete self.background;
                     };
-                })(that, that.imgBackGround)).start();
+                })(that, that.imgBackGround));
             }
-            that.imgBackGround = Sprite(backgroundImage.imageUrl, WrtGame.Game.SCREEN_WIDTH, WrtGame.Game.SCREEN_HEIGHT);
-            that.imgBackGround.setPosition(WrtGame.Game.SCREEN_WIDTH / 2, WrtGame.Game.SCREEN_HEIGHT / 2);
-            that.addChildAt(that.imgBackGround, 0);
-            tm.anim.Tween().fromTo(that.imgBackGround, { alpha: 0.0 }, { alpha: 1.0 }, 500, null).start();
+            that.imgBackGround = Sprite(backgroundImage.imageUrl, that.gridX.span(16), that.gridY.span(16));
+            that.imgBackGround.setOrigin(0, 0);
+            that.addChildAt(that.imgBackGround, 1);
+            that.imgBackGround.tweener.clear().set({ alpha: 0.0 }).to({ alpha: 1.0 }, 500, 'linear');
         };
         NovelPlayer.prototype.nextBgm = function (currentStoryItem) {
             var that = this._phinaScene;
@@ -4259,7 +4264,7 @@ var WrtGame;
                         that.removeChild(background);
                         //                delete self.background;
                     };
-                })(that, that.imgBackGround)).start();
+                })(that, that.imgBackGround));
             }
             // stop BGM
             this._bgmPlayer.stop();
@@ -4735,24 +4740,26 @@ var WrtGame;
             scene.add(directionalLight_3);
             scene.add(directionalLight_4);
             this._map = new WrtGame.PolygonMapGLBoost(scene, data.map, data.mapTextures, canvasId);
+            /*
             // Windowのリサイズ対応
-            window.addEventListener("resize", function (e) {
-                var windowAspect = $(e.target).width() / $(e.target).height();
-                if (windowAspect > aspect) {
-                    var width = $(e.target).height() * aspect;
-                    var height = $(e.target).height();
-                    $(canvas).css('width', width);
-                    $(canvas).css('height', height);
-                    renderer.resize(width, height);
-                }
-                else {
-                    var width = $(e.target).width();
-                    var height = $(e.target).width() * 1 / aspect;
-                    $(canvas).css('width', width);
-                    $(canvas).css('height', height);
-                    renderer.resize(width, height);
-                }
+            window.addEventListener("resize", function(e) {
+              var windowAspect = $(e.target).width() / $(e.target).height();
+      
+              if (windowAspect > aspect) {
+                let width = $(e.target).height() * aspect;
+                let height = $(e.target).height();
+                $(canvas).css('width', width);
+                $(canvas).css('height', height);
+                renderer.resize(width, height);
+              } else {
+                let width = $(e.target).width();
+                let height = $(e.target).width() * 1/aspect;
+                $(canvas).css('width', width) ;
+                $(canvas).css('height',height);
+                renderer.resize(width, height);
+              }
             });
+            */
             this._scene = scene;
             this._camera = camera;
             this._renderer = renderer;

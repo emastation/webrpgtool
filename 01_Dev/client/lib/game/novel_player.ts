@@ -43,6 +43,12 @@ module WrtGame {
             height: Game.SCREEN_HEIGHT,// 画面高さ
           });
 
+
+          var layer = phina.display.GLBoostLayer({
+            width: Game.SCREEN_WIDTH,  // 画面幅
+            height: Game.SCREEN_HEIGHT,// 画面高さ
+          }).addChildTo(this);
+
           novelPlayerThis._phinaScene = this;
 
           // MessageWindow
@@ -75,7 +81,6 @@ module WrtGame {
 
 
           this.storyItemIndex = 0;
-          var that = this;
 
           this.on('pointend', function(e) {
             if (novelPlayerThis._isPlaying) {
@@ -85,14 +90,13 @@ module WrtGame {
 
           this.characters = [];
 
-//          this.imgMessageWindow.visible = false;
-//          this.lblMessage.visible = false;
+          this.imgMessageWindow.visible = false;
+          this.lblMessage.visible = false;
 
-          callback();
+          callback(layer);
         },
 
         update: function (app) {
-        //  novelPlayerThis._bgmPlayer.loop();
         }
 
       });
@@ -242,22 +246,22 @@ module WrtGame {
 
       var backgroundImage = MongoCollections.BackgroundImages.findOne({_id: currentStoryItem.content.backgroundImageId});
 
+
       if(that.imgBackGround) {
-        tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 1.0}, {alpha: 0.0}, 500, null).on("finish",
+        that.imgBackGround.tweener.clear().set({alpha: 1.0}).to({alpha: 0.0}, 500, 'linear').call(
           (function(self, background){
-            return function (e) {
-              that.removeChild(background)
+            return function () {
+              self.removeChild(background);
 //                delete self.background;
             };
           })(that, that.imgBackGround)
-        ).start();
+        );
       }
 
-      that.imgBackGround = Sprite(backgroundImage.imageUrl, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
-      that.imgBackGround.setPosition(Game.SCREEN_WIDTH/2, Game.SCREEN_HEIGHT/2);
-      that.addChildAt(that.imgBackGround, 0);
-      tm.anim.Tween().fromTo(that.imgBackGround, {alpha: 0.0}, {alpha: 1.0}, 500, null).start();
-
+      that.imgBackGround = Sprite(backgroundImage.imageUrl, that.gridX.span(16), that.gridY.span(16));
+      that.imgBackGround.setOrigin(0,0);
+      that.addChildAt(that.imgBackGround, 1);
+      that.imgBackGround.tweener.clear().set({alpha: 0.0}).to({alpha: 1.0}, 500, 'linear');
     }
 
     private nextBgm(currentStoryItem) {
@@ -439,7 +443,7 @@ module WrtGame {
 //                delete self.background;
             };
           })(that, that.imgBackGround)
-        ).start();
+        );
       }
 
       // stop BGM
